@@ -92,11 +92,12 @@
 					<h4 class="modal-title" id="myModalLabel">그룹 초대</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal style-form" method="post">
+					<!--  <form class="form-horizontal style-form" method="post">	-->
+					<form action="<c:url value='/email?${_csrf.parameterName}=${_csrf.token}'/>" class="form-horizontal style-form" method="post">
 						<div class="form-group">
 							<label class="col-sm-2 col-sm-2 control-label">email주소</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control">
+								<input type="email" name="receiver_id" class="form-control">
 							</div>
 						</div>
 						<div class="centered">
@@ -109,3 +110,4 @@
 			</div>
 		</div>
 	</div> <!--sidebar end--> 
+	

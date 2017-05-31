@@ -52,7 +52,10 @@
 									<h3></h3>
 								</div>
 								<div class="profile-01 centered">
-									<p>추가</p>
+									<!--  <p>추가</p>	-->
+									<a data-toggle="modal" data-target="#fileUpload" href="#">
+					                    	<span>추가</span>
+					                </a>
 								</div>
 								<div class="centered">
 									<h6>
@@ -63,82 +66,70 @@
 							<!--/content-panel -->
 						</div>
 						<!--/col-md-4 -->
-
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-							<div class="project-wrapper" data-toggle="dropdown">
-								<div class="project">
-									<div class="photo-wrapper">
-										<div class="white-header">
-											<h5>게시물 이름</h5>
+						<c:if test="${fn:length(sharing_list) > 0}"> 
+							<c:forEach items="${sharing_list}" var="list" step="1" varStatus="status">
+							<!--  <form action="<c:url value='/fileDownload?${_csrf.parameterName}=${_csrf.token}'/>" id='fileDownload' name="fileDownload" method="post">	-->
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
+										<div class="project-wrapper" data-toggle="dropdown">
+											<div class="project">
+												<div class="photo-wrapper">
+													<div class="white-header">
+														<h5>${sharing_list[status.index].file_name}</h5>
+														<h5>${sharing_list[status.index].member_no}</h5>
+														<h5>${sharing_list[status.index].group_file_no}</h5>
+													</div>
+													<div class="photo">
+														<a class="fancybox" href="">
+															<img class="img-responsive" src="<c:url value='resources/img/gongU.jpg' />" alt="">
+														</a>
+													</div>
+													<div class="overlay"></div>
+												</div>
+											</div>
 										</div>
-										<div class="photo">
-											<a class="fancybox" href="">
-												<img class="img-responsive" src="<c:url value='resources/img/gongU.jpg' />" alt="">
-											</a>
-										</div>
-										<div class="overlay"></div>
+										<input type="hidden" id="fno" name="fno" value="${sharing_list[status.index].group_file_no}">	
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="#">미리보기</a></li>								
+											<li><a href="<c:url value='/fileDownload?fno=${sharing_list[status.index].group_file_no}&=${_csrf.parameterName}&=${_csrf.token}'/>">다운로드</a></li>
+											<li><a href="#">삭제</a></li>
+										</ul>
 									</div>
-								</div>
-							</div>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">미리보기</a></li>
-								<li><a href="#">다운로드</a></li>
-								<li><a href="#">삭제</a></li>
-							</ul>
-						</div>
+									<br/>
+								<!--  </form> -->
+							</c:forEach>
+						</c:if>
 						<!-- col-lg-4 -->
-
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-							<div class="project-wrapper" data-toggle="dropdown">
-								<div class="project">
-									<div class="photo-wrapper">
-										<div class="white-header">
-											<h5>게시물 이름</h5>
-										</div>
-										<div class="photo">
-											<a class="fancybox" href="">
-												<img class="img-responsive" src="<c:url value='resources/img/gongU.jpg' />" alt="">
-											</a>
-										</div>
-										<div class="overlay"></div>
-									</div>
-								</div>
-							</div>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">미리보기</a></li>
-								<li><a href="#">다운로드</a></li>
-								<li><a href="#">삭제</a></li>
-							</ul>
-						</div>
-						<!-- col-lg-4 -->
-
 					</div>
-					<div class="row mt">
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-							<div class="project-wrapper" data-toggle="dropdown">
-								<div class="project">
-									<div class="photo-wrapper">
-										<div class="white-header">
-											<h5>게시물 이름</h5>
-										</div>
-										<div class="photo">
-											<a class="fancybox" href="">
-												<img class="img-responsive" src="<c:url value='resources/img/gongU.jpg' />" alt="">
-											</a>
-										</div>
-										<div class="overlay"></div>
-									</div>
-								</div>
+					<!-- 파일 업로드 모달 창 -->
+					<div class="modal fade" id="fileUpload" tabindex="-1"
+					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">파일 업로드</h4>
 							</div>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">미리보기</a></li>
-								<li><a href="#">다운로드</a></li>
-								<li><a href="#">삭제</a></li>
-							</ul>
+							<div class="modal-body">
+							</div>
+							<div class="modal-footer">
+								<!--  
+								<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+								<button type="button" class="btn btn-primary">확인
+								</button>	-->
+									<a href="#this"	id="fileUpload2"></a>
+									<form action="<c:url value='/fileUpload2?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
+										<input type="file" name="testFile" required="required">		
+										<input type="submit" value="완료">
+									</form>
+									<script>
+										console.log($("form#fileUpload"))
+									</script>
+									
+							</div>
 						</div>
-						<!-- col-lg-4 -->
-
 					</div>
+				</div>
+					
 					<!-- /row -->
 
 				</div>

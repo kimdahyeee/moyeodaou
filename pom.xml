@@ -201,6 +201,31 @@
 		    <artifactId>egovframework.rte.ptl.mvc</artifactId>
 		    <version>3.5.0</version>
 		</dependency>
+		<!-- file upload dependency -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		<!-- mail dependency -->
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>3.0.5.RELEASE</version>
+		</dependency>
+		
 	</dependencies>
 	<repositories>
         	<repository>

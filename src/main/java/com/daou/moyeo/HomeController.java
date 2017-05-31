@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.daou.moyeo.board.dao.BoardService;
 import com.daou.moyeo.user.dao.UserService;
+import com.daou.moyeo.user.service.InitFileService;
 import com.daou.moyeo.user.util.PasswordEncoding;
 
 /**
@@ -35,15 +36,6 @@ public class HomeController {
 	@Resource(name="userService")
 	private UserService userService;
 		
-	@Resource(name="boardService")
-	private BoardService boardService;
-	
-	@RequestMapping(value = "/groupMain")
-	public String groupMain(Model model) {
-		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(1);
-		model.addAttribute("allMainBoardList", allMainBoardList);
-		return "groupMain";
-	}
 	
 	/**
 	 * 
