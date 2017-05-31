@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd">
+		
+	<sec:http pattern="/resources/**" security="none" /> 
+	
+	<sec:http auto-config="true" use-expressions="true" create-session="never" >
+		<sec:intercept-url pattern="/" access="isAnonymous()"/>
+		<sec:intercept-url pattern="/login" access="isAnonymous()"/>
+		<sec:intercept-url pattern="/signUp" access="isAnonymous()"/>
+		<sec:intercept-url pattern="/user/**" access="isAnonymous()"/>
+		<sec:intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+        <sec:form-login 
+        		login-page="/"
+	        	login-processing-url="/login"
+	        	always-use-default-target="true"
+	        	username-parameter="email"
+	        	password-parameter="password"
+	        	authentication-success-handler-ref="userLoginSuccessHandler"
+	        	authentication-failure-handler-ref="userLoginFailureHandler"/>
+        <sec:logout  
+        		delete-cookies="true"
+        		logout-success-url="/"
+        		logout-url="/logout"
+        		invalidate-session="true"
+        	/>
+        	<sec:access-denied-handler ref="userDeniedHandler"/>
+    </sec:http>	
+		          
+    <sec:authentication-manager>
+    	<sec:authentication-provider user-service-ref="userAuthenticationService">
+    		<sec:password-encoder ref="passwordEncoder"></sec:password-encoder>
+ 		</sec:authentication-provider>
+    </sec:authentication-manager>
+    
+    <bean id="userLoginSuccessHandler" class="com.daou.moyeo.user.service.UserLoginSuccessHandler"></bean>
+    <bean id="userLoginFailureHandler" class="com.daou.moyeo.user.service.UserLoginFailureHandler"></bean>
+    <bean id="userAuthenticationService" class="com.daou.moyeo.user.service.UserAuthenticationService">
+    	<constructor-arg name="sqlSession" ref="sqlSession"/>
+    </bean>
+    <bean id="userDeniedHandler" class="com.daou.moyeo.user.service.UserDeniedHandler"></bean>
+    
+    <bean id="passwordEncoder" class="com.daou.moyeo.user.util.PasswordEncoding"/>
+</beans>
