@@ -6,8 +6,8 @@ import java.util.Map;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Service;
 
-@Service("checkingCodeService")
-public class CheckingCodeService extends SqlSessionDaoSupport{
+@Service("emailService")
+public class EmailService extends SqlSessionDaoSupport{
 	/* DB에 인증 코드 확인 요청*/
 	public boolean checkCode(String code){
 		int return_value;

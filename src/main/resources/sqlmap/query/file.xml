@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="testQuery">
+<mapper namespace="file">
 	<resultMap id="fileInfoList" type="hashmap">
 		<result property="file_name" column="FILE_NAME" javaType="java.lang.String"/>
 		<result property="member_no" column="MEMBER_NO" javaType="java.lang.String"/>
@@ -14,23 +14,19 @@
 		<result property="file_name" column="FILE_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
-	
-	<select id="selectName" resultType="java.lang.String">
-		select member_name from MEMBER_TB where email = 'test@daou.co.kr'
-	</select>
-
 	<!-- Upload 관련 query -->
 	<insert id="insertFile" parameterType="hashmap">
 	    INSERT INTO GROUP_FILE_TB (MEMBER_NO, GROUP_NO, UPLOAD_DATE, FILE_NAME, FILE_PATH) VALUES (12, 3, current_timestamp, #{FILE_ORIGINAL_NAME}, #{FILE_STORED_NAME})	 
 	</insert>
-	
-	<select id="showAllFile" resultMap="fileInfoList">
-		SELECT FILE_NAME, MEMBER_NO, GROUP_FILE_NO from GROUP_FILE_TB ORDER BY GROUP_FILE_NO ASC;
+
+	<!--  Download 관련 query -->
+	<select id="selectFilePath" parameterType="java.lang.String" resultMap="downFileInfo">
+        SELECT FILE_PATH, FILE_NAME FROM GROUP_FILE_TB WHERE GROUP_FILE_NO = #{fno}
 	</select>
 	
-	<!--  Download 관련 query -->
-	<select id="getFilePath" parameterType="hashmap"  resultMap="downFileInfo">
-        SELECT FILE_PATH, FILE_NAME FROM GROUP_FILE_TB WHERE GROUP_FILE_NO = #{fno}
+	<!-- group File List 관련 query -->
+	<select id="selectAllFileList" resultMap="fileInfoList">
+		SELECT FILE_NAME, MEMBER_NO, GROUP_FILE_NO from GROUP_FILE_TB ORDER BY GROUP_FILE_NO ASC;
 	</select>
 	
 	<!-- email 인증 관련 query -->	

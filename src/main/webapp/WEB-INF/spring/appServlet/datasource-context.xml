@@ -25,7 +25,7 @@
         <constructor-arg ref="sqlSessionFactory" />
      </bean>
      
-     <!-- pagenation -->
+     <!-- pagination -->
      <bean id="textRenderer" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationRenderer"/>  
      <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
         <property name="rendererType">

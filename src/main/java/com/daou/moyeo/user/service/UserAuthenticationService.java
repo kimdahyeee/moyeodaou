@@ -36,7 +36,6 @@ public class UserAuthenticationService implements UserDetailsService {
 		Map<String, Object> user = sqlSession.selectOne("user.selectUser", username);
 		
 		if(user == null ) throw new UsernameNotFoundException(username);
-		logger.info(user.toString());
 		List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
 		gas.add(new SimpleGrantedAuthority(user.get("authority").toString()));
 		

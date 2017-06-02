@@ -117,7 +117,7 @@
 								<button type="button" class="btn btn-primary">확인
 								</button>	-->
 									<a href="#this"	id="fileUpload2"></a>
-									<form action="<c:url value='/fileUpload2?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
+									<form action="<c:url value='/fileUpload?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
 										<input type="file" name="testFile" required="required">		
 										<input type="submit" value="완료">
 									</form>

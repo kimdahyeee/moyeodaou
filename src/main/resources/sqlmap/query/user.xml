@@ -11,6 +11,7 @@
 		FROM MEMBER_TB
 		WHERE EMAIL = #{username} 
 	</select>	
+	
 	<insert id="insertUser">
 		INSERT INTO MEMBER_TB(email, password, MEMBER_NAME, authority, SIGNUP_DATE)
   		VALUES(#{email},#{password},#{name},#{authority}, current_timestamp)
