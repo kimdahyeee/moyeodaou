@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="email">
+	<!-- email 인증 관련 query -->	
+	<select id="selectToken" parameterType="java.lang.String"  resultType="java.lang.Integer">
+       SELECT count(*) from CODE_TB WHERE TOKEN=#{token}
+	</select>
+	
+	<!-- 회원, 비회원 구분 query -->
+	<select id="selectMemberOrNot" parameterType="java.lang.String"  resultType="java.lang.Integer"> 
+		SELECT count(*) FROM MEMBER_TB WHERE EMAIL=#{receiverEmail}
+	</select>
+	
+	<!-- 인증 token값 삽입 -->
+	<insert id="insertToken" parameterType="java.lang.String">
+	    INSERT INTO CODE_TB(INVITE_GROUP_NO, TOKEN) VALUES (1, #{token});
+	</insert>
+	
+</mapper>

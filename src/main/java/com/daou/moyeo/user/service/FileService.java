@@ -22,7 +22,7 @@ public class FileService extends SqlSessionDaoSupport{
 		
 		for(int i=0;i<param.size();i++){
 			map = param.get(i);						
-			getSqlSession().selectOne("file.insertFile", map);
+			getSqlSession().insert("file.insertFile", map);
 		}	
 	}
 }
