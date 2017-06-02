@@ -112,10 +112,6 @@
 							<div class="modal-body">
 							</div>
 							<div class="modal-footer">
-								<!--  
-								<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-								<button type="button" class="btn btn-primary">확인
-								</button>	-->
 									<a href="#this"	id="fileUpload2"></a>
 									<form action="<c:url value='/fileUpload?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
 										<input type="file" name="testFile" required="required">		

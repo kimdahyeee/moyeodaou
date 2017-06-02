@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="group">
+	<insert id="insertGroupInfo">
+		INSERT INTO MEMBER_TB(email, password, MEMBER_NAME, authority, SIGNUP_DATE)
+  		VALUES(#{email},#{password},#{name},#{authority}, current_timestamp)
+	</insert>
+	
+	<resultMap id="groupList" type="hashmap">
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+		<result property="groupName" column="GROUP_NAME" javaType="java.lang.String"/>
+		<result property="groupImg" column="GROUP_IMG" javaType="java.lang.String"/>
+		<result property="groupTotalCount" column="GROUP_TOTAL_COUNT" javaType="int"/>
+	</resultMap>
+	
+	<select id="selectGroupList" parameterType="int" resultMap="groupList">
+		select 
+			G.GROUP_NO,
+			G.GROUP_NAME,
+			G.GROUP_IMG,
+			(SELECT COUNT(*) FROM MEMBER_GROUP_TB MG WHERE MG.GROUP_NO = G.GROUP_NO) AS GROUP_TOTAL_COUNT
+		FROM 
+			GROUP_TB G, MEMBER_GROUP_TB MG
+		WHERE 
+			MG.MEMBER_NO = #{groupNo} AND
+			G.GROUP_NO = MG.GROUP_NO
+	</select>
+</mapper>

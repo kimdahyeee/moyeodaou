@@ -24,6 +24,7 @@ public class UserDeniedHandler implements AccessDeniedHandler {
 		logger.info("StackTrace : {}",ade.getStackTrace());
 
 		req.setAttribute("errMsg",ade.getMessage());
+		System.out.println(ade.getMessage());
 		req.getRequestDispatcher("/WEB-INF/views/user/denied.jsp").forward(req, res);
 	}
 	
