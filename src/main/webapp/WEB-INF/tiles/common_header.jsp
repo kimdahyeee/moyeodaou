@@ -22,7 +22,7 @@
 	<link href="<c:url value='/resources/css/style-responsive.css'/>" rel="stylesheet">
 	
 	<script src="<c:url value='/resources/js/chart-master/Chart.js'/>"></script>
-
+	<script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
