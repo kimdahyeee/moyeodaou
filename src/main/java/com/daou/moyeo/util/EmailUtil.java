@@ -1,6 +1,7 @@
 package com.daou.moyeo.util;
 
 import java.util.Random;
+import java.util.UUID;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -19,22 +20,23 @@ public class EmailUtil {
      protected JavaMailSender mailSender;
  
 	 @Autowired
-	 private EmailUtil emailSenderUtil;
-	    
-	public boolean sendMailAuth(HttpSession session, String receiver_id) {
+	 private EmailUtil emailUtil;
+	 
+	 /*
+	  	 configoureAndSend -> sendEmail 의 흐름으로 그룹초대 email 발송
+	  */
+	public boolean configureAndSend(HttpSession session, String receiverEmail, String joinCode) {
     	EmailDTO email = new EmailDTO();
     	
-        int ran = new Random().nextInt(100000) + 10000; 		// 10000 ~ 99999
-        String joinCode = String.valueOf(ran);
-        session.setAttribute("joinCode", joinCode);
+    	session.setAttribute("joinCode", joinCode);
         
         StringBuilder sb = new StringBuilder();
         sb.append("귀하의 인증 코드는 " + joinCode + " 입니다.");
         
-        String reciver = receiver_id; 							//	받을사람의 이메일입니다.
-        String subject = "그룹초대 인증 코드 발급 안내 입니다.";			//  이메일 제목
-	    String content = sb.toString();						// 	이메일 내용
-        
+        String reciver = receiverEmail; 							
+        String subject = "그룹초대 인증 코드 발급 안내 입니다.";			
+	    String content = sb.toString();						
+	    
 	    // TODO url 설정하기
 	    content = content + "\n" +"http://localhost:8181/daou/invite?joincode=" + joinCode;				
 	    
@@ -43,7 +45,7 @@ public class EmailUtil {
         email.setContent(content);
         
         try {													// 이메일 발송 성공 , 실패 ??
-			return emailSenderUtil.sendEmail(email);
+			return emailUtil.sendEmail(email);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("hee hee hee");
@@ -53,7 +55,10 @@ public class EmailUtil {
         
     }
 	
-    public boolean sendEmail(EmailDTO emailDTO) throws Exception {
+	/*
+	 * 설정된 Mime Msg로 발송
+	 * */
+    private boolean sendEmail(EmailDTO emailDTO) throws Exception {
          
         MimeMessage msg = mailSender.createMimeMessage();
         msg.setSubject(emailDTO.getSubject());
