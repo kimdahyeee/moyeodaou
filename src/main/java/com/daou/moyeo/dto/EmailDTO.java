@@ -1,8 +1,8 @@
-package com.daou.moyeo.mail.util;
+package com.daou.moyeo.dto;
 /*
  	이메일 정보를 갖는 객체
  */
-public class Email {
+public class EmailDTO {
 
     private String subject;
     private String content;

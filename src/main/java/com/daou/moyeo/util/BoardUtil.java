@@ -1,4 +1,4 @@
-package com.daou.moyeo.board.util;
+package com.daou.moyeo.util;
 
 import java.util.Map;
 

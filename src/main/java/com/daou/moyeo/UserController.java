@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.daou.moyeo.board.dao.BoardService;
 import com.daou.moyeo.user.dao.UserService;
-import com.daou.moyeo.user.service.InitFileService;
+import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.util.PasswordEncoding;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
-public class HomeController {
+public class UserController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Resource(name="bcryptEncoder")
 	private PasswordEncoding encoder;
@@ -36,9 +36,8 @@ public class HomeController {
 	@Resource(name="userService")
 	private UserService userService;
 		
-	
 	/**
-	 * 
+	 * 로그인 화면
 	 * @param model
 	 * @return
 	 */
@@ -47,16 +46,25 @@ public class HomeController {
 		return "user/login";
 	}
 	
-	@RequestMapping(value = "/main")
-	public String main(Model model) {
-		return "main";
-	}
-	
+	/**
+	 * 회원가입 화면
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/signUp")
 	public String signUp(Model model) {
 		return "user/signUp";
 	}
 	
+	/**
+	 * 회원가입
+	 * @param req
+	 * @param res
+	 * @param email
+	 * @param name
+	 * @param password
+	 * @throws IOException
+	 */
 	@RequestMapping( value="/user/insertUser", method=RequestMethod.POST )
 	public void insertUser( HttpServletRequest req, HttpServletResponse res, @RequestParam("email") String email,
 										 @RequestParam("name") String name,
