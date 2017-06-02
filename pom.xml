@@ -242,8 +242,9 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
                 <version>4.3.4.RELEASE</version>
-        </dependency>
-	</dependencies>
+	</dependency>
+</dependencies>
+
 	<repositories>
 		<repository>
 			<id>egovframe</id>
