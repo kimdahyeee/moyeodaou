@@ -22,23 +22,11 @@ import com.daou.moyeo.user.vo.UserDetailsVO;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
+@RequestMapping(value = "/group/{groupNo}")
 public class BoardController {
 
 	@Resource(name="boardService")
 	private BoardService boardService;
-	
-	/**
-	 * 게시판 상세보기
-	 * @param boardNo
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/boardDetail/{boardNo}")
-	public String boardDetail( @PathVariable("boardIDX") int boardNo, Model model) {
-		Map<String, Object> boardDetailMap = boardService.selectBoardDetail(boardNo);
-		model.addAttribute("boardDetailMap", boardDetailMap);
-		return "boardDetail";
-	}
 	
 	/**
 	 * 게시판 리스트
@@ -47,10 +35,11 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping(value = "/boardList")
-	public String boardList( @RequestParam(value="currentPageNo", required=false) String currentPageNo, Model model ) {
+	public String boardList( @PathVariable("groupNo") int groupNo, @RequestParam(value="currentPageNo", required=false) String currentPageNo, Model model ) {
 		
 		PaginationInfo paginationInfo = new PaginationInfo();
 		
+		//TODO 함수로 빼기
 		System.out.println("currentPage No  ====> " + currentPageNo);
 		
 		if(StringUtils.isEmpty(currentPageNo) == true) {
@@ -66,22 +55,41 @@ public class BoardController {
 		
 		int firstRecordIndex = paginationInfo.getFirstRecordIndex();
 		int recordCountPerPage = paginationInfo.getRecordCountPerPage();
-
+		
 		Map<String, Object> pageInfoMap = new HashMap<String, Object>();
 		
 		pageInfoMap.put("firstIndex", firstRecordIndex);
 		pageInfoMap.put("recordCountPerPage", recordCountPerPage);
-		pageInfoMap.put("groupNo", 1);
+		pageInfoMap.put("groupNo", groupNo);
 		
 		List<Map<String, Object>> allBoardList = boardService.selectBoardList(pageInfoMap);
-		paginationInfo.setTotalRecordCount((Integer) allBoardList.get(0).get("totalCount"));
-
+		
+		//TODO 여기 예외처리 하기
+		if(allBoardList.size() != 0)
+			paginationInfo.setTotalRecordCount((Integer) allBoardList.get(0).get("totalCount"));
+		
 		System.out.println("allboardList" + allBoardList);
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("allBoardList", allBoardList);
+		model.addAttribute("groupNo", groupNo);
 		
 		return "boardList";
 	}
+	
+	/**
+	 * 게시판 상세보기
+	 * @param boardNo
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/boardDetail/{boardNo}")
+	public String boardDetail( @PathVariable("groupNo") int groupNo, @PathVariable("boardNo") int boardNo, Model model) {
+		Map<String, Object> boardDetailMap = boardService.selectBoardDetail(boardNo);
+		model.addAttribute("boardDetailMap", boardDetailMap);
+		model.addAttribute("groupNo", groupNo);
+		return "boardDetail";
+	}
+	
 	
 	/**
 	 * 게시글 쓰기 화면
@@ -89,7 +97,8 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping(value = "/boardWrite")
-	public String boardWrite(Model model) {
+	public String boardWrite(@PathVariable("groupNo") int groupNo, Model model) {
+		model.addAttribute("groupNo", groupNo);
 		return "boardWrite";
 	}
 	
@@ -101,18 +110,20 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping(value ="/insertBoard", method=RequestMethod.POST)
-	public String insertBoard( @RequestParam("title") String title,
+	public String insertBoard( @PathVariable("groupNo") int groupNo,
+										   @RequestParam("title") String title,
 										   @RequestParam("contents") String contents,
 										   Authentication auth){
 		Map<String, Object> boardMap = new HashMap<String, Object>();
 		boardMap.put("title", title);
 		boardMap.put("contents", contents);
+		boardMap.put("groupNo", groupNo);
 		
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		boardMap.put("author", u.getMemberNo());
 		
 		boardService.insertBoard(boardMap);
-		return "redirect:/boardList";
+		return "redirect:/group/"+groupNo+"/boardList";
 	}
 	
 	/**
@@ -122,7 +133,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping(value = "/detailBoard/{boardNo}/update")
-	public String boardUpdate( @PathVariable("boardNo") int boardNo, Model model ) {
+	public String boardUpdate( @PathVariable("groupNo") int groupNo, @PathVariable("boardNo") int boardNo, Model model ) {
 		Map<String, Object> boardDetailMap = boardService.selectBoardDetail(boardNo);
 		model.addAttribute("boardDetailMap", boardDetailMap);
 		return "boardUpdate";
@@ -135,10 +146,10 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping(value ="/updateBoard/{boardNo}", method=RequestMethod.POST)
-	public String updateBoard( @PathVariable("boardNo") int boardNo,
+	public String updateBoard( @PathVariable("groupNo") int groupNo, @PathVariable("boardNo") int boardNo,
 			@RequestParam("contents") String contents){
 		boardService.updateBoard(boardNo, contents);
-		return "redirect:/boardList";
+		return  "redirect:/group/"+groupNo+"/boardList";
 	}
 	
 	/**
@@ -147,9 +158,9 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping(value ="/deleteBoard/{boardNo}")
-	public String insertBoard( @PathVariable("boardNo") int boardNo){
+	public String insertBoard( @PathVariable("groupNo") int groupNo, @PathVariable("boardNo") int boardNo){
 		boardService.deleteBoard(boardNo);
-		return "redirect:/boardList";
+		return  "redirect:/group/"+groupNo+"/boardList";
 	}
 	
 }

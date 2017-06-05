@@ -16,7 +16,7 @@
 	
 	<!-- Upload 관련 query -->
 	<insert id="insertFile" parameterType="hashmap">
-	    INSERT INTO GROUP_FILE_TB (MEMBER_NO, GROUP_NO, UPLOAD_DATE, FILE_NAME, FILE_PATH) VALUES (12, 3, current_timestamp, #{FILE_ORIGINAL_NAME}, #{FILE_STORED_NAME})	 
+	    INSERT INTO GROUP_FILE_TB (MEMBER_NO, GROUP_NO, UPLOAD_DATE, FILE_NAME, FILE_PATH) VALUES (#{memberNo}, #{groupNo}, current_timestamp, #{FILE_ORIGINAL_NAME}, #{FILE_STORED_NAME})	 
 	</insert>
 
 	<!--  Download 관련 query -->
@@ -25,8 +25,8 @@
 	</select>
 	
 	<!-- group File List 관련 query -->
-	<select id="selectAllFileList" resultMap="fileInfoList">
-		SELECT FILE_NAME, MEMBER_NO, GROUP_FILE_NO from GROUP_FILE_TB ORDER BY GROUP_FILE_NO ASC;
+	<select id="selectAllFileList" parameterType="int" resultMap="fileInfoList">
+		SELECT FILE_NAME, MEMBER_NO, GROUP_FILE_NO from GROUP_FILE_TB WHERE GROUP_NO = #{groupNo} ORDER BY GROUP_FILE_NO ASC;
 	</select>
 	
 	<!-- email 인증 관련 query -->	

@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 public class GroupServiceImpl extends SqlSessionDaoSupport implements GroupService {
 
 	@Override
-	public int createGroup(Map<String, String> groupInfo) {
-		return getSqlSession().insert("group.insertGroupInfo", groupInfo);
+	public int insertGroup(Map<String, Object> groupInfo) {
+		return getSqlSession().insert("group.insertGroup", groupInfo);
+	}
+
+	@Override
+	public int insertMemberGroup(Map<String, Object> memberInfo) {
+		return getSqlSession().insert("group.insertMemberGroup", memberInfo);
 	}
 
 	@Override

@@ -16,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daou.moyeo.board.dao.BoardService;
 import com.daou.moyeo.user.service.FileService;
+import com.daou.moyeo.user.vo.UserDetailsVO;
 import com.daou.moyeo.util.FileUtil;
 
 @Controller
@@ -43,14 +46,15 @@ public class GroupMainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/groupMain")
-	public String groupMainInit(Model model) {		
+	@RequestMapping(value = "/group/{groupNo}")
+	public String groupMainInit(@PathVariable("groupNo") int groupNo, Model model) {		
 		//TODO 그룹 권한 삽입
 		System.out.println("Group Main Init()");
 		
-		List<Map<String, Object>> sharing_list = fileService.getFileList();  // load Group Fille List
-		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(1); // load Group Board List
+		List<Map<String, Object>> sharing_list = fileService.getFileList(groupNo);  // load Group Fille List
+		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // load Group Board List
 		
+		System.out.println("allmainBoardList ==>" + allMainBoardList);
 		//=============== FileList Test ===================//
 		/*for(int i=0;i<sharing_list.size();i++){
 			Map<String, Object> map;		
@@ -60,6 +64,7 @@ public class GroupMainController {
 		
 		model.addAttribute("sharing_list", sharing_list);
 		model.addAttribute("allMainBoardList", allMainBoardList);
+		model.addAttribute("groupNo", groupNo);
 		
 		return "groupMain";
 	}
@@ -90,17 +95,18 @@ public class GroupMainController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/fileUpload", method=RequestMethod.POST)
-	public String fileUpload(HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping(value = "/group/{groupNo}/fileUpload", method=RequestMethod.POST)
+	public String fileUpload(@PathVariable("groupNo") int groupNo, HttpServletRequest request, HttpServletResponse response, Authentication auth){
 		FileUtil fileUtil = new FileUtil();
 		List<Map<String, Object>> fileInfoList;
 		
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		fileInfoList = fileUtil.fileUpload(mhsr);
 		
-		fileService.insertFileInfo(fileInfoList);			
+		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
+		fileService.insertFileInfo(fileInfoList, groupNo, u.getMemberNo());			
 	
-		return "redirect:/groupMain";
+		return "redirect:/group/" + groupNo;
 	}
 	
 	

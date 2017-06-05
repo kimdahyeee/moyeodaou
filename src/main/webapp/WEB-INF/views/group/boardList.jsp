@@ -17,7 +17,7 @@
 						<table class="table table-hover">
 							<h4>
 								<i class="fa fa-angle-right"></i> 게시판<i
-									class="fa fa-angle-right more"><a href="<c:url value='/boardWrite'/>">
+									class="fa fa-angle-right more"><a href="<c:url value='/group/${groupNo}/boardWrite'/>">
 										게시글 쓰기</a></i>
 							</h4>
 							<hr>
@@ -34,7 +34,7 @@
 									<c:forEach items="${allBoardList}" var="allBoardLists"  begin="0" end="${fn:length(allBoardList)}" step="1" varStatus="status">
 										<tr>
 											<td>${allBoardList[status.index].rNum}</td>
-											<td><a href="<c:url value='/boardDetail/${allBoardList[status.index].board_no}'/>">${allBoardList[status.index].title}</a></td>
+											<td><a href="<c:url value='/group/${groupNo}/boardDetail/${allBoardList[status.index].board_no}'/>">${allBoardList[status.index].title}</a></td>
 											<td>${allBoardList[status.index].member_name}</td>
 											<td>${allBoardList[status.index].created_date}</td>
 										</tr>
@@ -101,7 +101,7 @@
 	
 	function fn_search(pageNo){
         var comSubmit = new ComSubmit();
-        comSubmit.setUrl("<c:url value='/boardList' />");
+        comSubmit.setUrl("<c:url value='/group/${groupNo}/boardList' />");
         comSubmit.addParam("currentPageNo", pageNo);
         comSubmit.submit();
     }

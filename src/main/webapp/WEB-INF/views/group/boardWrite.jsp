@@ -16,7 +16,7 @@
           		<div class="col-lg-12">
                   <div class="form-panel">
                   	  <h4 class="mb"><i class="fa fa-angle-right"></i> 게시글 작성</h4>
-                      <form class="form-horizontal style-form" method="post" action='<c:url value="/insertBoard"/>'>
+                      <form class="form-horizontal style-form" method="post" action='<c:url value="/group/${groupNo}/insertBoard"/>'>
                           <div class="form-group">
                               <label class="col-sm-2 col-sm-2 control-label">제목</label>
                               <div class="col-sm-10">

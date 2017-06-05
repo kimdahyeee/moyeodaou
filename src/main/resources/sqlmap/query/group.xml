@@ -2,9 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="group">
-	<insert id="insertGroupInfo">
-		INSERT INTO MEMBER_TB(email, password, MEMBER_NAME, authority, SIGNUP_DATE)
-  		VALUES(#{email},#{password},#{name},#{authority}, current_timestamp)
+	<insert id="insertGroup" parameterType="map">
+		insert into GROUP_TB(GROUP_NAME, GROUP_DESC, GROUP_IMG) 
+		values(#{groupName}, #{groupDesc}, #{groupImg});
+	</insert>
+	
+	<insert id="insertMemberGroup" parameterType="map">
+		insert into MEMBER_GROUP_TB(MEMBER_NO, GROUP_NO, GROUP_AUTHORITY) 
+		values(#{memberNO}, (select group_no from GROUP_TB where group_name=#{groupName}), 'MASTER');
 	</insert>
 	
 	<resultMap id="groupList" type="hashmap">
@@ -26,4 +31,6 @@
 			MG.MEMBER_NO = #{groupNo} AND
 			G.GROUP_NO = MG.GROUP_NO
 	</select>
+	
+	
 </mapper>

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface GroupService {
-	public int createGroup(Map<String, String> groupInfo);
+	public int insertGroup(Map<String, Object> groupInfo);
+	public int insertMemberGroup(Map<String, Object> memberInfo);
 	public List<Map<String, Object>> selectGroupList(int memberNo);
+	
 }

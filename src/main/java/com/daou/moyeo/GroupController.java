@@ -33,17 +33,29 @@ public class GroupController {
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		List<Map<String, Object>> groupList = groupService.selectGroupList(u.getMemberNo());
 		model.addAttribute("groupList", groupList);
+		model.addAttribute("groupNo", groupList.get(0).get("groupNo"));
+		
 		return "main";
 	}
 	
 	@RequestMapping( value = "/createGroup", method=RequestMethod.POST)
-	public String fileUpload(HttpServletRequest request, @RequestParam Map<String, Object> reqParams){
+	public String fileUpload(HttpServletRequest request, @RequestParam Map<String, Object> reqParams, Authentication auth){
 		FileUtil fileUtil = new FileUtil();
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		List<Map<String, Object>> fileInfoList = fileUtil.fileUpload(mhsr);
 		
+		Map<String, Object> groupMap = new HashMap<String, Object>();
+		groupMap.put("groupName", reqParams.get("groupName"));
+		groupMap.put("groupDesc", reqParams.get("groupDesc"));
+		groupMap.put("groupImg", fileInfoList.get(0).get("FILE_STORED_NAME"));
+		groupService.insertGroup(groupMap);
 		
-		System.out.println(fileInfoList.get(0).get("FILE_STORED_NAME"));
+		Map<String, Object> memGroupMap = new HashMap<String, Object>();
+		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
+		memGroupMap.put("groupName", reqParams.get("groupName"));
+		memGroupMap.put("memberNO", u.getMemberNo());
+		memGroupMap.put("groupAuthority", "master");
+		groupService.insertMemberGroup(memGroupMap);
 		
 		return "redirect:/main";
 	}

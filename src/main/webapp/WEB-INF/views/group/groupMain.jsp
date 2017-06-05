@@ -16,8 +16,8 @@
 						<table class="table table-hover">
 							<h4>
 								<i class="fa fa-angle-right"></i> 게시판
-								<i class="fa fa-angle-right more"><a href="<c:url value='/boardWrite'/>">게시글 쓰기</a></i> 
-								<i class="fa fa-angle-right more"><a href="<c:url value='/boardList'/>"> 더보기</a></i>
+								<i class="fa fa-angle-right more"><a href="<c:url value='/group/${groupNo}/boardWrite'/>">게시글 쓰기</a></i> 
+								<i class="fa fa-angle-right more"><a href="<c:url value='/group/${groupNo}/boardList'/>"> 더보기</a></i>
 							</h4>
 							<hr>
 							<thead>
@@ -33,7 +33,7 @@
 									<c:forEach var="allMainBoardLists" items="${allMainBoardList}" begin="0" end="${fn:length(allMainBoardList)}" step="1" varStatus="status">
 										<tr>
 											<td>${allMainBoardList[status.index].rNum}</td>
-											<td><a href="<c:url value='/boardDetail/${allMainBoardList[status.index].board_no}'/>">${allMainBoardList[status.index].title}</a></td>
+											<td><a href="<c:url value='/group/${groupNo}/boardDetail/${allMainBoardList[status.index].board_no}'/>">${allMainBoardList[status.index].title}</a></td>
 											<td>${allMainBoardList[status.index].member_name}</td>
 											<td>${allMainBoardList[status.index].created_date}</td>
 										</tr>
@@ -117,7 +117,7 @@
 								<button type="button" class="btn btn-primary">확인
 								</button>	-->
 									<a href="#this"	id="fileUpload2"></a>
-									<form action="<c:url value='/fileUpload?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
+									<form action="<c:url value='/group/${groupNo}/fileUpload?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
 										<input type="file" name="testFile" required="required">		
 										<input type="submit" value="완료">
 									</form>
