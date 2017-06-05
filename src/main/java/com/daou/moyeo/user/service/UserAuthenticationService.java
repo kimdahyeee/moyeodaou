@@ -49,6 +49,6 @@ public class UserAuthenticationService implements UserDetailsService {
 			}
 		}
 		
-		return new UserDetailsVO(user.get("username").toString(), user.get("password").toString(), true, true, true, true, gas, (Integer)user.get("memberNo"));
+		return new UserDetailsVO(user.get("username").toString(), user.get("password").toString(), gas, (Integer)user.get("memberNo"));
 	}
 }
