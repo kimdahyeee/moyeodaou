@@ -32,4 +32,6 @@ public class UserDetailsVO extends User {
 		return super.toString() + "; memberNo: "+this.memberNo;
 	}
 	
+	
+	
 }

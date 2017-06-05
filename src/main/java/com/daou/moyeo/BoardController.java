@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,7 +39,7 @@ public class BoardController {
 	 */
 	@RequestMapping(value = "/boardList")
 	public String boardList( @PathVariable("groupNo") int groupNo, @RequestParam(value="currentPageNo", required=false) String currentPageNo, Model model ) {
-		
+
 		PaginationInfo paginationInfo = new PaginationInfo();
 		
 		//TODO 함수로 빼기
@@ -65,8 +68,11 @@ public class BoardController {
 		List<Map<String, Object>> allBoardList = boardService.selectBoardList(pageInfoMap);
 		
 		//TODO 여기 예외처리 하기
-		if(allBoardList.size() != 0)
+		if(allBoardList.size() != 0) {
 			paginationInfo.setTotalRecordCount((Integer) allBoardList.get(0).get("totalCount"));
+		}else{
+			paginationInfo.setTotalRecordCount(0);
+		}
 		
 		System.out.println("allboardList" + allBoardList);
 		model.addAttribute("paginationInfo", paginationInfo);

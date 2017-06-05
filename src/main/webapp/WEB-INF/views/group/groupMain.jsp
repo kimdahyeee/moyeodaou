@@ -52,9 +52,8 @@
 									<h3></h3>
 								</div>
 								<div class="profile-01 centered">
-									<!--  <p>추가</p>	-->
 									<a data-toggle="modal" data-target="#fileUpload" href="#">
-					                    	<span>추가</span>
+					                    	<p>추가</p>
 					                </a>
 								</div>
 								<div class="centered">
@@ -104,7 +103,7 @@
 					<div class="modal fade" id="fileUpload" tabindex="-1"
 					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
-						<div class="modal-content팀">
+						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								<h4 class="modal-title" id="myModalLabel">파일 업로드</h4>
@@ -112,26 +111,15 @@
 							<div class="modal-body">
 							</div>
 							<div class="modal-footer">
-								<!--  
-								<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-								<button type="button" class="btn btn-primary">확인
-								</button>	-->
 									<a href="#this"	id="fileUpload2"></a>
 									<form action="<c:url value='/group/${groupNo}/fileUpload?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
 										<input type="file" name="testFile" required="required">		
 										<input type="submit" value="완료">
 									</form>
-									<script>
-										console.log($("form#fileUpload"))
-									</script>
-									
 							</div>
 						</div>
 					</div>
 				</div>
-					
-					<!-- /row -->
-
 				</div>
 				<!-- /col-lg-9 END SECTION MIDDLE -->
 

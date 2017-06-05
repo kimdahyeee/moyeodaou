@@ -27,6 +27,12 @@ public class GroupController {
 	@Resource(name="groupService")
 	private GroupService groupService;
 	
+	/**
+	 * 로그인 시 처음(메인) 화면
+	 * @param model
+	 * @param auth
+	 * @return
+	 */
 	@RequestMapping(value = "/main")
 	public String main(Model model, Authentication auth) {
 		//TODO
@@ -38,6 +44,13 @@ public class GroupController {
 		return "main";
 	}
 	
+	/**
+	 * 새 그룹 생성
+	 * @param request
+	 * @param reqParams
+	 * @param auth
+	 * @return
+	 */
 	@RequestMapping( value = "/createGroup", method=RequestMethod.POST)
 	public String fileUpload(HttpServletRequest request, @RequestParam Map<String, Object> reqParams, Authentication auth){
 		FileUtil fileUtil = new FileUtil();

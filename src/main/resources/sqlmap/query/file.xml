@@ -6,7 +6,6 @@
 		<result property="file_name" column="FILE_NAME" javaType="java.lang.String"/>
 		<result property="member_no" column="MEMBER_NO" javaType="java.lang.String"/>
 		<result property="group_file_no" column="GROUP_FILE_NO" javaType="int"/>
-	
 	</resultMap>
 	
 	<resultMap id="downFileInfo" type="hashmap" >

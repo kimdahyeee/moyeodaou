@@ -54,7 +54,6 @@ public class GroupMainController {
 		List<Map<String, Object>> sharing_list = fileService.getFileList(groupNo);  // load Group Fille List
 		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // load Group Board List
 		
-		System.out.println("allmainBoardList ==>" + allMainBoardList);
 		//=============== FileList Test ===================//
 		/*for(int i=0;i<sharing_list.size();i++){
 			Map<String, Object> map;		

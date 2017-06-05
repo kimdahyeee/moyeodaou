@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,14 +33,21 @@ public class UserAuthenticationService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		// group authority 권한 추가해야함~!!!!
+
 		Map<String, Object> user = sqlSession.selectOne("user.selectUser", username);
 		
 		if(user == null ) throw new UsernameNotFoundException(username);
 		List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
 		gas.add(new SimpleGrantedAuthority(user.get("authority").toString()));
 		
-		//gas.add(new SimpleGrantedAuthority("권한1"));
+		int memberNo = (Integer)user.get("memberNo");
+		List<Map<String, Object>> groupAuth = sqlSession.selectList("user.selectGroupAuthInfo", memberNo);
+		
+		if(groupAuth.size() != 0){
+			for(int i=0; i<groupAuth.size(); i++){
+				gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + groupAuth.get(i).get("groupNo") + "_" + groupAuth.get(i).get("groupAuthority") ));
+			}
+		}
 		
 		return new UserDetailsVO(user.get("username").toString(), user.get("password").toString(), true, true, true, true, gas, (Integer)user.get("memberNo"));
 	}
