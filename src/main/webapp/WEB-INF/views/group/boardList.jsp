@@ -42,9 +42,11 @@
 								</c:if>
 							</tbody>
 						</table>
-						<c:if test="${not empty paginationInfo}">
-					        <ui:pagination paginationInfo = "${paginationInfo}" type="text" jsFunction="fn_search"/>
-					    </c:if>
+						<div class="centered">
+							<c:if test="${not empty paginationInfo}">
+						        <ui:pagination paginationInfo = "${paginationInfo}" type="text" jsFunction="fn_search"/>
+						    </c:if>
+					    </div>
 						    <input type="hidden" id="currentPageNo" name="currentPageNo"/>
 					</div>
 					<!--/content-panel -->

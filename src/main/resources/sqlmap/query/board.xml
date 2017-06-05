@@ -61,7 +61,7 @@
         	AA.*
    		FROM(
        		SELECT 
-       			(SELECT COUNT(*) FROM GROUP_BOARD_TB) AS TOTALCOUNT,
+       			(SELECT COUNT(*) FROM GROUP_BOARD_TB WHERE GROUP_NO = #{groupNo}) AS TOTALCOUNT,
        			@ROWNUM := @ROWNUM + 1 AS RNUM, 
        			GB.BOARD_NO, 
        			GB.TITLE, 

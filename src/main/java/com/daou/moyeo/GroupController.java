@@ -39,7 +39,10 @@ public class GroupController {
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		List<Map<String, Object>> groupList = groupService.selectGroupList(u.getMemberNo());
 		model.addAttribute("groupList", groupList);
-		model.addAttribute("groupNo", groupList.get(0).get("groupNo"));
+		
+		if(groupList.size() != 0) {
+			model.addAttribute("groupNo", groupList.get(0).get("groupNo"));
+		}
 		
 		return "main";
 	}

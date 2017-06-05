@@ -43,8 +43,6 @@ public class BoardController {
 		PaginationInfo paginationInfo = new PaginationInfo();
 		
 		//TODO 함수로 빼기
-		System.out.println("currentPage No  ====> " + currentPageNo);
-		
 		if(StringUtils.isEmpty(currentPageNo) == true) {
 			paginationInfo.setCurrentPageNo(1);
 		}else {
@@ -69,6 +67,7 @@ public class BoardController {
 		
 		//TODO 여기 예외처리 하기
 		if(allBoardList.size() != 0) {
+			System.out.println("total  : " + allBoardList.get(0).get("totalCount"));
 			paginationInfo.setTotalRecordCount((Integer) allBoardList.get(0).get("totalCount"));
 		}else{
 			paginationInfo.setTotalRecordCount(0);
