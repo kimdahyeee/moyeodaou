@@ -1,6 +1,7 @@
 package com.daou.moyeo;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,16 +42,26 @@ public class GroupMainController {
 	/**
 	 *  그룹 메인 화면
 	 * @param model
+	 * @param auth
 	 * @return
 	 */
 	@RequestMapping(value = "/group/{groupNo}")
-	public String groupMainInit(@PathVariable("groupNo") int groupNo, Model model) {		
+	public String groupMainInit(@PathVariable("groupNo") int groupNo, Model model, Authentication auth) {		
 		//TODO 그룹 권한 삽입
 		System.out.println("Group Main Init()");
 		
+		//Daeho 2017.06.07 chat
+		Map<String, Object> currentInfo = new HashMap<String, Object>();
+		UserDetailsVO u = (UserDetailsVO)auth.getPrincipal();
+		currentInfo.put("memberNo", u.getMemberNo());
+		currentInfo.put("groupNo", groupNo);
+		
 		List<Map<String, Object>> sharing_list = fileService.getFileList(groupNo);  // load Group Fille List
 		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // load Group Board List
+		
 		Map<String, Object> groupInfo = groupService.selectGroupInfo(groupNo); // daeho 2017.06.07 chat
+		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
+		List<Map<String, Object>> groupMemberList = groupService.selectGroupMemberList(currentInfo);
 		
 		//=============== FileList Test ===================//
 		/*for(int i=0;i<sharing_list.size();i++){
@@ -63,6 +74,8 @@ public class GroupMainController {
 		model.addAttribute("allMainBoardList", allMainBoardList);
 		model.addAttribute("groupNo", groupNo);
 		model.addAttribute("groupInfo", groupInfo); // daeho 2017.06.07 chat
+		model.addAttribute("otherGroupList", otherGroupList); 
+		model.addAttribute("groupMemberList", groupMemberList); 
 		
 		return "groupMain";
 	}
