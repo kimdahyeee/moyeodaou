@@ -18,14 +18,16 @@ public class UserDetailsVO implements UserDetails {
 	private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 	
 	private String username;
+	private String memberName;
 	private String password;
 	private Set<GrantedAuthority> authorities;
 	private int memberNo;
 	
-	public UserDetailsVO(String username, String password, Collection<? extends GrantedAuthority> authorities, int memberNo) {
+	public UserDetailsVO(String username, String memberName, String password, Collection<? extends GrantedAuthority> authorities, int memberNo) {
 		this.username = username;
 		this.password = password;
 		this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
+		this.memberName = memberName;
 		this.memberNo = memberNo;
 	}
 	
@@ -47,6 +49,7 @@ public class UserDetailsVO implements UserDetails {
 	public String getUsername() {
 		return username;
 	}
+	
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -74,6 +77,14 @@ public class UserDetailsVO implements UserDetails {
 
 	public void setMemberNo(int memberNo) {
 		this.memberNo = memberNo;
+	}
+	
+	public String getMemberName() {
+		return memberName;
+	}
+	
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
 	}
 
 	private static SortedSet<GrantedAuthority> sortAuthorities(
@@ -121,6 +132,7 @@ public class UserDetailsVO implements UserDetails {
 		sb.append("id: ").append(this.username).append("; ");
 		sb.append("Password: [PROTECTED]; ");
 		sb.append("memberNo : ").append(this.memberNo).append("; "); 
+		sb.append("memberName : ").append(this.memberName).append("; "); 
 
 		if (!authorities.isEmpty()) {
 			sb.append("Granted Authorities: ");
