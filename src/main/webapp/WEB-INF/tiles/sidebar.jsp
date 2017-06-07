@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 	<aside>
           <div id="sidebar"  class="nav-collapse ">
@@ -15,13 +16,15 @@
                           <span>메인화면</span>
                       </a>
                   </li>
-
+					<sec:authorize access="hasRole('ROLE_GROUP${groupNo}_MEMBER')">
                   <li class="sub-menu">
                       <a data-toggle="modal" data-target="#leaveThisGroup" href="#">
                           <i class="fa fa-dashboard"></i>
                             <span>탈퇴</span>
                       </a>
                   </li>
+                  </sec:authorize>
+                  <sec:authorize access="hasRole('ROLE_GROUP${groupNo}_MASTER')">
                   <li class="sub-menu">
                       <a href="#" data-toggle="modal" data-target="#inviteGroup">
                           <i class="fa fa-dashboard"></i>
@@ -34,6 +37,7 @@
                           <span>그룹해체</span>
                       </a>
                   </li>
+                  </sec:authorize>
                   <li class="sub-menu">
                       <a href="#">
                           <i class="fa fa-dashboard"></i>

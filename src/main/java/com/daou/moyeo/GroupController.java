@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.jws.soap.SOAPBinding.Use;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,11 +79,17 @@ public class GroupController {
 		memGroupMap.put("groupAuthority", "master");
 		groupService.insertMemberGroup(memGroupMap);
 		
-		//TODO 권한 재설정 => groupno 추가하도록 바꾸면 됨(10자리)
+		int groupNo = groupService.selectGroupNo((String) reqParams.get("groupName"));
 		List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
 		gas.addAll(u.getAuthorities());
-		gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + 13 + "_MASTER"));
+		gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + groupNo + "_MASTER"));
 		u.setAuthorities(gas);
+		
+		System.out.println("u : " + u);
+		
+		Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), gas);
+
+		SecurityContextHolder.getContext().setAuthentication(newAuth);
 		
 		System.out.println("user authority : " + u.getAuthorities());
 		return "redirect:/main";

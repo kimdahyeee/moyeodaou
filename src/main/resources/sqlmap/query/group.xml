@@ -20,7 +20,7 @@
 	</resultMap>
 	
 	<select id="selectGroupList" parameterType="int" resultMap="groupList">
-		select 
+		SELECT 
 			G.GROUP_NO,
 			G.GROUP_NAME,
 			G.GROUP_IMG,
@@ -32,5 +32,12 @@
 			G.GROUP_NO = MG.GROUP_NO
 	</select>
 	
-	
+	<select id="selectGroupNo" parameterType="java.lang.String" resultType="int">
+		SELECT
+			GROUP_NO
+		FROM
+			GROUP_TB
+		WHERE
+			GROUP_NAME = #{groupName}
+	</select>
 </mapper>

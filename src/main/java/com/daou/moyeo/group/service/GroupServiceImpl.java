@@ -24,4 +24,10 @@ public class GroupServiceImpl extends SqlSessionDaoSupport implements GroupServi
 		return getSqlSession().selectList("group.selectGroupList", memberNo);
 	}
 
+	@Override
+	public int selectGroupNo(String groupName) {
+		return getSqlSession().selectOne("group.selectGroupNo", groupName);
+	}
+
+	
 }
