@@ -209,6 +209,7 @@
 	var port = "3003";
 	var chat_id = "";
 	var cnt = 0;
+	var notify_cnt = 0;
 
 	var group = {
 		group_no: '${groupInfo.groupNo}',
@@ -259,10 +260,15 @@
 		});
 
 		group_socket.on('notify', function (data) {
-			var token = data.split("*")[0];
-			data = data.split("*")[1];
+			var time = data.split("*")[0];
+			var token = data.split("*")[1];
+			var from = data.split("*")[2];
+			$("#notify_cnt").html(cnt++);
 			if(token != group.group_no) {
-				$('#chat_notify_list').append('<li> <a href="/group">' + data + '</a> </li>');
+				/*$('#chat_notify_list').append('
+						<li> <a href="/group">' + data + '</a> </li>
+						');*/
+				$('#chat_notify_list').append(' <li> <a href="#"> <span class="subject"> <span class="from">'+ from +'</span> <span class="time">'+ time +'</span> </span> <span class="message"> '+ token +'방에서 알림이 왔습니다. </span> </a> </li> ');
 				$('.chat_notify_list').scrollTop($('#chat_notify_list').height());
 			}
 		});
