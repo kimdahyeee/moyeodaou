@@ -34,6 +34,15 @@ public class GroupServiceImpl extends SqlSessionDaoSupport implements GroupServi
 	public Map<String, Object> selectGroupInfo(int groupNo){
 		return getSqlSession().selectOne("group.selectGroupInfo", groupNo);
 	}
+	
+	@Override
+	public List<Map<String, Object>> selectOtherGroupList(Map<String, Object> currentInfo) {
+		return getSqlSession().selectList("group.selectOtherGroupList", currentInfo);
+	}
 
+	@Override
+	public List<Map<String, Object>> selectGroupMemberList(Map<String, Object> currentInfo) {
+		return getSqlSession().selectList("group.selectGroupMemberList", currentInfo);
+	}
 	
 }

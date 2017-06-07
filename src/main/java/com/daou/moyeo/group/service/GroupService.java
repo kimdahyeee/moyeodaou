@@ -9,4 +9,7 @@ public interface GroupService {
 	public List<Map<String, Object>> selectGroupList(int memberNo);
 	public int selectGroupNo(String groupName);
 	public Map<String, Object> selectGroupInfo(int groupNo); // Daeho 2017.06.07 chat
+	// Daeho 2017.06.07 select group list except for current joined group
+	public List<Map<String, Object>> selectOtherGroupList(Map<String, Object> currentInfo); 
+	public List<Map<String, Object>> selectGroupMemberList(Map<String, Object> currentInfo); 
 }
