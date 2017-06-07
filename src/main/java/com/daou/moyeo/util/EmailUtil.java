@@ -25,7 +25,7 @@ public class EmailUtil {
 	 /*
 	  	 configoureAndSend -> sendEmail 의 흐름으로 그룹초대 email 발송
 	  */
-	public boolean configureAndSend(HttpSession session, String receiverEmail, String joinCode) {
+	public boolean configureAndSend(HttpSession session, String receiverEmail, String joinCode, int groupNo, int memberNo) {
     	EmailDTO email = new EmailDTO();
     	
     	session.setAttribute("joinCode", joinCode);
@@ -37,8 +37,8 @@ public class EmailUtil {
         String subject = "그룹초대 인증 코드 발급 안내 입니다.";			
 	    String content = sb.toString();						
 	    
-	    // TODO url 설정하기
-	    content = content + "\n" +"http://localhost:8181/daou/invite?joincode=" + joinCode;				
+	    // TODO url 설정하기			
+	    content = content + "\n" +"http://localhost:8181/daou/invite/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
 	    
 	    email.setReciver(reciver);
         email.setSubject(subject);

@@ -48,7 +48,7 @@ public class EmailController {
 		    	int receiverNo = emailService.getMemberNo(receiverEmail);
 		    	token = emailService.createToken(receiverNo, groupNo);
 		    	
-	    		if(emailUtil.configureAndSend(session, receiverEmail, token, groupNo)){
+	    		if(emailUtil.configureAndSend(session, receiverEmail, token, groupNo, receiverNo)){
 		        	// 성공
 	    			System.out.println("발송) 회원 -> 성공");
 	    			return "redirect:/group/" + groupNo;
