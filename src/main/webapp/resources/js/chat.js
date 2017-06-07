@@ -13,6 +13,8 @@
 //var member = {
 //		member_no: '<%=member_no%>',
 //		member_name: '<%=member_name%>'
+//		member_no: '${memberNo}',
+//		member_name: '${memberName}'
 //};
 //
 //var channel = group.group_no;

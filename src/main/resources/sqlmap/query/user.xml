@@ -6,6 +6,7 @@
 		SELECT 
 			MEMBER_NO as memberNo,
 			EMAIL as username,
+			MEMBER_NAME as memberName,
 		    PASSWORD as password,
 		    AUTHORITY as authority
 		FROM MEMBER_TB

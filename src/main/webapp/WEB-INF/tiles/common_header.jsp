@@ -29,6 +29,7 @@
 <body>
    	<sec:authentication property="principal.username" var="email" />
    	<sec:authentication property="principal.memberNo" var="memberNo" />
+   	<sec:authentication property="principal.memberName" var="memberName" />
 	<section id="container"> <!-- **********************************************************************************************************************************************************
       TOP BAR CONTENT & NOTIFICATIONS
       *********************************************************************************************************************************************************** -->
@@ -92,6 +93,7 @@
 						<a href="#">
 							<span class="photo">
 								<img alt="avatar" src="<c:url value='/resources/img/ui-zac.jpg'/>">
+								
 							</span>
 							<span class="subject">
 								<span class="from">Zac Snider</span>
@@ -112,7 +114,7 @@
 	<div class="top-menu">
        	<form action="<c:url value='/logout'/>" method="post">
 	    	<ul class="nav pull-right top-menu">
-	            <a class="main_name dont-show">${email} 님 </a> 
+	            <a class="main_name dont-show">${memberName} 님 </a> 
 	           <li>
 		            	<input type="submit" class="logout" value="Logout"/>
 	           	</li>	
