@@ -4,13 +4,18 @@
 <mapper namespace="email">
 	
 	<!-- email 인증 관련 query (groupNo, memberNo, token)-->	
-	<select id="selectToken" parameterType="hashmap" >
-       SELECT count(*) FROM CODE_TB WHERE INVITE_GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo} AND TOKEN=#{token};
+	<select id="selectToken" parameterType="hashmap" resultType="java.lang.Integer">
+       SELECT count(*) FROM CODE_TB WHERE INVITE_GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo} AND TOKEN=#{token}
 	</select>
 	
 	<!-- 회원 id로 member_no 가지고 오는 query -->
 	<select id="selectMemberNo" parameterType="java.lang.String"  resultType="java.lang.Integer"> 
-		select MEMBER_NO from MEMBER_TB where EMAIL="#{receiverEmail}";
+		select MEMBER_NO from MEMBER_TB where EMAIL=#{receiverEmail}
+	</select>
+	
+	<!-- 같은 그룹에서 오는 초대인지 아닌지 확인해주는 query -->
+	<select id="selectTheSameInvitedGroupOrNot" parameterType="hashmap" resultType="java.lang.Integer">
+		SELECT count(*) FROM MEMBER_GROUP_TB where MEMBER_NO=#{memberNo} AND GROUP_NO=#{groupNo}
 	</select>
 	
 	<!-- 회원, 비회원 구분 query -->
@@ -20,11 +25,11 @@
 	
 	<!-- 인증 token값 삽입 -->
 	<insert id="insertToken" parameterType="hashmap">
-	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN) VALUES (#{memberNo},#{groupNo}, #{token});
+	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN) VALUES (#{memberNo},#{groupNo}, #{token})
 	</insert>
 	
 	<!-- MEMBER_GROUP_TB에 새로운 Member 추가 -->
 	<insert id="insertMemberGroupTB" parameterType="hashmap">
-		INSERT INTO MEMBER_GROUP_TB(MEMBER_NO, GROUP_NO, GROUP_AUTHORITY) VALUES (#{memberNo}, #{groupNo}, "MEMBER");
+		INSERT INTO MEMBER_GROUP_TB(MEMBER_NO, GROUP_NO, GROUP_AUTHORITY) VALUES (#{memberNo}, #{groupNo}, "MEMBER")
 	</insert>
 </mapper>
