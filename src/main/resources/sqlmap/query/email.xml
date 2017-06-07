@@ -2,14 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="email">
-	<resultMap id="codeInfo" type="hashmap">
-		<result property="invite_group_no" column="INVITE_GROUP_NO" javaType="java.lang.String"/>
-		<result property="member_no" column="MEMBER_NO" javaType="java.lang.String"/>
-	</resultMap>
 	
-	<!-- email 인증 관련 query -->	
-	<select id="selectToken" parameterType="java.lang.String"  resultMap="codeInfo">
-       SELECT INVITE_GROUP_NO, MEMBER_NO from CODE_TB WHERE TOKEN=#{token}
+	<!-- email 인증 관련 query (groupNo, memberNo, token)-->	
+	<select id="selectToken" parameterType="hashmap" >
+       SELECT count(*) FROM CODE_TB WHERE INVITE_GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo} AND TOKEN=#{token};
 	</select>
 	
 	<!-- 회원 id로 member_no 가지고 오는 query -->
@@ -27,4 +23,8 @@
 	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN) VALUES (#{memberNo},#{groupNo}, #{token});
 	</insert>
 	
+	<!-- MEMBER_GROUP_TB에 새로운 Member 추가 -->
+	<insert id="insertMemberGroupTB" parameterType="hashmap">
+		INSERT INTO MEMBER_GROUP_TB(MEMBER_NO, GROUP_NO, GROUP_AUTHORITY) VALUES (#{memberNo}, #{groupNo}, "MEMBER");
+	</insert>
 </mapper>

@@ -1,6 +1,6 @@
 package com.daou.moyeo.mail.service;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,12 +15,17 @@ public class EmailService extends SqlSessionDaoSupport{
 	}
 	
 	/* 
-	 * 인증 Token 값 확인 메소드
+	 * 그룹No, 멤버No, 인증 Token 값 확인 메소드
 	 * */
-	public Map<String, Object> checkToken(String token){
+	public boolean checkToken(Map<String, Object> map){
+		int returnValue;
+		returnValue = getSqlSession().selectOne("email.selectToken", map);
 		
-		return (getSqlSession().selectOne("email.selectToken", token));
-		
+		if(returnValue == 1){							
+			return true;
+		}else{										
+			return false;
+		}
 	}
 	/*
 	 *  ID로 멤버 No 가져오는 메소드
@@ -63,8 +68,8 @@ public class EmailService extends SqlSessionDaoSupport{
 	/*
 	 * 회원의 그룹가입 삽입해주는 메소드
 	 * */
-	public void putNewMemberInGroup(){
-	//	getSqlSession().insert();
+	public void putNewMemberInGroup(Map<String, Object> map){
+		getSqlSession().insert("email.insertMemberGroupTB", map);
 	}
 	
 }
