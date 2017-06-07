@@ -68,7 +68,6 @@ public class FileUtil {
 		System.out.println("fileUpload() call");
 		try{							
 			iter = mhsr.getFileNames();
-			
 			File file = new File(path);
 	        if(file.exists() == false){
 	            file.mkdirs();

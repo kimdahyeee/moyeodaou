@@ -48,4 +48,4 @@
     
     <bean id="passwordEncoder" class="com.daou.moyeo.user.util.PasswordEncoding"/>
     
-</beans>
+	</beans>

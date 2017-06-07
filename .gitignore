@@ -38,11 +38,6 @@ hs_err_pid*
 .project
 .classpath
 src/test/
-src/main/webapp/WEB-INF/spring/root-context.xml
 src/main/webapp/resources/database.properties
 /bin/
 src/main/resources/log4j.xml
-src/main/webapp/resources/css/customs.css.rej
-src/main/webapp/WEB-INF/tiles/footer.jsp.rej
-src/main/webapp/resources/application.properties
-src/main/webapp/resources/jdbc.properties
