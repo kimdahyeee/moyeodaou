@@ -133,7 +133,7 @@
 					<h3>회의 가능 시간</h3>
 					<div class="mb">
 						<div class="white-panel desc donut-chart">
-							<div class="row">
+							<!-- <div class="row">
 								<div class="col-sm-6 col-xs-6 goleft">
 									<p>
 										<i class="fa fa-database"></i> 50%
@@ -154,15 +154,17 @@
 									];
 									var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
 							</script>
-						</div>
+						</div>-->
 						<!--/grey-panel -->
 					</div>
 
 					<!-- USERS ONLINE SECTION -->
-					<h3>채팅</h3>
+					<h3>
+					채팅(접속자 수 :<span id="now_member_cnt">-</span>)
+					</h3>
 					<!-- First Member -->
+					<!-- 
 					<div class="desc">
-					
 						<div class="thumb">
 							<img class="img-circle" src="<c:url value='resources/img/ui-divya.jpg'/>" width="35px" height="35px" align="">
 						</div>
@@ -173,52 +175,22 @@
 							</p>
 						</div>
 					</div>
-				<!-- Second Member -->
-					<div class="desc">
-						<div class="thumb">
-							<img class="img-circle" src="<c:url value='resources/img/ui-sherman.jpg'/>" width="35px" height="35px" align="">
+					-->
+					<div id="chat_form" class="desc chat_form">
+						<div class="chat_notify_list">
+							<ul id="chat_notify_list"></ul>
 						</div>
-						<div class="details">
-							<p>
-								<a href="#">DJ SHERMAN</a><br />
-								<muted>I am Busy</muted>
-							</p>
+						<div class="chat_list">
+							<strong>대화</strong><br>
+							<ul id="chat_list"></ul>
 						</div>
-					</div>
-					<!-- Third Member -->
-					<div class="desc">
-						<div class="thumb">
-							<img class="img-circle" src="<c:url value='resources/img/ui-danro.jpg'/>" width="35px" height="35px" align="">		
+						
+						<div class="chat_input">
+							<input type='text' id="chat_input" class="chat_input_txt" value="대화 글을 입력하세요." onclick="$(this).val('');")/>
 						</div>
-						<div class="details">
-							<p>
-								<a href="#">DAN ROGERS</a><br />
-								<muted>Available</muted>
-							</p>
-						</div>
-					</div>
-					<!-- Fourth Member -->
-					<div class="desc">
-						<div class="thumb">
-							<img class="img-circle" src="<c:url value='resources/img/ui-zac.jpg'/>" width="35px" height="35px" align="">		
-						</div>
-						<div class="details">
-							<p>
-								<a href="#">Zac Sniders</a><br />
-								<muted>Available</muted>
-							</p>
-						</div>
-					</div>
-					<!-- Fifth Member -->
-					<div class="desc">
-						<div class="thumb">
-							<img class="img-circle" src="<c:url value='resources/img/ui-sam.jpg'/>" width="35px" height="35px" align="">		
-						</div>
-						<div class="details">
-							<p>
-								<a href="#">Marcel Newman</a><br />
-								<muted>Available</muted>
-							</p>
+						
+						<div class="chat_btn">
+							<a href="javascript:chat_input();">입력</a>
 						</div>
 					</div>
 				</div>
@@ -232,7 +204,8 @@
 <script>
 	// var host = "175.115.95.51";
 	// var host = "192.168.219.102";
-	var host = "localhost"
+	var host = "172.21.21.61";
+	//var host = "localhost"
 	var port = "3003";
 	var chat_id = "";
 	var cnt = 0;
@@ -246,7 +219,7 @@
 		member_no: '${memberNo}',
 		member_name: '${memberName}'
 	};
-
+	
 	var group_info = [];
 	var channel = group.group_no;
 	var member_list = [];
