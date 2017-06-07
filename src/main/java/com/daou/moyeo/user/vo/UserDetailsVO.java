@@ -1,22 +1,17 @@
 package com.daou.moyeo.user.vo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
-
-import com.daou.moyeo.user.service.UserAuthenticationService;
 
 public class UserDetailsVO implements UserDetails {
 
@@ -39,18 +34,12 @@ public class UserDetailsVO implements UserDetails {
 		return authorities;
 	}
 	
-	//TODO 여기 수정요함... 권한 추가 할 수 있도록 controller에서
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-		/*List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
-		gas.add(new SimpleGrantedAuthority("dddd"));
-		gas.addAll(authorities);
-		this.authorities = (Set<GrantedAuthority>) gas;*/
 		this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
 		return password;
 	}
 
