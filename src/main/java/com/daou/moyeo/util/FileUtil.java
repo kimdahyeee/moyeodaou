@@ -41,7 +41,7 @@ public class FileUtil {
 		
 		response.setContentType("application/octet-stream");
 	    response.setContentLength(fileByte.length);
-	    response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(originalFileName,"UTF-8")+"\";");			// attachment : ÷������ , content-disposition : multipart-form / data    ,  UTF-8 ���ڵ� 
+	    response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(originalFileName,"UTF-8")+"\";");			
 	    response.setHeader("Content-Transfer-Encoding", "binary");
 	  
 	    response.getOutputStream().write(fileByte);
@@ -68,8 +68,6 @@ public class FileUtil {
 		System.out.println("fileUpload() call");
 		try{							
 			iter = mhsr.getFileNames();
-			System.out.println("out while" + mhsr.getFile(iter.next()).getOriginalFilename());
-			
 			File file = new File(path);
 	        if(file.exists() == false){
 	            file.mkdirs();
@@ -78,7 +76,7 @@ public class FileUtil {
 			while (iter.hasNext()) { 
 				mfile = mhsr.getFile(iter.next());				
 				originalFileName = mfile.getOriginalFilename();
-				System.out.println("in while");
+			
 				String temp = originalFileName.substring(originalFileName.lastIndexOf('.'));
 				storedName = path + getRandomName() + temp;
 				file = new File(storedName);		
