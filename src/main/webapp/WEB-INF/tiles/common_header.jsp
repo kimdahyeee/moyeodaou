@@ -27,7 +27,8 @@
 
 </head>
 <body>
-
+   	<sec:authentication property="principal.username" var="email" />
+   	<sec:authentication property="principal.memberNo" var="memberNo" />
 	<section id="container"> <!-- **********************************************************************************************************************************************************
       TOP BAR CONTENT & NOTIFICATIONS
       *********************************************************************************************************************************************************** -->
@@ -111,13 +112,12 @@
 	<div class="top-menu">
        	<form action="<c:url value='/logout'/>" method="post">
 	    	<ul class="nav pull-right top-menu">
-	            <a class="main_name dont-show"><sec:authentication property="principal.username"/> 님</a>
-	            <li>
+	            <a class="main_name dont-show">${email} 님 </a> 
+	           <li>
 		            	<input type="submit" class="logout" value="Logout"/>
 	           	</li>	
 	    	</ul>
 	    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
       	</form>
     </div>
-	
 	</header> <!--header end--> 

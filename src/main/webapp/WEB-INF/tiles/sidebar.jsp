@@ -7,8 +7,11 @@
           <div id="sidebar"  class="nav-collapse ">
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
-              	  <p class="centered"><a href="#"><img src="<c:url value='resources/img/ui-sam.jpg'/>" class="img-circle" width="60"></a></p>
-              	  <h5 class="centered">그룹명</h5>
+              	  <p class="centered">
+              	  <a href="#"><img src="<c:url value='resources/img/ui-sam.jpg'/>" class="img-circle" width="60"></a>
+              	  ${groupInfo.groupImg}
+              	  </p>
+              	  <h5 class="centered">${groupInfo.groupName}</h5>
               	  	
                   <li class="mt">
                       <a class="active" href="#">

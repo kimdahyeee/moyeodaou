@@ -6,8 +6,8 @@ var chat_id = "";
 var cnt = 0;
 
 var group = {
-		group_no: '<%=group_no%>',
-		group_name: '<%=group_name%>'
+		group_no: '${groupInfo.groupNo}',
+		group_name: '${groupInfo.groupName}'
 };
 
 var member = {
