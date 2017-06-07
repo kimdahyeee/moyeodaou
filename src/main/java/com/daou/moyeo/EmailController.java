@@ -1,5 +1,8 @@
 package com.daou.moyeo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.daou.moyeo.mail.service.EmailService;
-import com.daou.moyeo.user.vo.UserDetailsVO;
 import com.daou.moyeo.util.EmailUtil;
 
 @Controller
@@ -55,10 +57,11 @@ public class EmailController {
 		        }else{
 		        	// 실패
 		        	System.out.println("발송) 회원 -> 실패");
-		            return "redirect:/main";
+		        	return "redirect:/group/" + groupNo;
 		    	}
 	    	}else{
 	    		System.out.println("발송) 비회원 ");
+	    		return "redirect:/group/" + groupNo;
 	    	/*
 	    		// 비회원
 	    		if(emailUtil.configureAndSend(session, receiverEmail, token)){
@@ -73,21 +76,31 @@ public class EmailController {
 	    }
 	    
 	    /* 인증 URL 타고 온 요청 확인하는 메소드*/
-	    @RequestMapping(value = "/invite/{groupNo}/", method=RequestMethod.GET)
-	    public String checkRequest(@PathVariable("groupNo") int groupNo, @RequestParam("joincode") String code){
+	    @RequestMapping(value = "/invite/{groupNo}/{memberNo}/", method=RequestMethod.GET)
+	    public String checkRequest(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code){
 	    	
-	    	/* DB에 저장된 인증코드 확인 */
+	    	/* Session 확인을 통해 로그인 / 비로그인 구분
+	    	 * groupNo, memberNo, token 으로 유효한 url 접근인지 확인. -> DB insert
+	    	 * */
+	    	Map<String, Object> map = new HashMap<String, Object>();
 	    	System.out.println("checkRequest() - code:"+code);
 	    	
-	    	if(emailService.checkToken(code)){
-	    		// true (인증코드 확인)
-	    		System.out.println("그룹가입 완료창?");
-	    		// DB에 해당 회원 GROUP_TB에 새롭게 insert 해주는 Service 추가
-	    		// ....
+	    	map.put("groupNo", groupNo);
+	    	map.put("memberNo", memberNo);
+	    	map.put("token", code);
+	    	//UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
+	    	//u.getMemberNo();
+	    	
+	    	if(emailService.checkToken(map)){
+	    		// true (유효한 접근임을 확인)
+	    		System.out.println("CODE_TB에 저장된 값과 url 값이 동일");
+	    		// DB에 해당 회원 MEMBER_GROUP_TB에 새롭게 insert 해주는 Service 추가
+	    		emailService.putNewMemberInGroup(map);
 	    	}else{
-	    		System.out.println("그룹가입 X");  	
+	    		System.out.println("groupNo, memberNo, token 중 DB에 존재하는 값과 일치하지 않음. ");  	
 	    	}
 	    	
+	    	// session 확인 ?? 
 	    	return "redirect:/groupMain"; 
 	    }
 }
