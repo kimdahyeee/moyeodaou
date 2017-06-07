@@ -100,11 +100,12 @@
 				</div>
 				<div class="modal-body">
 					<!--  <form class="form-horizontal style-form" method="post">	-->
-					<form action="<c:url value='/email?${_csrf.parameterName}=${_csrf.token}'/>" class="form-horizontal style-form" method="post">
+					<form action="<c:url value='/group/${groupNo}/email'/>" class="form-horizontal style-form" method="post">
 						<div class="form-group">
 							<label class="col-sm-2 col-sm-2 control-label">email주소</label>
 							<div class="col-sm-10">
 								<input type="email" name="receiverId" class="form-control">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 							</div>
 						</div>
 						<div class="centered">

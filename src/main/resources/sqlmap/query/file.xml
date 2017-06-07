@@ -25,7 +25,7 @@
 	
 	<!-- group File List 관련 query -->
 	<select id="selectAllFileList" parameterType="int" resultMap="fileInfoList">
-		SELECT FILE_NAME, MEMBER_NO, GROUP_FILE_NO from GROUP_FILE_TB WHERE GROUP_NO = #{groupNo} ORDER BY GROUP_FILE_NO ASC;
+		SELECT FILE_NAME, MEMBER_NO, GROUP_FILE_NO from GROUP_FILE_TB WHERE GROUP_NO = #{groupNo} ORDER BY GROUP_FILE_NO ASC
 	</select>
 	
 	<!-- email 인증 관련 query -->	

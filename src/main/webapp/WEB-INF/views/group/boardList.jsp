@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 
 	<!-- **********************************************************************************************************************************************************
@@ -42,69 +41,26 @@
 								</c:if>
 							</tbody>
 						</table>
-						<div class="centered">
-							<c:if test="${not empty paginationInfo}">
-						        <ui:pagination paginationInfo = "${paginationInfo}" type="text" jsFunction="fn_search"/>
-						    </c:if>
+							<div class="centered">
+							<nav aria-label="Page navigation example">
+								<ul class="pagination">
+								<c:if test="${paginationInfo.firstPageNoOnPageList > 1}">
+									<li class="page-item"><a class="page-link" href="<c:url value='/group/${groupNo}/boardList?page=${paginationInfo.firstPageNoOnPageList - 1}'/>">Previous</a></li>
+								</c:if>
+								<c:forEach var="i" begin="${paginationInfo.firstPageNoOnPageList}" end="${paginationInfo.lastPageNoOnPageList > paginationInfo.totalPageCount ? paginationInfo.totalPageCount : paginationInfo.lastPageNoOnPageList }" varStatus="status">
+									<li class="page-item"><a class="page-link" href="<c:url value='/group/${groupNo}/boardList?page=${i}'/>">${i}</a></li>
+								</c:forEach>
+								<c:if test="${paginationInfo.totalPageCount > paginationInfo.lastPageNoOnPageList}">
+									<li class="page-item"><a class="page-link" href="<c:url value='/group/${groupNo}/boardList?page=${paginationInfo.lastPageNoOnPageList + 1}'/>">Next</a></li>
+								</c:if>
+								</ul>
+							</nav>
 					    </div>
-						    <input type="hidden" id="currentPageNo" name="currentPageNo"/>
 					</div>
 					<!--/content-panel -->
 				</div>
-				
-				<form id="commonForm" name="commonForm">
-				</form>
 				<!-- /col-md-12 -->
 			</div>
 			<!-- row -->
 		</section>
 	</section>
-	
-<script type="text/javascript">
-	$(document).ready(function(){
-		fn_search();
-	});
-	
-	function gfn_isNull(str) {
-	    if (str == null) return true;
-	    if (str == "NaN") return true;
-	    if (new String(str).valueOf() == "undefined") return true;   
-	    var chkStr = new String(str);
-	    if( chkStr.valueOf() == "undefined" ) return true;
-	    if (chkStr == null) return true;   
-	    if (chkStr.toString().length == 0 ) return true;  
-	    return false;
-	}
-	
-	function ComSubmit(opt_formId) {
-		this.formId = gfn_isNull(opt_formId) == true ? "commonForm" : opt_formId;
-		this.url = "";
-		
-		if(this.formId == "commonForm"){
-			$('#commonForm input[type="hidden"]').val(""); 
-		}
-		
-		this.setUrl = function setUrl(url){
-			this.url = url;
-		};
-		
-		this.addParam = function addParam(key, value){
-			$("#"+this.formId).append($("<input type='hidden' name='"+key+"' id='"+key+"' value='"+value+"' >"));
-			$("#"+this.formId).append($("<input type='hidden' name='${_csrf.parameterName}' value='${_csrf.token}' >"));
-		};
-		
-		this.submit = function submit(){
-			var frm = $("#"+this.formId)[0];
-			frm.action = this.url;
-			frm.method = "post";
-			frm.submit();	
-		};
-	}
-	
-	function fn_search(pageNo){
-        var comSubmit = new ComSubmit();
-        comSubmit.setUrl("<c:url value='/group/${groupNo}/boardList' />");
-        comSubmit.addParam("currentPageNo", pageNo);
-        comSubmit.submit();
-    }
-</script>

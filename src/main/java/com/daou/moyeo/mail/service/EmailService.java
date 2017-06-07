@@ -1,6 +1,6 @@
 package com.daou.moyeo.mail.service;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,21 +15,28 @@ public class EmailService extends SqlSessionDaoSupport{
 	}
 	
 	/* 
-	 * 인증 Token 값 확인 메소드
+	 * 그룹No, 멤버No, 인증 Token 값 확인 메소드
 	 * */
-	public boolean checkToken(String token){
+	public boolean checkToken(Map<String, Object> map){
 		int returnValue;
-		returnValue = (getSqlSession().selectOne("email.selectToken", token));
+		returnValue = getSqlSession().selectOne("email.selectToken", map);
 		
-		if(returnValue == 1){				// 유일한 인증code 존재
+		if(returnValue == 1){							
 			return true;
-		}else{								// 없거나 혹은 다수개??(에러) false
-			System.out.println("testQuery.getCountCode return value is NOT '1' ");
+		}else{										
 			return false;
-		
 		}
 	}
+	/*
+	 *  ID로 멤버 No 가져오는 메소드
+	 * */
 	
+	public Integer getMemberNo(String receiverEmail){
+		int receiverNo;
+		receiverNo = (getSqlSession().selectOne("email.selectMemberNo", receiverEmail));
+		
+		return receiverNo;
+	}
 	/*
 	 	회원 인지 아닌지 확인하는 메소드	
 	 */
@@ -43,15 +50,37 @@ public class EmailService extends SqlSessionDaoSupport{
 			return false;
 		}
 	}
-	
+	/*
+	 * 같은 그룹에서 온 초대인지 아닌지 확인하는 메소드
+	 * */
+	public boolean checkTheSameInvitedGroupOrNot(Map<String, Object> map){
+		int returnValue;
+		
+		returnValue = (getSqlSession().selectOne("email.selectTheSameInvitedGroupOrNot", map));
+		if(returnValue == 0)
+			return false;
+		else
+			return true;
+	}
 	/*
 	 * 	인증 Token 값 생성 및 CODE_TB에 추가해주는 메소드
 	 * */
-	public String createToken(){
+	public String createToken(int memberNo, int groupNo){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
 		String token = getRandomName();
-		getSqlSession().insert("email.insertToken", token);
+		map.put("memberNo", memberNo);
+		map.put("groupNo", groupNo);
+		map.put("token", token);
+		
+		getSqlSession().insert("email.insertToken", map);
 		return token;
 	}
-	
+	/*
+	 * 회원의 그룹가입 삽입해주는 메소드
+	 * */
+	public void putNewMemberInGroup(Map<String, Object> map){
+		getSqlSession().insert("email.insertMemberGroupTB", map);
+	}
 	
 }
