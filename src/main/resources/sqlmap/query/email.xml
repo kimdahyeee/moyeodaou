@@ -12,6 +12,11 @@
        SELECT INVITE_GROUP_NO, MEMBER_NO from CODE_TB WHERE TOKEN=#{token}
 	</select>
 	
+	<!-- 회원 id로 member_no 가지고 오는 query -->
+	<select id="selectMemberNo" parameterType="java.lang.String"  resultType="java.lang.Integer"> 
+		select MEMBER_NO from MEMBER_TB where EMAIL="#{receiverEmail}";
+	</select>
+	
 	<!-- 회원, 비회원 구분 query -->
 	<select id="selectMemberOrNot" parameterType="java.lang.String"  resultType="java.lang.Integer"> 
 		SELECT count(*) FROM MEMBER_TB WHERE EMAIL=#{receiverEmail}

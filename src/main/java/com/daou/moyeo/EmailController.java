@@ -44,10 +44,9 @@ public class EmailController {
 	    	
 	    	if(emailService.checkMemberOrNot(receiverEmail)){
 	    		// 회원
-	    		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
-		    	u.getMemberNo();
-		    	
-		    	token = emailService.createToken(u.getMemberNo(), groupNo);
+	    		
+		    	int receiverNo = emailService.getMemberNo(receiverEmail);
+		    	token = emailService.createToken(receiverNo, groupNo);
 		    	
 	    		if(emailUtil.configureAndSend(session, receiverEmail, token, groupNo)){
 		        	// 성공

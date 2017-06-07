@@ -17,19 +17,21 @@ public class EmailService extends SqlSessionDaoSupport{
 	/* 
 	 * 인증 Token 값 확인 메소드
 	 * */
-	public boolean checkToken(String token){
-		int returnValue;
-		returnValue = (getSqlSession().selectOne("email.selectToken", token));
+	public Map<String, Object> checkToken(String token){
 		
-		if(returnValue == 1){				// 유일한 인증code 존재
-			return true;
-		}else{								// 없거나 혹은 다수개??(에러) false
-			System.out.println("testQuery.getCountCode return value is NOT '1' ");
-			return false;
+		return (getSqlSession().selectOne("email.selectToken", token));
 		
-		}
 	}
+	/*
+	 *  ID로 멤버 No 가져오는 메소드
+	 * */
 	
+	public Integer getMemberNo(String receiverEmail){
+		int receiverNo;
+		receiverNo = (getSqlSession().selectOne("email.selectMemberNo", receiverEmail));
+		
+		return receiverNo;
+	}
 	/*
 	 	회원 인지 아닌지 확인하는 메소드	
 	 */
@@ -47,11 +49,22 @@ public class EmailService extends SqlSessionDaoSupport{
 	/*
 	 * 	인증 Token 값 생성 및 CODE_TB에 추가해주는 메소드
 	 * */
-	public String createToken(){
+	public String createToken(int memberNo, int groupNo){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
 		String token = getRandomName();
-		getSqlSession().insert("email.insertToken", token);
+		map.put("memberNo", memberNo);
+		map.put("groupNo", groupNo);
+		map.put("token", token);
+		
+		getSqlSession().insert("email.insertToken", map);
 		return token;
 	}
-	
+	/*
+	 * 회원의 그룹가입 삽입해주는 메소드
+	 * */
+	public void putNewMemberInGroup(){
+	//	getSqlSession().insert();
+	}
 	
 }
