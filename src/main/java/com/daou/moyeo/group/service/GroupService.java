@@ -8,4 +8,5 @@ public interface GroupService {
 	public int insertMemberGroup(Map<String, Object> memberInfo);
 	public List<Map<String, Object>> selectGroupList(int memberNo);
 	public int selectGroupNo(String groupName);
+	public Map<String, Object> selectGroupInfo(int groupNo); // Daeho 2017.06.07 chat
 }

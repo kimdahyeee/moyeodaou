@@ -19,6 +19,15 @@
 		<result property="groupTotalCount" column="GROUP_TOTAL_COUNT" javaType="int"/>
 	</resultMap>
 	
+	<!-- Daeho 2017.06.07 chat -->
+	<resultMap id="groupInfo" type="hashmap">
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+		<result property="groupName" column="GROUP_NAME" javaType="java.lang.String"/>
+		<result property="groupDesc" column="GROUP_DESC" javaType="java.lang.String"/>
+		<result property="groupImg" column="GROUP_IMG" javaType="java.lang.String"/>
+		<result property="createdDate" column="CREATED_DATE" javaType="java.util.Date"/>
+	</resultMap>
+	
 	<select id="selectGroupList" parameterType="int" resultMap="groupList">
 		SELECT 
 			G.GROUP_NO,
@@ -30,6 +39,19 @@
 		WHERE 
 			MG.MEMBER_NO = #{groupNo} AND
 			G.GROUP_NO = MG.GROUP_NO
+	</select>
+	
+	<select id="selectGroupInfo" parameterType="int" resultMap="groupInfo">
+		SELECT
+			GROUP_NO,
+			GROUP_NAME,
+			GROUP_DESC
+			GROUP_IMG,
+			CREATED_DATE
+		FROM
+			GROUP_TB
+		WHERE
+			GROUP_NO = #{groupNo}
 	</select>
 	
 	<select id="selectGroupNo" parameterType="java.lang.String" resultType="int">

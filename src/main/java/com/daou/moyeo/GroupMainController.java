@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daou.moyeo.board.dao.BoardService;
+import com.daou.moyeo.group.service.GroupService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
 import com.daou.moyeo.util.FileUtil;
@@ -34,6 +35,9 @@ public class GroupMainController {
 	@Resource(name="boardService")
 	private BoardService boardService;
 	
+	@Resource(name="groupService")
+	private GroupService groupService;
+	
 	/**
 	 *  그룹 메인 화면
 	 * @param model
@@ -46,6 +50,7 @@ public class GroupMainController {
 		
 		List<Map<String, Object>> sharing_list = fileService.getFileList(groupNo);  // load Group Fille List
 		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // load Group Board List
+		Map<String, Object> groupInfo = groupService.selectGroupInfo(groupNo); // daeho 2017.06.07 chat
 		
 		//=============== FileList Test ===================//
 		/*for(int i=0;i<sharing_list.size();i++){
@@ -57,6 +62,7 @@ public class GroupMainController {
 		model.addAttribute("sharing_list", sharing_list);
 		model.addAttribute("allMainBoardList", allMainBoardList);
 		model.addAttribute("groupNo", groupNo);
+		model.addAttribute("groupInfo", groupInfo); // daeho 2017.06.07 chat
 		
 		return "groupMain";
 	}
