@@ -18,6 +18,17 @@
 		<result property="groupImg" column="GROUP_IMG" javaType="java.lang.String"/>
 		<result property="groupTotalCount" column="GROUP_TOTAL_COUNT" javaType="int"/>
 	</resultMap>
+			
+	<!-- Daeho 2017.06.07 chat -->
+	<resultMap id="otherGroupList" type="hashmap">
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+	</resultMap>
+	
+	<!-- Daeho 2017.06.07 chat -->
+	<resultMap id="groupMemberList" type="hashmap">
+		<result property="memberNo" column="MEMBER_NO" javaType="int"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
+	</resultMap>
 	
 	<!-- Daeho 2017.06.07 chat -->
 	<resultMap id="groupInfo" type="hashmap">
@@ -41,6 +52,31 @@
 			G.GROUP_NO = MG.GROUP_NO
 	</select>
 	
+	<!-- Daeho 2017.06.07 select Group List except for current joined group -->
+	<select id="selectOtherGroupList" parameterType="map" resultMap="otherGroupList">
+		SELECT 
+			GROUP_NO
+		FROM 
+			MEMBER_GROUP_TB
+		WHERE
+			MEMBER_NO = #{memberNo}
+			AND	NOT GROUP_NO = #{groupNo}
+	</select>
+	
+	<!-- Daeho 2017.06.07 select Member List for current joined group -->
+	<select id="selectGroupMemberList" parameterType="map" resultMap="groupMemberList">
+		SELECT 
+			MEMBER_NO, MEMBER_NAME
+		FROM 
+			MEMBER_TB
+		WHERE
+			MEMBER_NO IN
+			 (SELECT MEMBER_NO 
+			 	FROM MEMBER_GROUP_TB 
+			 	WHERE GROUP_NO = #{groupNo} AND MEMBER_NO != #{memberNo})
+	</select>
+	
+	<!-- Daeho 2017.06.07 chat -->
 	<select id="selectGroupInfo" parameterType="int" resultMap="groupInfo">
 		SELECT
 			GROUP_NO,

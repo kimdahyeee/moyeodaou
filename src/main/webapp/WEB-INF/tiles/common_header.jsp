@@ -23,6 +23,8 @@
 	
 	<script src="<c:url value='/resources/js/chart-master/Chart.js'/>"></script>
 	
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
 	<script src="<c:url value='/resources/node_modules/socket.io-client/dist/socket.io.js'/>"></script>
 
 </head>
