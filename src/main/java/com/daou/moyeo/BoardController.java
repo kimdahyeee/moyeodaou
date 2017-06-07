@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.daou.moyeo.board.dao.BoardService;
+import com.daou.moyeo.board.service.BoardService;
+import com.daou.moyeo.dto.PagingVO;
 import com.daou.moyeo.user.vo.UserDetailsVO;
-import com.daou.moyeo.util.BoardUtil;
-
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
 @RequestMapping(value = "/group/{groupNo}")
@@ -35,17 +33,40 @@ public class BoardController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/boardList")
-	public String boardList( @PathVariable("groupNo") int groupNo, @RequestParam(value="currentPageNo", required=false) int currentPageNo, Model model ) {
-		Map<String, Integer> pagingInfo = new HashMap<String, Integer>();
-		pagingInfo.put("currentPageNo", currentPageNo);
-		pagingInfo.put("groupNo", groupNo);
+	@RequestMapping( value = "/boardList", method=RequestMethod.GET )
+	public String boardList( @PathVariable("groupNo") int groupNo, 
+										@RequestParam(value="page", required=false) String currentPageNo, 
+										Model model ) {
+		PagingVO pagingVO = new PagingVO();
 		
-		BoardUtil boardUtil = new BoardUtil();
-		Map<String, Object> returnMap = boardUtil.paging(pagingInfo);
+		if(StringUtils.isEmpty(currentPageNo) == true) {
+			pagingVO.setCurrentPageNo(1);
+		}else {
+			pagingVO.setCurrentPageNo(Integer.parseInt(currentPageNo));
+		}
 		
-		model.addAttribute("paginationInfo", returnMap.get("paginationInfo"));
-		model.addAttribute("allBoardList", returnMap.get("allBoardList"));
+		int firstRecordIndex = pagingVO.getFirstRecordIndex();
+		int recordCountPerPage = pagingVO.getRecordCountPerPage();
+		
+		Map<String, Object> pageInfoMap = new HashMap<String, Object>();
+		
+		pageInfoMap.put("firstIndex", firstRecordIndex);
+		pageInfoMap.put("recordCountPerPage", recordCountPerPage);
+		pageInfoMap.put("groupNo", groupNo);
+		
+		List<Map<String, Object>> allBoardList = boardService.selectBoardList(pageInfoMap);
+		
+		//TODO 여기 예외처리 하기
+		if(allBoardList.size() != 0) {
+			System.out.println("total  : " + allBoardList.get(0).get("totalCount"));
+			pagingVO.setTotalRecordCount((Integer) allBoardList.get(0).get("totalCount"));
+		}else{
+			pagingVO.setTotalRecordCount(0);
+		}
+		
+		System.out.println("allboardList" + allBoardList);
+		model.addAttribute("paginationInfo", pagingVO);
+		model.addAttribute("allBoardList", allBoardList);
 		model.addAttribute("groupNo", groupNo);
 		
 		return "boardList";

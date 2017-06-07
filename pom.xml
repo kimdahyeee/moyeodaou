@@ -195,12 +195,6 @@
 			<version>3.1.4.RELEASE</version>
 		</dependency>
 
-		<!-- 전자정부 프레임워크 -->
-		<dependency>
-			<groupId>egovframework.rte</groupId>
-			<artifactId>egovframework.rte.ptl.mvc</artifactId>
-			<version>3.5.0</version>
-		</dependency>
 		<!-- file upload dependency -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>

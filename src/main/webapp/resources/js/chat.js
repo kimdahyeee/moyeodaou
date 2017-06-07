@@ -24,8 +24,8 @@ var group_socket = null;
 $(document).ready(function () {
 	chat_socket = io.connect('http://'+ host + ':' + port +'/chat');
 	group_socket = io.connect('http://' + host + ':' + port + '/group');
-	group_info = <%- JSON.stringify(groups) %>
-	member_list = <%- JSON.stringify(member_list) %>
+	//group_info = <%- JSON.stringify(groups) %>
+	//member_list = <%- JSON.stringify(member_list) %>
 
 	member_list = set_member_list(member_list);
 	//Enroll Chatting info
