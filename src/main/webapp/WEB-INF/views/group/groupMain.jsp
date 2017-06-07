@@ -162,6 +162,7 @@
 					<h3>채팅</h3>
 					<!-- First Member -->
 					<div class="desc">
+					
 						<div class="thumb">
 							<img class="img-circle" src="<c:url value='resources/img/ui-divya.jpg'/>" width="35px" height="35px" align="">
 						</div>
@@ -172,7 +173,8 @@
 							</p>
 						</div>
 					</div>
-					<!-- Second Member -->
+				<script src="<c:url value='/resources/js/chat.js'/>"></script>
+				<!-- Second Member -->
 					<div class="desc">
 						<div class="thumb">
 							<img class="img-circle" src="<c:url value='resources/img/ui-sherman.jpg'/>" width="35px" height="35px" align="">
