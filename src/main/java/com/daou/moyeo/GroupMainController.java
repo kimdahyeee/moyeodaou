@@ -54,6 +54,7 @@ public class GroupMainController {
 		Map<String, Object> currentInfo = new HashMap<String, Object>();
 		UserDetailsVO u = (UserDetailsVO)auth.getPrincipal();
 		currentInfo.put("memberNo", u.getMemberNo());
+		currentInfo.put("memberName", u.getMemberName());
 		currentInfo.put("groupNo", groupNo);
 		
 		List<Map<String, Object>> sharing_list = fileService.getFileList(groupNo);  // load Group Fille List
@@ -76,6 +77,8 @@ public class GroupMainController {
 		model.addAttribute("groupInfo", groupInfo); // daeho 2017.06.07 chat
 		model.addAttribute("otherGroupList", otherGroupList); 
 		model.addAttribute("groupMemberList", groupMemberList); 
+		model.addAttribute("memberNo", currentInfo.get("memberNo"));
+		model.addAttribute("memberName", currentInfo.get("memberName"));
 		
 		return "groupMain";
 	}
