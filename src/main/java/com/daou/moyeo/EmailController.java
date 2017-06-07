@@ -111,6 +111,6 @@ public class EmailController {
 	    	}
 	    	
 	    	// session 확인 ?? 
-	    	return "redirect:/group/" + groupNo; 
+	    	return "redirect:/main/"; 
 	    }
 }
