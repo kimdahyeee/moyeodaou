@@ -2,7 +2,6 @@ package com.daou.moyeo;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.daou.moyeo.board.dao.BoardService;
 import com.daou.moyeo.user.dao.UserService;
-import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.util.PasswordEncoding;
 
 /**

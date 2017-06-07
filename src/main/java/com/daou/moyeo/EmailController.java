@@ -1,7 +1,5 @@
 package com.daou.moyeo;
 
-import java.util.Random;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.daou.moyeo.dto.EmailDTO;
 import com.daou.moyeo.mail.service.EmailService;
 import com.daou.moyeo.util.EmailUtil;
 
