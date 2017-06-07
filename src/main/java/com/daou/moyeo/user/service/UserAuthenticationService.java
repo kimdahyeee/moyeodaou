@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +22,6 @@ public class UserAuthenticationService implements UserDetailsService {
 	private SqlSessionTemplate sqlSession;
 	
 	public UserAuthenticationService() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public UserAuthenticationService(SqlSessionTemplate sqlSession) {
@@ -49,6 +47,6 @@ public class UserAuthenticationService implements UserDetailsService {
 			}
 		}
 		
-		return new UserDetailsVO(user.get("username").toString(), user.get("password").toString(), gas, (Integer)user.get("memberNo"));
+		return new UserDetailsVO(user.get("username").toString(), user.get("memberName").toString(), user.get("password").toString(), gas, (Integer)user.get("memberNo"));
 	}
 }

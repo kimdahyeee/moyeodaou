@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.jws.soap.SOAPBinding.Use;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.daou.moyeo.board.dao.BoardService;
 import com.daou.moyeo.group.service.GroupService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
 import com.daou.moyeo.util.FileUtil;
@@ -83,15 +80,10 @@ public class GroupController {
 		List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
 		gas.addAll(u.getAuthorities());
 		gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + groupNo + "_MASTER"));
-		u.setAuthorities(gas);
-		
-		System.out.println("u : " + u);
 		
 		Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), gas);
-
 		SecurityContextHolder.getContext().setAuthentication(newAuth);
 		
-		System.out.println("user authority : " + u.getAuthorities());
 		return "redirect:/main";
 	}
 }
