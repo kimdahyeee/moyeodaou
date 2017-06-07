@@ -50,7 +50,18 @@ public class EmailService extends SqlSessionDaoSupport{
 			return false;
 		}
 	}
-	
+	/*
+	 * 같은 그룹에서 온 초대인지 아닌지 확인하는 메소드
+	 * */
+	public boolean checkTheSameInvitedGroupOrNot(Map<String, Object> map){
+		int returnValue;
+		
+		returnValue = (getSqlSession().selectOne("email.selectTheSameInvitedGroupOrNot", map));
+		if(returnValue == 0)
+			return false;
+		else
+			return true;
+	}
 	/*
 	 * 	인증 Token 값 생성 및 CODE_TB에 추가해주는 메소드
 	 * */
