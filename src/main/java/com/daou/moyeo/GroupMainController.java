@@ -123,5 +123,21 @@ public class GroupMainController {
 		return "redirect:/group/" + groupNo;
 	}
 	
+	@RequestMapping(value = "/group/{groupNo}/deleteGroup")
+	public String groupDelete(@PathVariable("groupNo") int groupNo){
+		int result = groupService.deleteGroup(groupNo);
+		System.out.println("result : "  + result);
+		return "redirect:/main";
+	}
 	
+	@RequestMapping(value = "/group/{groupNo}/deleteGroupMember")
+	public String groupMemberDelete(@PathVariable("groupNo") int groupNo, Authentication auth){
+		Map<String, Object> deleteMemberInfo = new HashMap<String, Object>();
+		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
+		deleteMemberInfo.put("memberNo", u.getMemberNo());
+		deleteMemberInfo.put("groupNo", groupNo);
+		int result = groupService.deleteGroupMember(deleteMemberInfo);
+		System.out.println("result : "  + result);
+		return "redirect:/main";
+	}
 }

@@ -14,7 +14,7 @@
               	  <h5 class="centered">${groupInfo.groupName}</h5>
               	  	
                   <li class="mt">
-                      <a class="active" href="#">
+                      <a class="active" href="<c:url value='/group/${groupNo}'/>">
                           <i class="fa fa-dashboard"></i>
                           <span>메인화면</span>
                       </a>
@@ -63,7 +63,7 @@
 				<div class="modal-body">정말로 탈퇴하시겠어요?</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-					<button type="button" class="btn btn-primary">확인</button>
+					<a type="button" class="btn btn-primary" href="<c:url value='/group/${groupNo}/deleteGroupMember'/>">확인</a>
 				</div>
 			</div>
 		</div>
@@ -83,7 +83,9 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-					<button type="button" class="btn btn-primary">확인</button>
+					<c:if test="${groupInfo.groupTotalCount eq 1}">
+						<a type="button" class="btn btn-primary" href="<c:url value='/group/${groupNo}/deleteGroup'/>">확인</a>
+					</c:if>
 				</div>
 			</div>
 		</div>

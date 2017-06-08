@@ -37,6 +37,7 @@
 		<result property="groupDesc" column="GROUP_DESC" javaType="java.lang.String"/>
 		<result property="groupImg" column="GROUP_IMG" javaType="java.lang.String"/>
 		<result property="createdDate" column="CREATED_DATE" javaType="java.util.Date"/>
+		<result property="groupTotalCount" column="GROUP_TOTAL_COUNT" javaType="int"/>
 	</resultMap>
 	
 	<select id="selectGroupList" parameterType="int" resultMap="groupList">
@@ -83,10 +84,11 @@
 			GROUP_NAME,
 			GROUP_DESC
 			GROUP_IMG,
-			CREATED_DATE
+			CREATED_DATE,
+			(SELECT COUNT(*) FROM MEMBER_GROUP_TB MG WHERE MG.GROUP_NO = G.GROUP_NO) AS GROUP_TOTAL_COUNT
 		FROM
-			GROUP_TB
-		WHERE
+			GROUP_TB G
+		WHERE 
 			GROUP_NO = #{groupNo}
 	</select>
 	
@@ -98,4 +100,22 @@
 		WHERE
 			GROUP_NAME = #{groupName}
 	</select>
+	
+	<delete id="deleteGroup" parameterType="int">
+		DELETE GBT, CLT, ST, ADT, GFT, MGT, GT
+		FROM GROUP_BOARD_TB AS GBT
+		LEFT JOIN CHAT_LOG_TB AS CLT 				ON GBT.GROUP_NO=CLT.GROUP_NO
+		LEFT JOIN SCHEDULE_TB AS ST 				ON GBT.GROUP_NO=ST.GROUP_NO
+		LEFT JOIN AVAILABLE_DATE_TB AS ADT 	ON GBT.GROUP_NO=ADT.GROUP_NO
+		LEFT JOIN GROUP_FILE_TB AS GFT 			ON GBT.GROUP_NO=GFT.GROUP_NO
+		LEFT JOIN MEMBER_GROUP_TB AS MGT 	ON GBT.GROUP_NO=MGT.GROUP_NO
+		LEFT JOIN GROUP_TB AS GT 						ON GBT.GROUP_NO=GT.GROUP_NO
+		WHERE GBT.GROUP_NO = #{groupNo}
+	</delete>
+	
+	<delete id="deleteGroupMember" parameterType="map">
+		DELETE FROM MEMBER_GROUP_TB 
+		WHERE MEMBER_NO = #{memberNo}
+		AND		GROUP_NO 	= #{groupNo}
+	</delete>
 </mapper>

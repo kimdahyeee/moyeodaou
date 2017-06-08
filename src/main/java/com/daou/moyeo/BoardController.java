@@ -56,7 +56,6 @@ public class BoardController {
 		
 		List<Map<String, Object>> allBoardList = boardService.selectBoardList(pageInfoMap);
 		
-		//TODO 여기 예외처리 하기
 		if(allBoardList.size() != 0) {
 			System.out.println("total  : " + allBoardList.get(0).get("totalCount"));
 			pagingVO.setTotalRecordCount((Integer) allBoardList.get(0).get("totalCount"));
@@ -64,7 +63,6 @@ public class BoardController {
 			pagingVO.setTotalRecordCount(0);
 		}
 		
-		System.out.println("allboardList" + allBoardList);
 		model.addAttribute("paginationInfo", pagingVO);
 		model.addAttribute("allBoardList", allBoardList);
 		model.addAttribute("groupNo", groupNo);
