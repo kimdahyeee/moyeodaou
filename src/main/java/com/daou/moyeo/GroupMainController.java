@@ -115,6 +115,7 @@ public class GroupMainController {
 		
 		List<Map<String, Object>> fileInfoList;
 		
+		System.out.println("GroupmainController mapping fileUpload");
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		fileInfoList = fileUtil.fileUpload(mhsr);
 		
