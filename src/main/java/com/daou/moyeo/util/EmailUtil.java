@@ -37,7 +37,7 @@ public class EmailUtil {
         String subject = "그룹초대 인증 코드 발급 안내 입니다.";			
 	    String content = sb.toString();						
 	    
-	    // TODO url 설정하기			
+	    // TODO url 설정하기	
 	    content = content + "\n" +"http://localhost:8181/daou/invite/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
 	    
 	    email.setReciver(reciver);

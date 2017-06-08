@@ -23,9 +23,14 @@
 		SELECT count(*) FROM MEMBER_TB WHERE EMAIL=#{receiverEmail}
 	</select>
 	
-	<!-- 인증 token값 삽입 -->
+	<!-- 인증 token값 삽입 (회원)-->
 	<insert id="insertToken" parameterType="hashmap">
 	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN) VALUES (#{memberNo},#{groupNo}, #{token})
+	</insert>
+	
+	<!-- 인증 token값 삽입 (비회원)-->
+	<insert id="insertTokenNonMember" parameterType="hashmap">
+	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN) VALUES (-1,#{groupNo}, #{token})
 	</insert>
 	
 	<!-- MEMBER_GROUP_TB에 새로운 Member 추가 -->
