@@ -3,6 +3,7 @@ package com.daou.moyeo.mail.service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
@@ -10,7 +11,6 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
@@ -129,9 +129,9 @@ public class EmailService extends SqlSessionDaoSupport{
 		System.out.println(token);
 		
 		hashOps.putAll(token, rmap);
+		redisTemplate.expire(token, 5, TimeUnit.MINUTES);
 		
 		System.out.println("===============================================");
-		
 		System.out.println("test" +hashOps.get(token, "email"));
 		
 		return token;
