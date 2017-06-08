@@ -44,5 +44,16 @@ public class GroupServiceImpl extends SqlSessionDaoSupport implements GroupServi
 	public List<Map<String, Object>> selectGroupMemberList(Map<String, Object> currentInfo) {
 		return getSqlSession().selectList("group.selectGroupMemberList", currentInfo);
 	}
+
+	@Override
+	public int deleteGroup(int groupNo) {
+		return getSqlSession().delete("group.deleteGroup", groupNo);
+	}
+
+	@Override
+	public int deleteGroupMember(Map<String, Object> deleteMemberInfo) {
+		return getSqlSession().delete("group.deleteGroupMember", deleteMemberInfo);
+	}
+	
 	
 }

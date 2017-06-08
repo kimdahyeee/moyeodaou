@@ -1,6 +1,6 @@
  <%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+	
 	<div id="login-page">
 		<div class="container">
 			<form class="form-login" action="<c:url value='/user/insertUser'/>" method="post">
@@ -11,6 +11,10 @@
 					<input type="password" class="form-control" placeholder="비밀번호 확인"> <br> 
 					<input type="text" class="form-control" name="name" placeholder="이름">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+					<c:if test="${!empty notMemberInfo}">
+						<input type="hidden" name="code" value="${notMemberInfo.code}"/>
+						<input type="hidden" name="groupNo" value="${notMemberInfo.groupNo}"/>
+					</c:if>
 					<br>
 					<button class="btn btn-theme btn-block" type="submit">가입하기</button>
 				</div>
