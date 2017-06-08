@@ -112,6 +112,7 @@ public class GroupMainController {
 	@RequestMapping(value = "/group/{groupNo}/fileUpload", method=RequestMethod.POST)
 	public String fileUpload(@PathVariable("groupNo") int groupNo, HttpServletRequest request, HttpServletResponse response, Authentication auth){
 		FileUtil fileUtil = new FileUtil();
+		
 		List<Map<String, Object>> fileInfoList;
 		
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
