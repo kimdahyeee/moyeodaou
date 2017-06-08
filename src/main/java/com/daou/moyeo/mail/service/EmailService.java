@@ -63,7 +63,7 @@ public class EmailService extends SqlSessionDaoSupport{
 			return true;
 	}
 	/*
-	 * 	인증 Token 값 생성 및 CODE_TB에 추가해주는 메소드
+	 * 	인증 Token 값 생성 및 CODE_TB에 추가해주는 메소드 (회원)
 	 * */
 	public String createToken(int memberNo, int groupNo){
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -74,6 +74,19 @@ public class EmailService extends SqlSessionDaoSupport{
 		map.put("token", token);
 		
 		getSqlSession().insert("email.insertToken", map);
+		return token;
+	}
+	/*
+	 * 	인증 Token 값 생성 및 CODE_TB에 추가해주는 메소드 (비회원)
+	 * */
+	public String createToken(int groupNo){
+		Map<String, Object> map = new HashMap<String, Object>();
+		String token = getRandomName();
+		
+		map.put("groupNo", groupNo);
+		map.put("token", token);
+		
+		getSqlSession().insert("email.insertTokenNonMember", map);
 		return token;
 	}
 	/*
