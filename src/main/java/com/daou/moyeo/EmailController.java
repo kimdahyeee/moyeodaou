@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,13 @@ public class EmailController {
 	    
 	    @Resource(name="emailService")
 		private EmailService emailService;
+	    
+	    
+	    @Autowired
+	    private RedisTemplate<String, String> redisTemplate;
+
+	    @Resource(name="redisTemplate")
+	    private HashOperations<String, String, String> hashOps;
 		
 	    /*
 	     * 		그룹 초대 modal창 클릭시 
@@ -57,7 +66,7 @@ public class EmailController {
 		    	map.put("memberNo", receiverNo);
 		    	
 		    	if(!emailService.checkTheSameInvitedGroupOrNot(map)){						//  같은 그룹에서 온 초대가 false라면 (초대가능)
-		    		token = emailService.createToken(receiverNo, groupNo);
+		    		token = emailService.createToken(receiverNo, groupNo, receiverEmail);
 			    	
 		    		if(emailUtil.configureAndSend(session, receiverEmail, token, groupNo, receiverNo)){
 			        	// 성공
@@ -74,7 +83,7 @@ public class EmailController {
 		    	}
 		    	
 	    	}else{
-	    		token = emailService.createToken(groupNo);
+	    		token = emailService.createToken(groupNo, receiverEmail);
 	    		
 	    		if(emailUtil.configureAndSend(session, receiverEmail, token, groupNo, -1)){		// 비회원 receiverNo : -1
 	    			System.out.println("발송) 비회원 -> 성공");
@@ -96,6 +105,7 @@ public class EmailController {
 	    	 * */
 	    	Map<String, Object> map = new HashMap<String, Object>();
 	    	System.out.println("checkRequest() - code:"+code);
+	    	String result = null;
 	    	
 	    	if(memberNo != -1) {
 	    		// session 확인
@@ -109,8 +119,11 @@ public class EmailController {
 	    		map.put("groupNo", groupNo);
 	    		map.put("memberNo", memberNo);
 	    		map.put("token", code);
+	    		
+	    		result = hashOps.get(code, "token");
+	    		
 
-	    		if(emailService.checkToken(map)){
+	    		if(code != result){
 	    			// true (유효한 접근임을 확인)
 	    			System.out.println("CODE_TB에 저장된 값과 url 값이 동일");
 	    			// DB에 해당 회원 MEMBER_GROUP_TB에 새롭게 insert 해주는 Service 추가
@@ -127,6 +140,7 @@ public class EmailController {
 
 	    		notMemberInfo.put("code", code);
 	    		notMemberInfo.put("groupNo", groupNo);
+	    		notMemberInfo.put("email", hashOps.get(code, "email"));
 
 	    		model.addAttribute("notMemberInfo", notMemberInfo);
 

@@ -4,11 +4,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.Resource;
+
 import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 @Service("emailService")
 public class EmailService extends SqlSessionDaoSupport{
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+	
+	@Resource(name="redisTemplate")
+	private HashOperations<String, String, String> hashOps;
+	
+	@Resource(name="redisTemplate")
+	private SetOperations<String, String> setOps;
+	
+	@Resource(name="redisTemplate")
+	private ListOperations<String, String> listOps;
 	
 	private static String getRandomName(){
 		return UUID.randomUUID().toString().replaceAll("-","");
@@ -65,28 +84,56 @@ public class EmailService extends SqlSessionDaoSupport{
 	/*
 	 * 	인증 Token 값 생성 및 CODE_TB에 추가해주는 메소드 (회원)
 	 * */
-	public String createToken(int memberNo, int groupNo){
+	public String createToken(int memberNo, int groupNo, String email){
 		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, String> rmap = new HashMap<String, String>();
 		
 		String token = getRandomName();
 		map.put("memberNo", memberNo);
 		map.put("groupNo", groupNo);
 		map.put("token", token);
+		map.put("email", email);
 		
-		getSqlSession().insert("email.insertToken", map);
+		rmap.put("memberNo", Integer.toString(memberNo));
+		rmap.put("groupNo", Integer.toString(groupNo));
+		rmap.put("token", token);
+		rmap.put("email", email);
+		
+		System.out.println(token);
+		
+		hashOps.putAll(token, rmap);
+		
+		System.out.println("===============================================");
+		
+		System.out.println("test" +hashOps.get(token, "email"));
+		
 		return token;
 	}
 	/*
 	 * 	인증 Token 값 생성 및 CODE_TB에 추가해주는 메소드 (비회원)
 	 * */
-	public String createToken(int groupNo){
+	public String createToken(int groupNo, String email){
 		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, String> rmap = new HashMap<String, String>();
+		
 		String token = getRandomName();
 		
 		map.put("groupNo", groupNo);
 		map.put("token", token);
 		
-		getSqlSession().insert("email.insertTokenNonMember", map);
+		rmap.put("memberNo", Integer.toString(-1));
+		rmap.put("groupNo", Integer.toString(groupNo));
+		rmap.put("token", token);
+		rmap.put("email", email);
+		
+		System.out.println(token);
+		
+		hashOps.putAll(token, rmap);
+		
+		System.out.println("===============================================");
+		
+		System.out.println("test" +hashOps.get(token, "email"));
+		
 		return token;
 	}
 	/*
