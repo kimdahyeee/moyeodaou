@@ -42,7 +42,7 @@
                   </li>
                   </sec:authorize>
                   <li class="sub-menu">
-                      <a href="#">
+                      <a href="#" data-toggle="modal" data-target="#addSchedule">
                           <i class="fa fa-dashboard"></i>
                           <span>일정등록</span>
                       </a>

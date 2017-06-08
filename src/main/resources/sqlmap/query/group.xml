@@ -3,7 +3,7 @@
 
 <mapper namespace="group">
 	<insert id="insertGroup" parameterType="map">
-		insert into GROUP_TB(GROUP_NAME, GROUP_DESC, GROUP_IMG) 
+		INSERT INTO GROUP_TB(GROUP_NAME, GROUP_DESC, GROUP_IMG) 
 		values(#{groupName}, #{groupDesc}, #{groupImg});
 	</insert>
 	

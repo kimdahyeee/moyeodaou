@@ -99,16 +99,26 @@
 						<!-- col-lg-4 -->
 					</div>
 					<!-- 파일 업로드 모달 창 -->
-					<div class="modal fade" id="fileUpload" tabindex="-1"
-					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h4 class="modal-title" id="myModalLabel">파일 업로드</h4>
+					<div class="modal fade" id="fileUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h4 class="modal-title" id="myModalLabel">파일 업로드</h4>
+								</div>
+								<div class="modal-body">
+								</div>
+								<div class="modal-footer">
+										<a href="#this"	id="fileUpload2"></a>
+									<!--<form action="<c:url value='/group/${groupNo}/fileUpload?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">-->
+										<form action="<c:url value='/group/${groupNo}/fileUpload'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
+											<input type="file" name="testFile" required="required">		
+											<input type="submit" value="완료">
+									 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+										</form>
+								</div>
 							</div>
-							<div class="modal-body">
-							</div>
+<<<<<<< HEAD
 							<div class="modal-footer">
 									<a href="#this"	id="fileUpload2"></a>
 									<form action="<c:url value='/group/${groupNo}/fileUpload?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">	
@@ -117,10 +127,126 @@
 										<input type="submit" value="완료">
 										<!--  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">	-->
 									</form>
+=======
+						</div>
+					</div>
+					
+					<!-- /////////////////////////////////////// Schedule Modal //////////////////////////////////////////////////  -->
+					<div class="modal fade" id="addSchedule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h4 class="modal-title" id="myModalLabel">일정등록<h4>
+								</div>
+								<div class="modal-body">
+								
+								<div id="right">
+									<table id="table2">
+									<colgroup>
+										<col width="50"/>
+										<col width="100"/>
+										<col width="100"/>
+										<col width="100"/>
+										<col width="100"/>
+										<col width="100"/>
+									</colgroup>
+									<tbody>
+									<tr>
+										<!-- if checkbox is checked, clone school subjects to the whole table row  -->
+										<td class="mark blank"><input id="week" type="checkbox" title="Apply school subjects to the week"/></td>
+										<td class="mark dark">Monday</td>
+										<td class="mark dark">Tuesday</td>
+										<td class="mark dark">Wednesday</td>
+										<td class="mark dark">Thursday</td>
+										<td class="mark dark">Friday</td>
+									</tr>
+									<tr>
+										<td class="mark dark">8:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="mark dark">9:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="mark dark">10:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="mark dark">11:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="mark dark">12:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="mark dark">13:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="mark dark">14:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="mark dark">15:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="mark dark">16:00</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									</tbody>
+								</table>
+							</div><!-- right container -->
+								
+								</div>
+								<div class="modal-footer">
+								</div>
+>>>>>>> 82dbc6bc30e785ffcedeaed565e1bf90232e1db0
 							</div>
 						</div>
 					</div>
-				</div>
+					
+					
+					
 				</div>
 				<!-- /col-lg-9 END SECTION MIDDLE -->
 
@@ -131,10 +257,12 @@
 				<div class="col-lg-3 ds">
 
 					<!--COMPLETED ACTIONS DONUTS CHART-->
+					<div class="flat_item">
 					<h3>회의 가능 시간</h3>
-					<div class="mb">
+					</div>
+					<div class="mb" id="chat_form" style="display:none;">
 						<div class="white-panel desc donut-chart">
-							<!-- <div class="row">
+							<div class="row">
 								<div class="col-sm-6 col-xs-6 goleft">
 									<p>
 										<i class="fa fa-database"></i> 50%
@@ -155,32 +283,21 @@
 									];
 									var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
 							</script>
-						</div>-->
+						</div>
 						<!--/grey-panel -->
 					</div>
 
 					<!-- USERS ONLINE SECTION -->
+					<div class="flat_item">
 					<h3>
 					채팅(접속자 수 :<span id="now_member_cnt">-</span>)
 					</h3>
-					<!-- First Member -->
-					<!-- 
-					<div class="desc">
-						<div class="thumb">
-							<img class="img-circle" src="<c:url value='resources/img/ui-divya.jpg'/>" width="35px" height="35px" align="">
-						</div>
-						<div class="details">
-							<p>
-								<a href="#">DIVYA MANIAN</a><br />
-								<muted>Available</muted>
-							</p>
-						</div>
 					</div>
-					-->
 					<div id="chat_form" class="desc chat_form">
 						<div class="chat_notify_list">
 							<ul id="chat_notify_list"></ul>
 						</div>
+						
 						<div class="chat_list">
 							<strong>대화</strong><br>
 							<ul id="chat_list"></ul>
@@ -203,9 +320,9 @@
 
 <!-- chatting script -->
 <script>
-	// var host = "175.115.95.51";
+	 var host = "175.115.95.51";
 	// var host = "192.168.219.102";
-	var host = "172.21.21.61";
+	//var host = "172.21.21.61";
 	//var host = "localhost"
 	var port = "3003";
 	var chat_id = "";
@@ -272,6 +389,7 @@
 				$('#chat_notify_list').append(' <li> <a href="#"> <span class="subject"> <span class="from">'+ from +'</span> <span class="time">'+ time +'</span> </span> <span class="message"> '+ token +'방에서 알림이 왔습니다. </span> </a> </li> ');
 				$('.chat_notify_list').scrollTop($('#chat_notify_list').height());
 			}
+			
 		});
 
 		chat_socket.on('connected_member', function (data) {
@@ -330,9 +448,17 @@
 				chat_input();
 			}
 		});
-	})
-	
 		
+	})
+	(function ($) {
+		'use strict';
+		$('.flat_item').on("click", function() {
+			$(this).next().slideToggle(100);
+			$('#chat_form').not($(this).next()).slideUp('fast');
+		});
+	
+	}(jQuery));
+	
 	function init_list() {
 		<c:forEach items="${otherGroupList}" var="ogList">
 			group_info.push({GROUP_NO: '${ogList.groupNo}' });
