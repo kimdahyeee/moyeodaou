@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -88,7 +89,7 @@ public class EmailController {
 	    
 	    /* 인증 URL 타고 온 요청 확인하는 메소드*/
 	    @RequestMapping(value = "/invite/{groupNo}/{memberNo}/", method=RequestMethod.GET)
-	    public String checkRequest(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth){
+	    public String checkRequest(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth, Model model){
 	    	
 	    	/* Session 확인 
 	    	 * groupNo, memberNo, token 으로 유효한 url 접근인지 확인. -> DB insert
@@ -96,28 +97,40 @@ public class EmailController {
 	    	Map<String, Object> map = new HashMap<String, Object>();
 	    	System.out.println("checkRequest() - code:"+code);
 	    	
-	    	// session 확인
-	    	UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
-	    	System.out.println("login no:"+u.getMemberNo());
-	    	if(memberNo != u.getMemberNo() || u.getMemberNo() == 0){
-	    		System.out.println("session 일치 X , " + memberNo + "/"+u.getMemberNo());
-	    		return "user/login";
+	    	if(memberNo != -1) {
+	    		// session 확인
+	    		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
+	    		System.out.println("login no:"+u.getMemberNo());
+	    		if(memberNo != u.getMemberNo() || u.getMemberNo() == 0){
+	    			System.out.println("session 일치 X , " + memberNo + "/"+u.getMemberNo());
+	    			return "user/login";
+	    		}
+
+	    		map.put("groupNo", groupNo);
+	    		map.put("memberNo", memberNo);
+	    		map.put("token", code);
+
+	    		if(emailService.checkToken(map)){
+	    			// true (유효한 접근임을 확인)
+	    			System.out.println("CODE_TB에 저장된 값과 url 값이 동일");
+	    			// DB에 해당 회원 MEMBER_GROUP_TB에 새롭게 insert 해주는 Service 추가
+	    			emailService.putNewMemberInGroup(map);
+	    		}else{
+	    			System.out.println("groupNo, memberNo, token 중 DB에 존재하는 값과 일치하지 않음. "); 
+	    			return "user/login";
+	    		}
+
+	    		return "redirect:/main/"; 
+	    	} else {
+	    		Map<String, Object> notMemberInfo= new HashMap<String, Object>();
+	    		System.out.println("checkRequest() - code:"+code);
+
+	    		notMemberInfo.put("code", code);
+	    		notMemberInfo.put("groupNo", groupNo);
+
+	    		model.addAttribute("notMemberInfo", notMemberInfo);
+
+	    		return "user/signUp"; 
 	    	}
-	    	
-	    	map.put("groupNo", groupNo);
-	    	map.put("memberNo", memberNo);
-	    	map.put("token", code);
-	    	
-	    	if(emailService.checkToken(map)){
-	    		// true (유효한 접근임을 확인)
-	    		System.out.println("CODE_TB에 저장된 값과 url 값이 동일");
-	    		// DB에 해당 회원 MEMBER_GROUP_TB에 새롭게 insert 해주는 Service 추가
-	    		emailService.putNewMemberInGroup(map);
-	    	}else{
-	    		System.out.println("groupNo, memberNo, token 중 DB에 존재하는 값과 일치하지 않음. "); 
-	    		return "user/login";
-	    	}
-	     
-	    	return "redirect:/main/"; 
 	    }
 }

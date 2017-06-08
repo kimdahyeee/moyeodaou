@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.daou.moyeo.mail.service.EmailService;
 import com.daou.moyeo.user.dao.UserService;
 import com.daou.moyeo.user.util.PasswordEncoding;
 
@@ -32,6 +33,9 @@ public class UserController {
 	
 	@Resource(name="userService")
 	private UserService userService;
+	
+	@Resource(name="emailService")
+	private EmailService emailService;
 		
 	/**
 	 * 로그인 화면
@@ -65,7 +69,9 @@ public class UserController {
 	@RequestMapping( value="/user/insertUser", method=RequestMethod.POST )
 	public void insertUser( HttpServletRequest req, HttpServletResponse res, @RequestParam("email") String email,
 										 @RequestParam("name") String name,
-										 @RequestParam("password") String password) throws IOException {
+										 @RequestParam("password") String password, 
+										 @RequestParam("code") String code,
+										 @RequestParam("groupNo") int groupNo) throws IOException {
 		String encodePW = encoder.encode(password);
 		
 		Map<String, String> userMap = new HashMap<String, String>();
@@ -76,8 +82,17 @@ public class UserController {
 		
 		int result = userService.insertUser(userMap);
 		logger.info("result ======>" + result);
+		
+		if(code != null) {
+			Map<String, Object> groupMap = new HashMap<String, Object>();
+			int memberNo = emailService.getMemberNo(email);
+
+			groupMap.put("groupNo", groupNo);
+			groupMap.put("memberNo", memberNo);
+			groupMap.put("token", code);
+			emailService.putNewMemberInGroup(groupMap);
+		}
 		res.sendRedirect(req.getContextPath()+"/");
 	}
-	
 }
  
