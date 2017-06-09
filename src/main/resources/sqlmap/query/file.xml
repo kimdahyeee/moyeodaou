@@ -6,6 +6,7 @@
 		<result property="file_name" column="FILE_NAME" javaType="java.lang.String"/>
 		<result property="member_no" column="MEMBER_NO" javaType="java.lang.String"/>
 		<result property="group_file_no" column="GROUP_FILE_NO" javaType="int"/>
+		<result property="member_name" column="MEMBER_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
 	<resultMap id="downFileInfo" type="hashmap" >
@@ -25,7 +26,7 @@
 	
 	<!-- group File List 관련 query -->
 	<select id="selectAllFileList" parameterType="int" resultMap="fileInfoList">
-		SELECT FILE_NAME, MEMBER_NO, GROUP_FILE_NO from GROUP_FILE_TB WHERE GROUP_NO = #{groupNo} ORDER BY GROUP_FILE_NO ASC
+		SELECT G.FILE_NAME , G.MEMBER_NO, G.GROUP_FILE_NO, M.MEMBER_NAME from GROUP_FILE_TB AS G, MEMBER_TB AS M WHERE GROUP_NO = #{groupNo} AND G.MEMBER_NO = M.MEMBER_NO ORDER BY GROUP_FILE_NO ASC
 	</select>
 	
 	<!-- email 인증 관련 query -->	
