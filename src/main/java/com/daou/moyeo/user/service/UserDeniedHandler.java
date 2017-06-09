@@ -18,13 +18,8 @@ public class UserDeniedHandler implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest req, HttpServletResponse res,
 			AccessDeniedException ade) throws IOException, ServletException {
-		logger.info("Exceiption : {}",ade);
-		logger.info("LocalizedMessage : {}",ade.getLocalizedMessage());
-		logger.info("Message : {}",ade.getMessage());
-		logger.info("StackTrace : {}",ade.getStackTrace());
-
+		
 		req.setAttribute("errMsg",ade.getMessage());
-		System.out.println(ade.getMessage());
 		req.getRequestDispatcher("/WEB-INF/views/user/denied.jsp").forward(req, res);
 	}
 	

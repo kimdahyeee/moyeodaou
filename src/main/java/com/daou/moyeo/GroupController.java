@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -92,7 +93,6 @@ public class GroupController {
 			groupService.insertMemberGroup(memGroupMap);
 			
 			transactionManager.commit(status);
-			System.out.println("commit");
 		} catch (Exception e) {
 			transactionManager.rollback(status);
 			System.out.println("rollback");
