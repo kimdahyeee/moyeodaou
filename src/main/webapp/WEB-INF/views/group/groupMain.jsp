@@ -75,7 +75,7 @@
 													<img class="img-responsive" src="../resources/img/file_img.png" alt="">
 													<div class="white-header">
 														<h5>${sharing_list[status.index].file_name}</h5>
-														<h5>${sharing_list[status.index].member_no}</h5>
+														<h5>${sharing_list[status.index].member_name}</h5>
 													</div>
 													<div class="photo">
 														<a class="fancybox" href="">
