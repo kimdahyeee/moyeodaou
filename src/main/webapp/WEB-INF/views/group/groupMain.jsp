@@ -309,9 +309,9 @@
 
 <!-- chatting script -->
 <script>
-	 var host = "175.115.95.51";
+	// var host = "175.115.95.51";
 	// var host = "192.168.219.102";
-	//var host = "172.21.21.61";
+	var host = "172.21.21.61";
 	//var host = "localhost"
 	var port = "3003";
 	var chat_id = "";
@@ -335,8 +335,8 @@
 	var group_socket = null;
 
 	$(document).ready(function() {
-		chat_socket = io.connect('http://'+ host + ':' + port +'/chat', "transports": ['websocket']);
-		group_socket = io.connect('http://' + host + ':' + port + '/group', "transports": ['websocket']);
+		chat_socket = io.connect('http://'+ host + ':' + port +'/chat');
+		group_socket = io.connect('http://' + host + ':' + port + '/group');
 	
 		init_list();
 		member_list = set_member_list(member_list);
