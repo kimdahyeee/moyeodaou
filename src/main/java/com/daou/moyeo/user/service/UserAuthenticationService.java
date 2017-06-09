@@ -43,7 +43,9 @@ public class UserAuthenticationService implements UserDetailsService {
 		
 		if(groupAuth.size() != 0){
 			for(int i=0; i<groupAuth.size(); i++){
-				gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + groupAuth.get(i).get("groupNo") + "_" + groupAuth.get(i).get("groupAuthority") ));
+				gas.add(new SimpleGrantedAuthority("ROLE_GROUP" 
+									+ groupAuth.get(i).get("groupNo") + "_" 
+									+ groupAuth.get(i).get("groupAuthority") ));
 			}
 		}
 		

@@ -47,6 +47,7 @@ public class GroupMainController {
 	 */
 	@RequestMapping(value = "/group/{groupNo}")
 	public String groupMainInit(@PathVariable("groupNo") int groupNo, Model model, Authentication auth) {		
+		
 		//TODO 그룹 권한 삽입
 		System.out.println("Group Main Init()");
 		
