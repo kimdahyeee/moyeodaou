@@ -12,6 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -37,7 +40,24 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 		   
 		  System.out.println(u);
 		  
-		  res.sendRedirect(req.getContextPath()+"/main");
+		  //res.sendRedirect(req.getContextPath()+"/main");
+		  res.sendRedirect(getReturnUrl(req, res));
+	}
+	
+	/** 
+	 * 이전 페이지로 이동
+	 * @param request 
+	 * @param response 
+	 * @return 
+	 * */ 
+	private String getReturnUrl(HttpServletRequest request, HttpServletResponse response) { 
+		
+		RequestCache requestCache = new HttpSessionRequestCache(); 
+		SavedRequest savedRequest = requestCache.getRequest(request, response); 
+		if (savedRequest == null) { 
+			return request.getSession().getServletContext().getContextPath(); 
+		} 
+		return savedRequest.getRedirectUrl(); 
 	}
 
 }
