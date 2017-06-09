@@ -335,8 +335,8 @@
 	var group_socket = null;
 
 	$(document).ready(function() {
-		chat_socket = io.connect('http://'+ host + ':' + port +'/chat');
-		group_socket = io.connect('http://' + host + ':' + port + '/group');
+		chat_socket = io.connect('http://'+ host + ':' + port +'/chat', "transports": ['websocket']);
+		group_socket = io.connect('http://' + host + ':' + port + '/group', "transports": ['websocket']);
 	
 		init_list();
 		member_list = set_member_list(member_list);
