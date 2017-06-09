@@ -109,11 +109,17 @@ public class EmailController {
 	    	
 	    	if(memberNo != -1) {
 	    		// session 확인
+	    		
+	    		//System.out.println("login no:"+u.getMemberNo());
+	    		if (auth == null) {
+	    			System.out.println("정보없음" + memberNo + "/");
+	    		}
+	    		
 	    		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
-	    		System.out.println("login no:"+u.getMemberNo());
-	    		if(memberNo != u.getMemberNo() || u.getMemberNo() == 0){
+	    		
+	    		if(memberNo != u.getMemberNo()){
 	    			System.out.println("session 일치 X , " + memberNo + "/"+u.getMemberNo());
-	    			return "user/login";
+	    			return "denied";
 	    		}
 
 	    		map.put("groupNo", groupNo);
