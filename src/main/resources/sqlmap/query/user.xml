@@ -19,24 +19,26 @@
 		FROM MEMBER_TB
 		WHERE EMAIL = #{username}
 	</select>
-	
+
 	<insert id="insertUser">
-		INSERT INTO MEMBER_TB(email, password, MEMBER_NAME, authority, SIGNUP_DATE)
-  		VALUES(#{email},#{password},#{name},#{authority}, current_timestamp)
+		INSERT INTO MEMBER_TB(email, password, MEMBER_NAME,
+		authority, SIGNUP_DATE)
+		VALUES(#{email},#{password},#{name},#{authority}, current_timestamp)
 	</insert>
-	
+
 	<resultMap type="hashmap" id="groupAuthInfo">
-		<result property="groupNo" column="GROUP_NO" javaType="int"/>
-		<result property="groupAuthority" column="GROUP_AUTHORITY" javaType="java.lang.String"/>
+		<result property="groupNo" column="GROUP_NO" javaType="int" />
+		<result property="groupAuthority" column="GROUP_AUTHORITY"
+			javaType="java.lang.String" />
 	</resultMap>
-	
+
 	<select id="selectGroupAuthInfo" parameterType="int" resultMap="groupAuthInfo">
 		SELECT
-			GROUP_NO,
-			GROUP_AUTHORITY
+		GROUP_NO,
+		GROUP_AUTHORITY
 		FROM
-			MEMBER_GROUP_TB
+		MEMBER_GROUP_TB
 		WHERE
-			MEMBER_NO = #{memberNo}
-	</select>	
+		MEMBER_NO = #{memberNo}
+	</select>
 </mapper>
