@@ -2,13 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="user">
-	<select id="selectUser" resultType="map">
+	<resultMap type="hashmap" id="userInfo">
+		<result property="memberNo" column="MEMBER_NO" javaType="int"/>
+		<result property="username" column="EMAIL" javaType="java.lang.String"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
+		<result property="password" column="PASSWORD" javaType="java.lang.String"/>
+		<result property="authority" column="AUTHORITY" javaType="java.lang.String"/>
+	</resultMap>
+	<select id="selectUser" resultMap="userInfo">
 		SELECT 
-			MEMBER_NO as memberNo,
-			EMAIL as username,
-			MEMBER_NAME as memberName,
-		    PASSWORD as password,
-		    AUTHORITY as authority
+			MEMBER_NO,
+			EMAIL,
+			MEMBER_NAME,
+		    PASSWORD,
+		    AUTHORITY
 		FROM MEMBER_TB
 		WHERE EMAIL = #{username} 
 	</select>	

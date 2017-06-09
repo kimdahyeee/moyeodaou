@@ -38,7 +38,7 @@ public class UserAuthenticationService implements UserDetailsService {
 		List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
 		gas.add(new SimpleGrantedAuthority(user.get("authority").toString()));
 		
-		int memberNo = (Integer)user.get("memberNo");
+		int memberNo = (Integer) user.get("memberNo");
 		List<Map<String, Object>> groupAuth = sqlSession.selectList("user.selectGroupAuthInfo", memberNo);
 		
 		if(groupAuth.size() != 0){
