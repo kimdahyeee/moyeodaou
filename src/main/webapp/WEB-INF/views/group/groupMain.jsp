@@ -275,6 +275,20 @@
 						</div>
 						<!--/grey-panel -->
 					</div>
+					
+					<div class="flat_item">
+					<h3>현재 접속 리스트</h3>
+					</div>
+					<div class="mb" id="chat_form" style="display:none;">
+						<div class="white-panel desc donut-chart">
+							<div class="chat_member">
+								<div class="chat_member_list">
+									<ul id="chat_member_list"></ul>
+								</div>
+							</div>
+						</div>
+						<!--/grey-panel -->
+					</div>
 
 					<!-- USERS ONLINE SECTION -->
 					<div class="flat_item">
@@ -339,6 +353,8 @@
 		group_socket = io.connect('http://' + host + ':' + port + '/group');
 	
 		init_list();
+		console.log(member_list);
+		
 		member_list = set_member_list(member_list);
 	
 		//Enroll Chatting info
@@ -362,8 +378,8 @@
 			data = ((data.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
 			data = data.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 			
-			$('#chat_list').append('<li>' + data + '</li>');
-			$('.chat_list').scrollTop($('#chat_list').height());
+			//$('#chat_list').append('<li>' + data + '</li>');
+			//$('.chat_list').scrollTop($('#chat_list').height());
 		});
 
 		group_socket.on('notify', function (data) {
@@ -454,10 +470,10 @@
 		</c:forEach>
 		
 		<c:forEach items="${groupMemberList}" var="gmList">
-			member_list.push(
-					{MEMBER_NO: '${gmList.memberNo}' },
-					{MEMBER_NAME: '${gmList.memberName}' },
-					);
+			member_list.push({
+				MEMBER_NO: '${gmList.memberNo}',
+				MEMBER_NAME: '${gmList.memberName}' 
+				});
 		</c:forEach>
 	};
 
