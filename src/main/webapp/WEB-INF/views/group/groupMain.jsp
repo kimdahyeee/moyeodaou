@@ -309,11 +309,11 @@
 
 <!-- chatting script -->
 <script>
-	// var host = "175.115.95.51";
+	 var host = "175.115.95.51";
 	// var host = "192.168.219.102";
-	var host = "172.21.21.61";
+	//var host = "172.21.21.61";
 	//var host = "localhost"
-	var port = "3003";
+	var port = "3000";
 	var chat_id = "";
 	var cnt = 0;
 	var notify_cnt = 0;
