@@ -20,7 +20,6 @@
 					<input type="password" class="form-control" name="password" placeholder="비밀번호"> <br> 
 					<input type="password" class="form-control" placeholder="비밀번호 확인"> <br> 
 					<input type="text" class="form-control" name="name" placeholder="이름">
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 					<br>
 					<button class="btn btn-theme btn-block" type="submit">가입하기</button>
 				</div>

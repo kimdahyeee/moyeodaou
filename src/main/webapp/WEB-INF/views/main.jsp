@@ -35,7 +35,7 @@
 						</div>
 						<div class="modal-body">
 							<form class="form-horizontal style-form"
-								action="<c:url value='/createGroup?${_csrf.parameterName}=${_csrf.token}'/>"
+								action="<c:url value='/createGroup'/>"
 								method="post" enctype="multipart/form-data">
 								<div class="form-group">
 									<label class="col-sm-2 col-sm-2 control-label">그룹명</label>
