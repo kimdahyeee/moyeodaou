@@ -112,6 +112,7 @@ public class EmailService extends SqlSessionDaoSupport{
 		System.out.println(token);
 		
 		hashOps.putAll(token, rmap);
+		redisTemplate.expire(token, 5, TimeUnit.MINUTES);
 		
 		System.out.println("===============================================");
 		
