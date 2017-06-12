@@ -38,7 +38,7 @@ public class EmailUtil {
 	    String content = sb.toString();						
 	    
 	    // TODO url 설정하기	
-	    content = content + "\n" +"http://localhost:8181/daou/invite/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
+	    content = content + "\n" +"http://172.21.22.137:8181/daou/invite/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
 	    
 	    email.setReciver(reciver);
         email.setSubject(subject);
