@@ -442,9 +442,9 @@
 				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + " : "+ result[temp_keys[i]].state+'</li>');
 			}
 
-			data = decodeURIComponent(data.msg);
-			$('#chat_list').append('<li>' + data + '</li>');
-			$('.chat_list').scrollTop($('#chat_list').height());
+			//data = decodeURIComponent(data.msg);
+			//$('#chat_list').append('<li>' + data + '</li>');
+			//$('.chat_list').scrollTop($('#chat_list').height());
 		});
 
 		// msg input and enter key
