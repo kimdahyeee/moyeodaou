@@ -40,8 +40,11 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 		   
 		  System.out.println(u);
 		  
-		  //res.sendRedirect(req.getContextPath()+"/main");
-		  res.sendRedirect(getReturnUrl(req, res));
+		  if(getReturnUrl(req, res).equals("/daou")){
+			  res.sendRedirect(req.getContextPath()+"/main");
+		  } else {
+			  res.sendRedirect(getReturnUrl(req, res));
+		  }
 	}
 	
 	/** 
