@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,8 +71,8 @@ public class UserController {
 	public void insertUser( HttpServletRequest req, HttpServletResponse res, @RequestParam("email") String email,
 										 @RequestParam("name") String name,
 										 @RequestParam("password") String password, 
-										 @RequestParam("code") String code,
-										 @RequestParam("groupNo") int groupNo) throws IOException {
+										 @RequestParam(value="code", required=false) String code,
+										 @RequestParam(value="groupNo", required=false) Integer groupNo) throws IOException {
 		String encodePW = encoder.encode(password);
 		
 		Map<String, String> userMap = new HashMap<String, String>();
