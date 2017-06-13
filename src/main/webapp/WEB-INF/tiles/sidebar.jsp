@@ -107,7 +107,7 @@
 							<label class="col-sm-2 col-sm-2 control-label">email주소</label>
 							<div class="col-sm-10">
 								<input type="email" name="receiverId" class="form-control">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+								<!--  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">	-->
 							</div>
 						</div>
 						<div class="centered">

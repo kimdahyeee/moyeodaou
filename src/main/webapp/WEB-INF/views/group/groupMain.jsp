@@ -87,7 +87,8 @@
 										<input type="hidden" id="fno" name="fno" value="${sharing_list[status.index].group_file_no}">	
 										<ul class="dropdown-menu" role="menu">
 											<li><a href="#">미리보기</a></li>								
-											<li><a href="<c:url value='/fileDownload?fno=${sharing_list[status.index].group_file_no}&=${_csrf.parameterName}&=${_csrf.token}'/>">다운로드</a></li>
+											<!--  <li><a href="<c:url value='/fileDownload?fno=${sharing_list[status.index].group_file_no}&=${_csrf.parameterName}&=${_csrf.token}'/>">다운로드</a></li>	-->
+											<li><a href="<c:url value='/fileDownload?fno=${sharing_list[status.index].group_file_no}'/>">다운로드</a></li>
 											<li><a href="#">삭제</a></li>
 										</ul>
 									</div>
@@ -109,12 +110,10 @@
 								</div>
 								<div class="modal-footer">
 										<a href="#this"	id="fileUpload2"></a>
-									<!--<form action="<c:url value='/group/${groupNo}/fileUpload?${_csrf.parameterName}=${_csrf.token}'/>" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">-->
-										<form:form action="/daou/group/${groupNo}/fileUpload?${_csrf.parameterName}=${_csrf.token}" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
+										<form:form action="/daou/group/${groupNo}/fileUpload" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
 											<input type="file" name="testFile" required="required"/>		
 											<input type="submit" value="완료"/>
-									 		<%-- <input type="text" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
-										</form:form>
+									 	</form:form>
 								</div>
 							</div>
 						</div>
