@@ -102,23 +102,28 @@
 					<div class="modal fade" id="fileUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
+							<form:form action="/daou/group/${groupNo}/fileUpload" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 									<h4 class="modal-title" id="myModalLabel">파일 업로드</h4>
 								</div>
 								<div class="modal-body">
-								</div>
-								<div class="modal-footer">
+									<input type="button" value="+" id="addFile">
+									<button type="submit">완료</button>
+ 								</div>
+								<div class="modal-footer" id="fileUpload-footer">
 										<a href="#this"	id="fileUpload2"></a>
+										<!--  
 										<form:form action="/daou/group/${groupNo}/fileUpload" id="fileUpload" name="fileUpload" method="post" enctype="multipart/form-data">
 											<input type="file" name="testFile" required="required"/>		
 											<input type="submit" value="완료"/>
 									 	</form:form>
+									 	-->
 								</div>
+								</form:form>
 							</div>
 						</div>
 					</div>
-					
 					<!-- /////////////////////////////////////// Schedule Modal //////////////////////////////////////////////////  -->
 					<div class="modal fade" id="addSchedule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
@@ -452,6 +457,8 @@
 			}
 		});
 		
+	
+		
 	})
 	(function ($) {
 		'use strict';
@@ -516,4 +523,48 @@
 		}
 		return result;
 	};
+</script>
+
+<script type="text/x-javascript">
+ 	var cnt = 0;
+ 	
+ 	function fn_addFile(){
+ 		cnt++;
+ 		console.log(cnt);
+ 		var str = "<p>" +
+ 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"'>"+
+ 			//"<input type='button' value='삭제' class='deleteFile'>" +
+ 			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+cnt+"</a>"+ 
+ 			"</p>";
+ 		$("#fileUpload-footer").append(str);
+ 		console.log('end');
+ 		
+		$(".delete").on("click", function(e){ 						// 삭제 버튼
+			e.preventDefault();
+			fn_deleteFile($(this));
+		});
+ 	}
+ 		
+ 	function fn_deleteFile(obj){
+ 	         obj.parent().remove();
+ 	}
+ 		
+	$("#addFile").on("click", function(e){ 						//파일 추가 버튼
+		e.preventDefault();
+		fn_addFile();
+	});
+	
+	
+	
+ /*
+	function fn_submitFile(){
+		// form 생성하고 addFile을 다 submit 하고 싶다 ~ 
+		var form = document.createElement("form");
+
+		 form.setAttribute("method", "post");
+		 form.setAttribute("action", "/daou/group/${groupNo}/fileUpload");
+		 $(document.body).append(form);
+		 form.submit();
+	}
+	*/
 </script>
