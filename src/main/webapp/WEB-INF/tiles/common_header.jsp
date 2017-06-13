@@ -6,10 +6,16 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="_csrf" content="${_csrf.token}"/>
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>모여다우</title>
+	<title>모여다우</title>
 	
+	<link rel='stylesheet' href="<c:url value='/resources/css/fullcalendar.min.css'/>"  type="text/css" />
+	<link rel='stylesheet' href="<c:url value='/resources/css/fullcalendar.print.css'/>" type="text/css"  media='print' />
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/moment.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/jquery.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/jquery-ui.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/fullcalendar.js'/>"></script>
+	
+	<script src="<c:url value='/resources/js/fullCalendar/ko.js'/>"></script>
 	<!-- Bootstrap core CSS -->
 	<link href="<c:url value='/resources/css/bootstrap.css'/>" rel="stylesheet">
 	
@@ -22,10 +28,11 @@
 	
 	<link href="<c:url value='/resources/css/style-responsive.css'/>" rel="stylesheet">
 	
+	
+	
+	<!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+	
 	<script src="<c:url value='/resources/js/chart-master/Chart.js'/>"></script>
-	
-	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-	
 	<script src="<c:url value='/resources/node_modules/socket.io-client/dist/socket.io.js'/>"></script>
 
 </head>
@@ -70,7 +77,8 @@
 		            	<input type="submit" class="logout" value="Logout"/>
 	           	</li>	
 	    	</ul>
-	    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
       	</form>
     </div>
 	</header> <!--header end--> 
+	
+	
