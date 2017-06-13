@@ -87,7 +87,7 @@
 										<div class="col-sm-6 col-xs-6"></div>
 									</div>
 									<div class="centered">
-										<img src="${groupList[status.index].groupImg }" width="120">
+										<img src="/fileStore/${groupList[status.index].groupImg }" width="120">
 									</div>
 								</div>
 							</a>
