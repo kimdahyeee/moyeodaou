@@ -49,6 +49,8 @@ public class FileUtil {
 	    
 	    response.getOutputStream().flush();
 	    response.getOutputStream().close();
+	    
+	    // progbar에서 쓴 내용 
 	}
 	
 	/**
