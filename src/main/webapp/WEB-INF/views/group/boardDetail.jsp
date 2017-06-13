@@ -43,7 +43,6 @@
 							<sec:authentication property="principal.memberNo" var="currentUserNO"/>
 							<c:if test="${ authorNO eq currentUserNO }">
 								<a href="<c:url value='/group/${groupNo}/deleteBoard/${ boardDetailMap.board_no}'/>" class="btn btn-default btn-lg btn-block" >삭제</a>
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 								<button type="submit" class="btn btn-default btn-lg btn-block">수정</button>
 							</c:if>
 							<a href="<c:url value='/group/${groupNo}/boardList'/>" class="btn btn-primary btn-lg btn-block">목록</a>

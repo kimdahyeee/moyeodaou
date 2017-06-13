@@ -67,7 +67,6 @@
 						<!--/col-md-4 -->
 						<c:if test="${fn:length(sharing_list) > 0}"> 
 							<c:forEach items="${sharing_list}" var="list" step="1" varStatus="status">
-							<!--  <form action="<c:url value='/fileDownload?${_csrf.parameterName}=${_csrf.token}'/>" id='fileDownload' name="fileDownload" method="post">	-->
 									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
 										<div class="project-wrapper" data-toggle="dropdown">
 											<div class="project">

@@ -35,7 +35,6 @@
                                   <textarea class="form-control" rows="15" name="contents"></textarea>
                               </div>
                           </div>
-                          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                           <button type="submit" class="btn btn-primary btn-lg btn-block">작성 완료</button>
 						  <button type="button" class="btn btn-default btn-lg btn-block" onclick="window.history.go(-1); return false;">취소</button>
                       </form>
