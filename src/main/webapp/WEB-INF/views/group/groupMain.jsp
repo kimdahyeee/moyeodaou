@@ -369,17 +369,7 @@
 				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + ":"+ result[temp_keys[i]].state+'</li>');
 			}
 
-			data = decodeURIComponent(data.msg);
-			data = ((data.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
-			data = data.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-			data = data..replace(/\\n/g, "\\n")
-            .replace(/\\'/g, "\\'")
-            .replace(/\\"/g, '\\"')
-            .replace(/\\&/g, "\\&")
-            .replace(/\\r/g, "\\r")
-            .replace(/\\t/g, "\\t")
-            .replace(/\\b/g, "\\b")
-            .replace(/\\f/g, "\\f");
+			data = decodeURI(data.msg);
 			
 			//$('#chat_list').append('<li>' + data + '</li>');
 			//$('.chat_list').scrollTop($('#chat_list').height());
@@ -388,17 +378,7 @@
         chat_socket.on('history', function(data) {
             var len = data.length;
             for(var i = len-1; i >= 0 ; i--) {
-                contents = decodeURIComponent(data[i].CHAT_CONTENTS);
-                contents = ((contents.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
-                contents = contents.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                contents = contents.replace(/\\n/g, "\\n")
-                .replace(/\\'/g, "\\'")
-                .replace(/\\"/g, '\\"')
-                .replace(/\\&/g, "\\&")
-                .replace(/\\r/g, "\\r")
-                .replace(/\\t/g, "\\t")
-                .replace(/\\b/g, "\\b")
-                .replace(/\\f/g, "\\f");
+                contents = decodeURI(data[i].CHAT_CONTENTS);
                 var msg = data[i].MEMBER_NAME + ":" + contents;
                 $('#chat_list').append('<li>' + msg + '</li>');
             }
@@ -443,17 +423,7 @@
 		});
 
 		chat_socket.on("receive_message", function(data) {
-			data = decodeURIComponent(data);
-			data = ((data.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
-			data = data.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-			data = data.replace(/\\n/g, "\\n")
-            .replace(/\\'/g, "\\'")
-            .replace(/\\"/g, '\\"')
-            .replace(/\\&/g, "\\&")
-            .replace(/\\r/g, "\\r")
-            .replace(/\\t/g, "\\t")
-            .replace(/\\b/g, "\\b")
-            .replace(/\\f/g, "\\f");
+			data = decodeURI(data);
 			
 			$('#chat_list').append('<li>' + data + '</li>');
 			$('#chat_scroll').scrollTop($('#chat_list').height());
@@ -472,7 +442,7 @@
 				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + " : "+ result[temp_keys[i]].state+'</li>');
 			}
 
-			//data = decodeURIComponent(data.msg);
+			//data = decodeURI(data.msg);
 			//$('#chat_list').append('<li>' + data + '</li>');
 			//$('.chat_list').scrollTop($('#chat_list').height());
 		});
