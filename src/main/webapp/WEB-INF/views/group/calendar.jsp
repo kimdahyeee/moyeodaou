@@ -5,14 +5,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 
 <!--  fullCalendar에만 적용 -->
-<script type="text/javascript"
-	src="<c:url value='/resources/js/fullCalendar/moment.min.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/resources/js/fullCalendar/jquery.min.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/resources/js/fullCalendar/jquery-ui.min.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/resources/js/fullCalendar/fullcalendar.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/fullcalendar.js'/>"></script>
 <script src="<c:url value='/resources/js/fullCalendar/ko.js'/>"></script>
 
 <section id="main-content">
@@ -75,7 +68,8 @@
 				minTime : '6:00:00',
 				slotDuration : '1:00:00',
 				allDaySlot : false,
-				height : "auto"
+				height : "auto",
+				eventOverlap:false
 			});
 		}
 
@@ -87,18 +81,58 @@
 				end : e.end
 			};
 		});
+		
+		var scheduleInfo = new Array();
+		
 		for ( var k in obj) {
 			console.log(k, obj[k]);
 		}
 		for ( var key in obj) {
 			if (obj.hasOwnProperty(key)) {
+				var data = new Object();
+				
 				var startDate = new Date(obj[key].start);
 				var endDate = new Date(obj[key].end);
-				alert(startDate.getUTCDay());
+				
+				data.scheduleDay = startDate.getUTCDay();
+				data.scheduleStartTime = startDate.getUTCHours();
+				
+				if(obj[key].end == null){
+					data.scheduleFinishTime = data.scheduleStartTime + 1;
+				} else{
+					if(endDate.getUTCHours() == 0){
+						data.scheduleFinishTime = 23;
+					} else {
+						data.scheduleFinishTime = endDate.getUTCHours() - 1;
+					}
+				}
+			/* 	alert(startDate.getUTCDay());
 				alert(startDate.getUTCHours());
-				alert(endDate.getUTCHours());
+				alert(endDate.getUTCHours()); */
+				scheduleInfo.push(data);
 			}
 		}
-		console.log('Item: ', JSON.stringify(obj));
+		var scheduleInfos = {
+				groupNo : ${groupNo}, 
+				memberNo : <sec:authentication property="principal.memberNo"/>, 
+				scheduleInfos : scheduleInfo
+		};
+		
+		console.log('Item: ', JSON.stringify(scheduleInfos));
+		
+		$.ajax({
+            type: "POST",
+            url: "/daou/insertSchedule", 
+            processData : true,
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            data: JSON.stringify(scheduleInfos),
+            dataType: "json",
+            success: function(data) {
+            	alert("저장되었습니다.");
+            }
+        });
 	}
 </script>
