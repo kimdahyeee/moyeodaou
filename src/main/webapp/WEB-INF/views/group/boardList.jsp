@@ -33,9 +33,9 @@
 									<c:forEach items="${allBoardList}" var="allBoardLists"  begin="0" end="${fn:length(allBoardList)}" step="1" varStatus="status">
 										<tr>
 											<td>${allBoardList[status.index].rNum}</td>
-											<td><a href="<c:url value='/group/${groupNo}/boardDetail/${allBoardList[status.index].board_no}'/>">${allBoardList[status.index].title}</a></td>
-											<td>${allBoardList[status.index].member_name}</td>
-											<td>${allBoardList[status.index].created_date}</td>
+											<td><a href="<c:url value='/group/${groupNo}/boardDetail/${allBoardList[status.index].boardNo}'/>">${allBoardList[status.index].title}</a></td>
+											<td>${allBoardList[status.index].memberName}</td>
+											<td>${allBoardList[status.index].createdDate}</td>
 										</tr>
 									</c:forEach>
 								</c:if>

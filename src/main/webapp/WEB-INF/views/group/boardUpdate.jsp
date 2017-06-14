@@ -16,7 +16,7 @@
           		<div class="col-lg-12">
                   <div class="form-panel">
                   	  <h4 class="mb"><i class="fa fa-angle-right"></i> 게시글 작성</h4>
-                      <form class="form-horizontal style-form" method="post" action='<c:url value="/group/${groupNo}/updateBoard/${ boardDetailMap.board_no }"/>'>
+                      <form class="form-horizontal style-form" method="post" action='<c:url value="/group/${groupNo}/updateBoard/${ boardDetailMap.boardNo }"/>'>
                           <div class="form-group">
                               <label class="col-lg-2 col-sm-2 control-label">제목</label>
                               <div class="col-sm-10">
@@ -26,7 +26,7 @@
                           <div class="form-group">
                               <label class="col-lg-2 col-sm-2 control-label">작성자</label>
                               <div class="col-lg-10">
-                                  <p class="form-control-static">${boardDetailMap.member_name }</p>
+                                  <p class="form-control-static">${boardDetailMap.memberName }</p>
                               </div>
                           </div>
                           <div class="form-group">

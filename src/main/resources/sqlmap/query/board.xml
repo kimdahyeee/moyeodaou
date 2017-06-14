@@ -19,11 +19,11 @@
 	</insert>
 	
 	<resultMap type="hashmap" id="boardDetail">
-		<result property="board_no" column="BOARD_NO" javaType="int"/>
+		<result property="boardNo" column="BOARD_NO" javaType="int"/>
 		<result property="title" column="TITLE" javaType="java.lang.String"/>
 		<result property="contents" column="CONTENTS" javaType="java.lang.String"/>
-		<result property="member_name" column="MEMBER_NAME" javaType="java.lang.String"/>
-		<result property="member_no" column="MEMBER_NO" javaType="int"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
+		<result property="memberNo" column="MEMBER_NO" javaType="int"/>
 	</resultMap>
 	
 	<select id="selectBoardDetail" resultMap="boardDetail">
@@ -50,10 +50,10 @@
 	<resultMap type="hashmap" id="boardList">
 		<result property="totalCount" column="TOTALCOUNT" javaType="int"/>
 		<result property="rNum" column="RNUM" javaType="int"/>
-		<result property="board_no" column="BOARD_NO" javaType="int"/>
+		<result property="boardNo" column="BOARD_NO" javaType="int"/>
 		<result property="title" column="TITLE" javaType="java.lang.String"/>
-		<result property="created_date" column="CREATED_DATE" javaType="java.lang.String"/>
-		<result property="member_name" column="MEMBER_NAME" javaType="java.lang.String"/>
+		<result property="createdDate" column="CREATED_DATE" javaType="java.lang.String"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
 	 <select id="selectBoardList" parameterType="hashmap" resultMap="boardList">
@@ -81,10 +81,10 @@
 	
 	<resultMap type="hashmap" id="boardMainList">
 		<result property="rNum" column="RNUM" javaType="int"/>
-		<result property="board_no" column="BOARD_NO" javaType="int"/>
+		<result property="boardNo" column="BOARD_NO" javaType="int"/>
 		<result property="title" column="TITLE" javaType="java.lang.String"/>
-		<result property="created_date" column="CREATED_DATE" javaType="java.lang.String"/>
-		<result property="member_name" column="MEMBER_NAME" javaType="java.lang.String"/>
+		<result property="createdDate" column="CREATED_DATE" javaType="java.lang.String"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
 	 <select id="selectMainBoardList" parameterType="int" resultMap="boardMainList">
