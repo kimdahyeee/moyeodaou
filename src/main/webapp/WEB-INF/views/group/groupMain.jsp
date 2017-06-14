@@ -277,20 +277,6 @@
 						</div>
 						<!--/grey-panel -->
 					</div>
-					
-					<div class="flat_item">
-					<h3>현재 접속 리스트</h3>
-					</div>
-					<div class="mb" id="chat_form" style="display:none;">
-						<div class="white-panel desc donut-chart">
-							<div class="chat_member">
-								<div class="chat_member_list">
-									<ul id="chat_member_list"></ul>
-								</div>
-							</div>
-						</div>
-						<!--/grey-panel -->
-					</div>
 
 					<!-- USERS ONLINE SECTION -->
 					<div class="flat_item">
@@ -302,19 +288,25 @@
 						<div class="chat_notify_list">
 							<ul id="chat_notify_list"></ul>
 						</div>
-						
-						<div class="chat_list">
-							<strong>대화</strong><br>
+					<div class="chat_member_list">
+						<strong>현재 접속 리스트</strong>
+						<ul id="chat_member_list"></ul>
+					</div>
+
+					<div class="chat_list" >
+						<strong>대화</strong><br>
+						<div id="chat_scroll" style="overflow:auto; height:300px;">
 							<ul id="chat_list"></ul>
 						</div>
+					</div>
 						
-						<div class="chat_input">
-							<input type='text' id="chat_input" class="chat_input_txt" value="대화 글을 입력하세요." onclick="$(this).val('');")/>
-						</div>
-						
-						<div class="chat_btn">
-							<a href="javascript:chat_input();">입력</a>
-						</div>
+					<div class="chat_input" >
+						<input type='text' size="50" id="chat_input" class="chat_input_txt" value="대화 글을 입력하세요." onclick="$(this).val('');")/>
+					</div>
+					
+					<div class="chat_btn">
+						<a href="javascript:chat_input();">입력</a>
+					</div>
 					</div>
 				</div>
 				<!-- /col-lg-3 -->
@@ -355,13 +347,14 @@
 		group_socket = io.connect('http://' + host + ':' + port + '/group');
 	
 		init_list();
-		console.log(member_list);
 		
 		member_list = set_member_list(member_list);
-	
+
+		
 		//Enroll Chatting info
 		chat_socket.emit('chat_join', { member: member, channel: channel });
 		group_socket.emit('group_info', { group_info: group_info });
+		
 
 		//Succes Chatting Join
 		chat_socket.on('chat_connect', function (data) {
@@ -386,15 +379,14 @@
 		
         chat_socket.on('history', function(data) {
             var len = data.length;
-            console.log(data[len-1]);
             for(var i = len-1; i >= 0 ; i--) {
                 contents = decodeURIComponent(data[i].CHAT_CONTENTS);
                 contents = ((contents.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
                 contents = contents.replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 var msg = data[i].MEMBER_NAME + ":" + contents;
                 $('#chat_list').append('<li>' + msg + '</li>');
-                console.log(msg);
             }
+			$('#chat_scroll').scrollTop($('#chat_list').height());
         });
 
 		group_socket.on('notify', function (data) {
@@ -435,13 +427,12 @@
 		});
 
 		chat_socket.on("receive_message", function(data) {
-			console.log(data);
 			data = decodeURIComponent(data);
 			data = ((data.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
 			data = data.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 			
 			$('#chat_list').append('<li>' + data + '</li>');
-			$('.chat_list').scrollTop($('#chat_list').height());
+			$('#chat_scroll').scrollTop($('#chat_list').height());
 		});
 
 		chat_socket.on('member_disconnected', function (data) {
@@ -469,17 +460,14 @@
 			}
 		});
 		
-	
-		
-	})
-	(function ($) {
+		//flick 
 		'use strict';
 		$('.flat_item').on("click", function() {
 			$(this).next().slideToggle(100);
 			$('#chat_form').not($(this).next()).slideUp('fast');
 		});
 	
-	}(jQuery));
+	});
 	
 	function init_list() {
 		<c:forEach items="${otherGroupList}" var="ogList">
@@ -496,7 +484,6 @@
 
 	function chat_input() {
 		var encodedMsg = encodeURIComponent($('#chat_input').val());
-		console.log(encodedMsg);
 		chat_socket.emit('send_message', { channel: channel, member: member, message: encodedMsg });
 		group_socket.emit('send_notify', { channel: channel, member: member, message: encodedMsg });
 		$('#chat_input').val(''); // clear input msg in chat_input area
