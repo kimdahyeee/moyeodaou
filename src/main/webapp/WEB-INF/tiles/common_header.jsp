@@ -10,12 +10,7 @@
 	
 	<link rel='stylesheet' href="<c:url value='/resources/css/fullcalendar.min.css'/>"  type="text/css" />
 	<link rel='stylesheet' href="<c:url value='/resources/css/fullcalendar.print.css'/>" type="text/css"  media='print' />
-	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/moment.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/jquery.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/jquery-ui.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/fullcalendar.js'/>"></script>
 	
-	<script src="<c:url value='/resources/js/fullCalendar/ko.js'/>"></script>
 	<!-- Bootstrap core CSS -->
 	<link href="<c:url value='/resources/css/bootstrap.css'/>" rel="stylesheet">
 	
@@ -28,8 +23,6 @@
 	
 	<link href="<c:url value='/resources/css/style-responsive.css'/>" rel="stylesheet">
 	
-	
-	
 	<!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
 	
 	<script src="<c:url value='/resources/js/chart-master/Chart.js'/>"></script>
@@ -40,16 +33,16 @@
    	<sec:authentication property="principal.username" var="email" />
    	<sec:authentication property="principal.memberNo" var="memberNo" />
    	<sec:authentication property="principal.memberName" var="memberName" />
-	<section id="container"> <!-- **********************************************************************************************************************************************************
-      TOP BAR CONTENT & NOTIFICATIONS
-      *********************************************************************************************************************************************************** -->
+	<section id="container"> 
+	
 	<!--header start--> 
 	<header class="header black-bg">
 	<div class="sidebar-toggle-box">
 		<div class="fa fa-bars tooltips" data-placement="right"
 			data-original-title="Toggle Navigation"></div>
 	</div>
-	<!--logo start--> <a href="<c:url value='/main'/>" class="logo"><b>모여다우</b></a> <!--logo end-->
+	<!--logo start--> 
+	<a href="<c:url value='/main'/>" class="logo"><b>모여다우</b></a> <!--logo end-->
 	<div class="nav notify-row" id="top_menu">
 		<!--  notification start -->
 		<ul class="nav top-menu">

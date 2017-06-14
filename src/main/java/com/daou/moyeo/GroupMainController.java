@@ -143,4 +143,10 @@ public class GroupMainController {
 		System.out.println("result : "  + result);
 		return "redirect:/main";
 	}
+	
+	@RequestMapping(value = "/group/{groupNo}/calendar")
+	public String boardWrite(@PathVariable("groupNo") int groupNo, Model model) {
+		model.addAttribute("groupNo", groupNo);
+		return "calendar";
+	}
 }

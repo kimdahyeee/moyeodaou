@@ -3025,7 +3025,7 @@ a.main_name {
 
 #wrap {
 		width: 1100px;
-		margin: 0 auto;
+		margin-top: 45px;
 	}
 		
 	#external-events {
