@@ -507,7 +507,7 @@
 	};
 
 	function chat_input() {
-		var encodedMsg = encodeURIComponent($('#chat_input').val());
+		var encodedMsg = encodeURI($('#chat_input').val());
 		chat_socket.emit('send_message', { channel: channel, member: member, message: encodedMsg });
 		group_socket.emit('send_notify', { channel: channel, member: member, message: encodedMsg });
 		$('#chat_input').val(''); // clear input msg in chat_input area
