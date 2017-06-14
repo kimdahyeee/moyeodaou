@@ -41,8 +41,23 @@
 	        </beans:list>
 	    </beans:property>
 	</beans:bean>
-	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
-		<beans:property name="maxUploadSize" value="10000000" /> 
+   <beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10000000" />
+	</beans:bean>
+
+	<beans:bean id="jedisConnectinFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<beans:property name="hostName" value="175.115.95.51" />
+		<beans:property name="port" value="6379" />
+		<beans:property name="usePool" value="true" />
 	</beans:bean>
 	
+	<beans:bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<beans:property name="connectionFactory" ref="jedisConnectinFactory" />
+	</beans:bean>
+	
+
+
+
 </beans:beans>

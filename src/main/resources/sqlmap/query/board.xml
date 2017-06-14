@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="board">
-	<insert id="insertBoard">
+	<insert id="insertBoard" parameterType="map">
 		INSERT INTO
 		GROUP_BOARD_TB(
 				MEMBER_NO,
@@ -12,18 +12,18 @@
 				CREATED_DATE)
 		VALUES(
 				#{author}, 
-				1, 
+				#{groupNo}, 
 				#{title}, 
 				#{contents}, 
 				CURRENT_TIMESTAMP)
 	</insert>
 	
 	<resultMap type="hashmap" id="boardDetail">
-		<result property="board_no" column="BOARD_NO" javaType="int"/>
+		<result property="boardNo" column="BOARD_NO" javaType="int"/>
 		<result property="title" column="TITLE" javaType="java.lang.String"/>
 		<result property="contents" column="CONTENTS" javaType="java.lang.String"/>
-		<result property="member_name" column="MEMBER_NAME" javaType="java.lang.String"/>
-		<result property="member_no" column="MEMBER_NO" javaType="int"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
+		<result property="memberNo" column="MEMBER_NO" javaType="int"/>
 	</resultMap>
 	
 	<select id="selectBoardDetail" resultMap="boardDetail">
@@ -50,10 +50,10 @@
 	<resultMap type="hashmap" id="boardList">
 		<result property="totalCount" column="TOTALCOUNT" javaType="int"/>
 		<result property="rNum" column="RNUM" javaType="int"/>
-		<result property="board_no" column="BOARD_NO" javaType="int"/>
+		<result property="boardNo" column="BOARD_NO" javaType="int"/>
 		<result property="title" column="TITLE" javaType="java.lang.String"/>
-		<result property="created_date" column="CREATED_DATE" javaType="java.lang.String"/>
-		<result property="member_name" column="MEMBER_NAME" javaType="java.lang.String"/>
+		<result property="createdDate" column="CREATED_DATE" javaType="java.lang.String"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
 	 <select id="selectBoardList" parameterType="hashmap" resultMap="boardList">
@@ -61,7 +61,7 @@
         	AA.*
    		FROM(
        		SELECT 
-       			(SELECT COUNT(*) FROM GROUP_BOARD_TB) AS TOTALCOUNT,
+       			(SELECT COUNT(*) FROM GROUP_BOARD_TB WHERE GROUP_NO = #{groupNo}) AS TOTALCOUNT,
        			@ROWNUM := @ROWNUM + 1 AS RNUM, 
        			GB.BOARD_NO, 
        			GB.TITLE, 
@@ -81,13 +81,13 @@
 	
 	<resultMap type="hashmap" id="boardMainList">
 		<result property="rNum" column="RNUM" javaType="int"/>
-		<result property="board_no" column="BOARD_NO" javaType="int"/>
+		<result property="boardNo" column="BOARD_NO" javaType="int"/>
 		<result property="title" column="TITLE" javaType="java.lang.String"/>
-		<result property="created_date" column="CREATED_DATE" javaType="java.lang.String"/>
-		<result property="member_name" column="MEMBER_NAME" javaType="java.lang.String"/>
+		<result property="createdDate" column="CREATED_DATE" javaType="java.lang.String"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
-	 <select id="selectMainBoardList" parameterType="hashmap" resultMap="boardMainList">
+	 <select id="selectMainBoardList" parameterType="int" resultMap="boardMainList">
    		SELECT 
    			@ROWNUM := @ROWNUM + 1 AS RNUM, 
    			GB.BOARD_NO, 
@@ -102,7 +102,7 @@
 			GROUP_NO = #{groupNo} AND MEM.MEMBER_NO = GB.MEMBER_NO
    		ORDER BY 
     			BOARD_NO DESC
-    	LIMIT 1, 3
+    	LIMIT 3
 	</select>
 	
 </mapper>

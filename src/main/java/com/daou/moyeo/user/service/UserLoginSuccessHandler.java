@@ -12,6 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -35,7 +38,29 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 		  logger.info(String.valueOf(u.isCredentialsNonExpired()));
 		  logger.info(String.valueOf(u.isEnabled()));
 		   
-		  res.sendRedirect(req.getContextPath()+"/main");
+		  System.out.println(u);
+		  
+		  if(getReturnUrl(req, res).equals("/daou")){
+			  res.sendRedirect(req.getContextPath()+"/main");
+		  } else {
+			  res.sendRedirect(getReturnUrl(req, res));
+		  }
+	}
+	
+	/** 
+	 * 이전 페이지로 이동
+	 * @param request 
+	 * @param response 
+	 * @return 
+	 * */ 
+	private String getReturnUrl(HttpServletRequest request, HttpServletResponse response) { 
+		
+		RequestCache requestCache = new HttpSessionRequestCache(); 
+		SavedRequest savedRequest = requestCache.getRequest(request, response); 
+		if (savedRequest == null) { 
+			return request.getSession().getServletContext().getContextPath(); 
+		} 
+		return savedRequest.getRedirectUrl(); 
 	}
 
 }

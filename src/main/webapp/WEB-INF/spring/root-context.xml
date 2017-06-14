@@ -18,9 +18,4 @@
          </props>
  </property>
  </bean>
- <!--  
- <bean id="mailService" class="service.other.MailServiceImpl">
-     <property name="javaMailSender" ref="javaMailSender" />
- </bean>
- -->
 </beans>

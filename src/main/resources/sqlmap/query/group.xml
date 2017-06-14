@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="group">
+	<insert id="insertGroup" parameterType="map">
+		INSERT INTO GROUP_TB(GROUP_NAME, GROUP_DESC, GROUP_IMG) 
+		values(#{groupName}, #{groupDesc}, #{groupImg});
+	</insert>
+	
+	<insert id="insertMemberGroup" parameterType="map">
+		insert into MEMBER_GROUP_TB(MEMBER_NO, GROUP_NO, GROUP_AUTHORITY) 
+		values(#{memberNO}, (select group_no from GROUP_TB where group_name=#{groupName}), 'MASTER');
+	</insert>
+	
+	<resultMap id="groupList" type="hashmap">
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+		<result property="groupName" column="GROUP_NAME" javaType="java.lang.String"/>
+		<result property="groupImg" column="GROUP_IMG" javaType="java.lang.String"/>
+		<result property="groupTotalCount" column="GROUP_TOTAL_COUNT" javaType="int"/>
+	</resultMap>
+			
+	<!-- Daeho 2017.06.07 chat -->
+	<resultMap id="otherGroupList" type="hashmap">
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+	</resultMap>
+	
+	<!-- Daeho 2017.06.07 chat -->
+	<resultMap id="groupMemberList" type="hashmap">
+		<result property="memberNo" column="MEMBER_NO" javaType="int"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<!-- Daeho 2017.06.07 chat -->
+	<resultMap id="groupInfo" type="hashmap">
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+		<result property="groupName" column="GROUP_NAME" javaType="java.lang.String"/>
+		<result property="groupDesc" column="GROUP_DESC" javaType="java.lang.String"/>
+		<result property="groupImg" column="GROUP_IMG" javaType="java.lang.String"/>
+		<result property="createdDate" column="CREATED_DATE" javaType="java.util.Date"/>
+		<result property="groupTotalCount" column="GROUP_TOTAL_COUNT" javaType="int"/>
+	</resultMap>
+	
+	<select id="selectGroupList" parameterType="int" resultMap="groupList">
+		SELECT 
+			G.GROUP_NO,
+			G.GROUP_NAME,
+			G.GROUP_IMG,
+			(SELECT COUNT(*) FROM MEMBER_GROUP_TB MG WHERE MG.GROUP_NO = G.GROUP_NO) AS GROUP_TOTAL_COUNT
+		FROM 
+			GROUP_TB G, MEMBER_GROUP_TB MG
+		WHERE 
+			MG.MEMBER_NO = #{groupNo} AND
+			G.GROUP_NO = MG.GROUP_NO
+	</select>
+	
+	<!-- Daeho 2017.06.07 select Group List except for current joined group -->
+	<select id="selectOtherGroupList" parameterType="map" resultMap="otherGroupList">
+		SELECT 
+			GROUP_NO
+		FROM 
+			MEMBER_GROUP_TB
+		WHERE
+			MEMBER_NO = #{memberNo}
+			AND	NOT GROUP_NO = #{groupNo}
+	</select>
+	
+	<!-- Daeho 2017.06.07 select Member List for current joined group -->
+	<select id="selectGroupMemberList" parameterType="map" resultMap="groupMemberList">
+		SELECT 
+			MEMBER_NO, MEMBER_NAME
+		FROM 
+			MEMBER_TB
+		WHERE
+			MEMBER_NO IN
+			 (SELECT MEMBER_NO 
+			 	FROM MEMBER_GROUP_TB 
+			 	WHERE GROUP_NO = #{groupNo} AND MEMBER_NO != #{memberNo})
+	</select>
+	
+	<!-- Daeho 2017.06.07 chat -->
+	<select id="selectGroupInfo" parameterType="int" resultMap="groupInfo">
+		SELECT
+			GROUP_NO,
+			GROUP_NAME,
+			GROUP_DESC
+			GROUP_IMG,
+			CREATED_DATE,
+			(SELECT COUNT(*) FROM MEMBER_GROUP_TB MG WHERE MG.GROUP_NO = G.GROUP_NO) AS GROUP_TOTAL_COUNT
+		FROM
+			GROUP_TB G
+		WHERE 
+			GROUP_NO = #{groupNo}
+	</select>
+	
+	<select id="selectGroupNo" parameterType="java.lang.String" resultType="int">
+		SELECT
+			GROUP_NO
+		FROM
+			GROUP_TB
+		WHERE
+			GROUP_NAME = #{groupName}
+	</select>
+	
+	<delete id="deleteGroup" parameterType="int">
+		DELETE GBT, ST, ADT, GFT, MGT, GT
+		FROM MEMBER_GROUP_TB AS MGT
+		LEFT JOIN SCHEDULE_TB AS ST 				ON MGT.GROUP_NO=ST.GROUP_NO
+		LEFT JOIN AVAILABLE_DATE_TB AS ADT 	ON MGT.GROUP_NO=ADT.GROUP_NO
+		LEFT JOIN GROUP_FILE_TB AS GFT 			ON MGT.GROUP_NO=GFT.GROUP_NO
+		LEFT JOIN GROUP_BOARD_TB AS GBT 	ON GBT.GROUP_NO=MGT.GROUP_NO
+		LEFT JOIN GROUP_TB AS GT 						ON MGT.GROUP_NO=GT.GROUP_NO
+		WHERE MGT.GROUP_NO = #{groupNo}
+	</delete>
+	
+	<delete id="deleteGroupMember" parameterType="map">
+		DELETE FROM MEMBER_GROUP_TB 
+		WHERE MEMBER_NO = #{memberNo}
+		AND		GROUP_NO 	= #{groupNo}
+	</delete>
+</mapper>

@@ -3,20 +3,20 @@
 
 <mapper namespace="file">
 	<resultMap id="fileInfoList" type="hashmap">
-		<result property="file_name" column="FILE_NAME" javaType="java.lang.String"/>
-		<result property="member_no" column="MEMBER_NO" javaType="java.lang.String"/>
-		<result property="group_file_no" column="GROUP_FILE_NO" javaType="int"/>
-	
+		<result property="fileName" column="FILE_NAME" javaType="java.lang.String"/>
+		<result property="memberNo" column="MEMBER_NO" javaType="java.lang.String"/>
+		<result property="groupFileNo" column="GROUP_FILE_NO" javaType="int"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
 	<resultMap id="downFileInfo" type="hashmap" >
-		<result property="file_path" column="FILE_PATH" javaType="java.lang.String"/>
-		<result property="file_name" column="FILE_NAME" javaType="java.lang.String"/>
+		<result property="filePath" column="FILE_PATH" javaType="java.lang.String"/>
+		<result property="fileName" column="FILE_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
 	<!-- Upload 관련 query -->
 	<insert id="insertFile" parameterType="hashmap">
-	    INSERT INTO GROUP_FILE_TB (MEMBER_NO, GROUP_NO, UPLOAD_DATE, FILE_NAME, FILE_PATH) VALUES (12, 3, current_timestamp, #{FILE_ORIGINAL_NAME}, #{FILE_STORED_NAME})	 
+	    INSERT INTO GROUP_FILE_TB (MEMBER_NO, GROUP_NO, UPLOAD_DATE, FILE_NAME, FILE_PATH) VALUES (#{memberNo}, #{groupNo}, current_timestamp, #{FILE_ORIGINAL_NAME}, #{FILE_STORED_NAME})	 
 	</insert>
 
 	<!--  Download 관련 query -->
@@ -25,8 +25,8 @@
 	</select>
 	
 	<!-- group File List 관련 query -->
-	<select id="selectAllFileList" resultMap="fileInfoList">
-		SELECT FILE_NAME, MEMBER_NO, GROUP_FILE_NO from GROUP_FILE_TB ORDER BY GROUP_FILE_NO ASC;
+	<select id="selectAllFileList" parameterType="int" resultMap="fileInfoList">
+		SELECT G.FILE_NAME , G.MEMBER_NO, G.GROUP_FILE_NO, M.MEMBER_NAME from GROUP_FILE_TB AS G, MEMBER_TB AS M WHERE GROUP_NO = #{groupNo} AND G.MEMBER_NO = M.MEMBER_NO ORDER BY GROUP_FILE_NO ASC
 	</select>
 	
 	<!-- email 인증 관련 query -->	
