@@ -110,7 +110,7 @@
 								</div>
 								<div class="modal-body">
 									<input type="button" value="+" id="addFile">
-									<button type="submit">완료</button>
+									<button type="submit" id="uploadButton">완료</button>
  								</div>
 								<div class="modal-footer" id="fileUpload-footer">
 										<a href="#this"	id="fileUpload2"></a>
@@ -555,17 +555,20 @@
 		fn_addFile();
 	});
 	
-	
-	
- /*
-	function fn_submitFile(){
-		// form 생성하고 addFile을 다 submit 하고 싶다 ~ 
-		var form = document.createElement("form");
+	$(document).ready(function() {
+		<!-- 프로그래스 바 요청 -->
+		$('#uploadButton').click(function(){
+			console.log('uploadButton!!!!!');
+			$.ajax({
+				url:"/fileUpload/progress", 
+				method: "post",
+				success: function(result){
+				<!-- result JSON객체 파싱해서 보여주기 -->
+				alert('aaaa');
+				}
+			});
 
-		 form.setAttribute("method", "post");
-		 form.setAttribute("action", "/daou/group/${groupNo}/fileUpload");
-		 $(document.body).append(form);
-		 form.submit();
-	}
-	*/
+		})
+	})
+	
 </script>

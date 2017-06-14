@@ -1,6 +1,8 @@
 
 package com.daou.moyeo.util;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileUpload;
@@ -12,11 +14,13 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 public class AjaxMultipartResolver extends CommonsMultipartResolver {
     
     private static ThreadLocal<AjaxProgressListener> progressListener = new ThreadLocal<AjaxProgressListener>();
-     
+   
+    public static int cnt = 0;
+    
     private AjaxProgressListener getListener() {
-         
+        
         AjaxProgressListener listener = progressListener.get();
-        System.out.println("getListener()");
+        //System.out.println("getListener()");
         
         if(listener == null)
         {
@@ -34,7 +38,7 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
         actualFileUpload = newFileUpload(getFileItemFactory());
         actualFileUpload.setSizeMax(fileUpload.getSizeMax());
         actualFileUpload.setHeaderEncoding(encoding);
-         
+        
         actualFileUpload.setProgressListener(getListener());
         return actualFileUpload;
     }
@@ -44,9 +48,10 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
          
     	try {           
             AjaxProgressListener listener = getListener();
-            
-            String uploadId = request.getParameter("uploadId");
-            listener.setUploadId(uploadId);
+        
+            System.out.println(request.getParameter("file_"+cnt));
+            listener.setUploadId(request.getParameter("file_"+cnt));
+            cnt++;
             listener.setSession(request.getSession());
              
             return super.resolveMultipart(request);

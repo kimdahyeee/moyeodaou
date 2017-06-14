@@ -76,7 +76,6 @@ public class FileUtil {
 		System.out.println("fileUpload() call");
 		try{							
 			iter = mhsr.getFileNames();
-			System.out.println("filename:"+mhsr.getFileNames());
 			File file = new File(path);
 			
 	        if(file.exists() == false){
@@ -85,7 +84,8 @@ public class FileUtil {
 	        
 			while (iter.hasNext()) { 
 				
-				mfile = mhsr.getFile(iter.next());				
+				mfile = mhsr.getFile(iter.next());	
+				System.out.println("지금봐야할거" + mfile.getName());
 				originalFileName = mfile.getOriginalFilename();
 			
 				String temp = originalFileName.substring(originalFileName.lastIndexOf('.'));

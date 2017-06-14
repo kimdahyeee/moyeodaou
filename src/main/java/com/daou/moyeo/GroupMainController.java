@@ -1,6 +1,8 @@
 package com.daou.moyeo;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +10,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -117,13 +121,46 @@ public class GroupMainController {
 		List<Map<String, Object>> fileInfoList;
 		
 		System.out.println("GroupmainController mapping fileUpload");
-		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
+	    MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		fileInfoList = fileUtil.fileUpload(mhsr);
 		
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		fileService.insertFileInfo(fileInfoList, groupNo, u.getMemberNo());			
 	
 		return "redirect:/group/" + groupNo;
+	}
+	
+	@RequestMapping(value = "/fileUpload/progress", method = RequestMethod.POST)
+	public void uploadProgress(
+	        HttpSession session
+	        ,HttpServletResponse response) {
+	 
+		System.out.println("uploadProgress()");
+	    JSONObject jsonResult = null;
+	    Object uploadInfo = session.getAttribute("UPLOAD_INFO_PREFIX");
+	    if(uploadInfo != null)
+	    {
+	        jsonResult = (JSONObject)uploadInfo;
+	    }
+	    else
+	    {
+	        jsonResult = new JSONObject();
+	        jsonResult.put("bytesRead", 0);
+	        jsonResult.put("contentLenght", 0);
+	    }
+	 
+	    try {
+	        String jsonStr = jsonResult.toJSONString();
+	 
+	        response.setContentType("text/xml; charset=UTF-8");
+	        PrintWriter out = response.getWriter();
+	        out.println(jsonStr);
+	        out.flush();
+	        out.close();
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
 	}
 	
 	@RequestMapping(value = "/group/{groupNo}/deleteGroup")
