@@ -289,8 +289,10 @@
 							<ul id="chat_notify_list"></ul>
 						</div>
 					<div class="chat_member_list">
-						<strong>현재 접속 리스트1</strong>
-						<ul id="chat_member_list"></ul>
+						<strong>현재 접속 리스트</strong>
+						<ul id="chat_member_list">
+							<li>나:connected</li>
+						</ul>
 					</div>
 
 					<div class="chat_list" >
@@ -318,9 +320,9 @@
 
 <!-- chatting script -->
 <script>
-	 var host = "175.115.95.51";
+	var host = "175.115.95.51";
 	// var host = "192.168.219.102";
-	//var host = "172.21.21.61";
+	//var host = "172.21.22.137";
 	//var host = "localhost"
 	var port = "3000";
 	var chat_id = "";
@@ -449,10 +451,10 @@
 		});
 
 		// msg input and enter key
-		$('#chat_input').keyup(function (event) {
+		$('#chat_input').keypress(function (event) {
 			if (event.which == 13) {
 				chat_input();
-			}
+			} 
 		});
 		
 		//flick 
@@ -479,9 +481,9 @@
 
 	function chat_input() {
 		var encodedMsg = encodeURI($('#chat_input').val());
+		$('#chat_input').val(''); // clear input msg in chat_input area
 		chat_socket.emit('send_message', { channel: channel, member: member, message: encodedMsg });
 		group_socket.emit('send_notify', { channel: channel, member: member, message: encodedMsg });
-		$('#chat_input').val(''); // clear input msg in chat_input area
 	};
 
 	// current connected member and state Object
