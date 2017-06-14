@@ -16,6 +16,8 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
     private AjaxProgressListener getListener() {
          
         AjaxProgressListener listener = progressListener.get();
+        System.out.println("getListener()");
+        
         if(listener == null)
         {
             listener = new AjaxProgressListener();
@@ -38,15 +40,16 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
     }
  
     public MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException {
-        try {           
+    	 System.out.println("AjaxMultipartResolver.resolveMultipart()");
+         
+    	try {           
             AjaxProgressListener listener = getListener();
- 
+            
             String uploadId = request.getParameter("uploadId");
             listener.setUploadId(uploadId);
             listener.setSession(request.getSession());
              
             return super.resolveMultipart(request);
-                 
         } catch(MaxUploadSizeExceededException ex) {
              throw new MultipartException(ex.getMessage());
         } catch (Exception ex) {

@@ -84,17 +84,19 @@ public class FileUtil {
 	        }
 	        
 			while (iter.hasNext()) { 
+				
 				mfile = mhsr.getFile(iter.next());				
 				originalFileName = mfile.getOriginalFilename();
 			
 				String temp = originalFileName.substring(originalFileName.lastIndexOf('.'));
-				//storedName = path + getRandomName() + temp;
 				storedName = getRandomName() + temp;
 				file = new File(path + storedName);		
 				
-				//System.out.println("stroedname:"+storedName);
-				if(mfile.isEmpty() == false)
-					mfile.transferTo(file);						
+				if(mfile.isEmpty() == false){
+					System.out.println("===================file=========================");
+					System.out.println(file);
+					mfile.transferTo(file);
+				}
 				
 				map = new HashMap<String, Object>();
 				map.put("FILE_ORIGINAL_NAME", originalFileName);
