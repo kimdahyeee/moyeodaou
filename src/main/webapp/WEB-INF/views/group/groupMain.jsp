@@ -372,6 +372,14 @@
 			data = decodeURIComponent(data.msg);
 			data = ((data.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
 			data = data.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			data = data..replace(/\\n/g, "\\n")
+            .replace(/\\'/g, "\\'")
+            .replace(/\\"/g, '\\"')
+            .replace(/\\&/g, "\\&")
+            .replace(/\\r/g, "\\r")
+            .replace(/\\t/g, "\\t")
+            .replace(/\\b/g, "\\b")
+            .replace(/\\f/g, "\\f");
 			
 			//$('#chat_list').append('<li>' + data + '</li>');
 			//$('.chat_list').scrollTop($('#chat_list').height());
@@ -383,6 +391,14 @@
                 contents = decodeURIComponent(data[i].CHAT_CONTENTS);
                 contents = ((contents.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
                 contents = contents.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                contents = contents.replace(/\\n/g, "\\n")
+                .replace(/\\'/g, "\\'")
+                .replace(/\\"/g, '\\"')
+                .replace(/\\&/g, "\\&")
+                .replace(/\\r/g, "\\r")
+                .replace(/\\t/g, "\\t")
+                .replace(/\\b/g, "\\b")
+                .replace(/\\f/g, "\\f");
                 var msg = data[i].MEMBER_NAME + ":" + contents;
                 $('#chat_list').append('<li>' + msg + '</li>');
             }
@@ -430,6 +446,14 @@
 			data = decodeURIComponent(data);
 			data = ((data.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
 			data = data.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			data = data.replace(/\\n/g, "\\n")
+            .replace(/\\'/g, "\\'")
+            .replace(/\\"/g, '\\"')
+            .replace(/\\&/g, "\\&")
+            .replace(/\\r/g, "\\r")
+            .replace(/\\t/g, "\\t")
+            .replace(/\\b/g, "\\b")
+            .replace(/\\f/g, "\\f");
 			
 			$('#chat_list').append('<li>' + data + '</li>');
 			$('#chat_scroll').scrollTop($('#chat_list').height());
