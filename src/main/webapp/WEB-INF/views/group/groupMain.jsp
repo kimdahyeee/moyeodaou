@@ -383,6 +383,19 @@
 			//$('#chat_list').append('<li>' + data + '</li>');
 			//$('.chat_list').scrollTop($('#chat_list').height());
 		});
+		
+        chat_socket.on('history', function(data) {
+            var len = data.length;
+            console.log(data[len-1]);
+            for(var i = len-1; i >= 0 ; i--) {
+                contents = decodeURIComponent(data[i].CHAT_CONTENTS);
+                contents = ((contents.replace(/&/g, '&amp;')).replace(/\"/g, '&quot;')).replace(/\'/g, '&#39;');
+                contents = contents.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                var msg = data[i].MEMBER_NAME + ":" + contents;
+                $('#chat_list').append('<li>' + msg + '</li>');
+                console.log(msg);
+            }
+        });
 
 		group_socket.on('notify', function (data) {
 			var time = data.split("*")[0];
