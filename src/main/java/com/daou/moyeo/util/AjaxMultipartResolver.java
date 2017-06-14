@@ -11,7 +11,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 public class AjaxMultipartResolver extends CommonsMultipartResolver {
     
-    private static ThreadLocal<AjaxprogressListener> progressListener = new ThreadLocal<AjaxprogressListener>();
+    private static ThreadLocal<AjaxProgressListener> progressListener = new ThreadLocal<AjaxProgressListener>();
      
     private AjaxProgressListener getListener() {
          
@@ -28,7 +28,7 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
     protected FileUpload prepareFileUpload(String encoding) {
         FileUpload fileUpload = getFileUpload();
         FileUpload actualFileUpload = fileUpload;
- 
+        System.out.println("AjaxMultipartResolver.prepareFileUpload()");
         actualFileUpload = newFileUpload(getFileItemFactory());
         actualFileUpload.setSizeMax(fileUpload.getSizeMax());
         actualFileUpload.setHeaderEncoding(encoding);
