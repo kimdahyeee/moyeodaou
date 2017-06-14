@@ -289,13 +289,14 @@
 							<ul id="chat_notify_list"></ul>
 						</div>
 					<div class="chat_member_list">
-						<strong>현재 접속 리스트</strong>
+						<strong>현재 접속 리스트1</strong>
 						<ul id="chat_member_list"></ul>
 					</div>
 
 					<div class="chat_list" >
 						<strong>대화</strong><br>
 						<div id="chat_scroll" style="overflow:auto; height:300px;">
+							<a>더보기</a>
 							<ul id="chat_list"></ul>
 						</div>
 					</div>
