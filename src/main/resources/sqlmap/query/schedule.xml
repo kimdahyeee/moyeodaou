@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="schedule">
+	
+	<insert id="insertScheduleInfo" parameterType="com.daou.moyeo.dto.ScheduleDTO">
+		INSERT INTO SCHEDULE_TB(
+			MEMBER_NO, 
+			GROUP_NO, 
+			SCHEDULE_DAY, 
+			SCHEDULE_START_TIME, 
+			SCHEDULE_FINISH_TIME
+		)
+		VALUES
+		<foreach collection="scheduleInfos" item="item" separator=",">
+		(
+			#{memberNo}, 
+			#{groupNo}, 
+			#{item.scheduleDay},
+			#{item.scheduleStartTime},
+			#{item.scheduleFinishTime}
+		)
+		</foreach>
+	</insert>
+
+</mapper>
