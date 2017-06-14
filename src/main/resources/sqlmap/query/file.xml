@@ -3,15 +3,15 @@
 
 <mapper namespace="file">
 	<resultMap id="fileInfoList" type="hashmap">
-		<result property="file_name" column="FILE_NAME" javaType="java.lang.String"/>
-		<result property="member_no" column="MEMBER_NO" javaType="java.lang.String"/>
-		<result property="group_file_no" column="GROUP_FILE_NO" javaType="int"/>
-		<result property="member_name" column="MEMBER_NAME" javaType="java.lang.String"/>
+		<result property="fileName" column="FILE_NAME" javaType="java.lang.String"/>
+		<result property="memberNo" column="MEMBER_NO" javaType="java.lang.String"/>
+		<result property="groupFileNo" column="GROUP_FILE_NO" javaType="int"/>
+		<result property="memberName" column="MEMBER_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
 	<resultMap id="downFileInfo" type="hashmap" >
-		<result property="file_path" column="FILE_PATH" javaType="java.lang.String"/>
-		<result property="file_name" column="FILE_NAME" javaType="java.lang.String"/>
+		<result property="filePath" column="FILE_PATH" javaType="java.lang.String"/>
+		<result property="fileName" column="FILE_NAME" javaType="java.lang.String"/>
 	</resultMap>
 	
 	<!-- Upload 관련 query -->

@@ -15,9 +15,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daou.moyeo.board.service.BoardService;
@@ -58,7 +60,7 @@ public class GroupMainController {
 		currentInfo.put("memberName", u.getMemberName());
 		currentInfo.put("groupNo", groupNo);
 		
-		List<Map<String, Object>> sharing_list = fileService.getFileList(groupNo);  // load Group Fille List
+		List<Map<String, Object>> sharingList = fileService.getFileList(groupNo);  // load Group Fille List
 		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // load Group Board List
 		
 		Map<String, Object> groupInfo = groupService.selectGroupInfo(groupNo); // daeho 2017.06.07 chat
@@ -72,7 +74,7 @@ public class GroupMainController {
 			System.out.println(map.get("file_name") + "," + map.get("member_no") + "," + map.get("group_file_no"));
 		}	*/
 		
-		model.addAttribute("sharing_list", sharing_list);
+		model.addAttribute("sharingList", sharingList);
 		model.addAttribute("allMainBoardList", allMainBoardList);
 		model.addAttribute("groupNo", groupNo);
 		model.addAttribute("groupInfo", groupInfo); // daeho 2017.06.07 chat
@@ -145,8 +147,13 @@ public class GroupMainController {
 	}
 	
 	@RequestMapping(value = "/group/{groupNo}/calendar")
-	public String boardWrite(@PathVariable("groupNo") int groupNo, Model model) {
+	public String calendarView(@PathVariable("groupNo") int groupNo, Model model) {
 		model.addAttribute("groupNo", groupNo);
 		return "calendar";
+	}
+	
+	@RequestMapping(value = "/insertSchedule", method=RequestMethod.POST)
+	public @ResponseBody void insertSchedule(/*@RequestParam("groupNo") String groupNo, @RequestParam("memberNo") int memberNo,*/ @RequestBody String scheduleInfo, Model model) {
+		System.out.println("ㅎ와썹 : " + scheduleInfo);
 	}
 }

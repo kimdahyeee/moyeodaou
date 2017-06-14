@@ -9,7 +9,6 @@
 	<!--main content start-->
 	<section id="main-content">
 		<section class="wrapper">
-			<!-- 세개가 한 줄!!-->
 			<div class="row">
 				<div class="col-md-9 mt">
 					<div class="content-panel">
@@ -33,9 +32,9 @@
 									<c:forEach var="allMainBoardLists" items="${allMainBoardList}" begin="0" end="${fn:length(allMainBoardList)}" step="1" varStatus="status">
 										<tr>
 											<td>${allMainBoardList[status.index].rNum}</td>
-											<td><a href="<c:url value='/group/${groupNo}/boardDetail/${allMainBoardList[status.index].board_no}'/>">${allMainBoardList[status.index].title}</a></td>
-											<td>${allMainBoardList[status.index].member_name}</td>
-											<td>${allMainBoardList[status.index].created_date}</td>
+											<td><a href="<c:url value='/group/${groupNo}/boardDetail/${allMainBoardList[status.index].boardNo}'/>">${allMainBoardList[status.index].title}</a></td>
+											<td>${allMainBoardList[status.index].memberName}</td>
+											<td>${allMainBoardList[status.index].createdDate}</td>
 										</tr>
 									</c:forEach>
 								</c:if>
@@ -65,16 +64,16 @@
 							<!--/content-panel -->
 						</div>
 						<!--/col-md-4 -->
-						<c:if test="${fn:length(sharing_list) > 0}"> 
-							<c:forEach items="${sharing_list}" var="list" step="1" varStatus="status">
+						<c:if test="${fn:length(sharingList) > 0}"> 
+							<c:forEach items="${sharingList}" var="list" step="1" varStatus="status">
 									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
 										<div class="project-wrapper" data-toggle="dropdown">
 											<div class="project">
 												<div class="photo-wrapper">
 													<img class="img-responsive" src="../resources/img/file_img.png" alt="">
 													<div class="white-header">
-														<h5>${sharing_list[status.index].file_name}</h5>
-														<h5>${sharing_list[status.index].member_name}</h5>
+														<h5>${sharingList[status.index].fileName}</h5>
+														<h5>${sharingList[status.index].memberName}</h5>
 													</div>
 													<div class="photo">
 														<a class="fancybox" href="">
@@ -84,11 +83,11 @@
 												</div>
 											</div>
 										</div>
-										<input type="hidden" id="fno" name="fno" value="${sharing_list[status.index].group_file_no}">	
+										<input type="hidden" id="fno" name="fno" value="${sharingList[status.index].group_file_no}">	
 										<ul class="dropdown-menu" role="menu">
 											<li><a href="#">미리보기</a></li>								
 											<!--  <li><a href="<c:url value='/fileDownload?fno=${sharing_list[status.index].group_file_no}&=${_csrf.parameterName}&=${_csrf.token}'/>">다운로드</a></li>	-->
-											<li><a href="<c:url value='/fileDownload?fno=${sharing_list[status.index].group_file_no}'/>">다운로드</a></li>
+											<li><a href="<c:url value='/fileDownload?fno=${sharingList[status.index].groupFileNo}'/>">다운로드</a></li>
 											<li><a href="#">삭제</a></li>
 										</ul>
 									</div>

@@ -10,6 +10,9 @@
 	
 	<link rel='stylesheet' href="<c:url value='/resources/css/fullcalendar.min.css'/>"  type="text/css" />
 	<link rel='stylesheet' href="<c:url value='/resources/css/fullcalendar.print.css'/>" type="text/css"  media='print' />
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/moment.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/jquery.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/jquery-ui.min.js'/>"></script>
 	
 	<!-- Bootstrap core CSS -->
 	<link href="<c:url value='/resources/css/bootstrap.css'/>" rel="stylesheet">
