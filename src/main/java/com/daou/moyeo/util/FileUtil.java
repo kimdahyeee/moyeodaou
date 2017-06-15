@@ -23,6 +23,10 @@ public class FileUtil {
 		return UUID.randomUUID().toString().replaceAll("-","");
 	}
 	
+	/*
+	 * Progress bar 구현을 위한 리스너 설정 
+	 * */
+	
 	/**
 	 *  file downLoad
 	 * @param fileInfo
@@ -50,7 +54,7 @@ public class FileUtil {
 	    response.getOutputStream().flush();
 	    response.getOutputStream().close();
 	    
-	    // progbar에서 쓴 내용 
+	    
 	}
 	
 	/**
@@ -73,23 +77,26 @@ public class FileUtil {
 		try{							
 			iter = mhsr.getFileNames();
 			File file = new File(path);
-			System.out.println(file);
+			
 	        if(file.exists() == false){
 	            file.mkdirs();
 	        }
 	        
 			while (iter.hasNext()) { 
-				mfile = mhsr.getFile(iter.next());				
+				
+				mfile = mhsr.getFile(iter.next());	
+				System.out.println("지금봐야할거" + mfile.getName());
 				originalFileName = mfile.getOriginalFilename();
 			
 				String temp = originalFileName.substring(originalFileName.lastIndexOf('.'));
-				//storedName = path + getRandomName() + temp;
 				storedName = getRandomName() + temp;
 				file = new File(path + storedName);		
-				System.out.println(file);
-				//System.out.println("stroedname:"+storedName);
-				if(mfile.isEmpty() == false)
-					mfile.transferTo(file);						
+				
+				if(mfile.isEmpty() == false){
+					System.out.println("===================file=========================");
+					System.out.println(file);
+					mfile.transferTo(file);
+				}
 				
 				map = new HashMap<String, Object>();
 				map.put("FILE_ORIGINAL_NAME", originalFileName);

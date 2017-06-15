@@ -108,8 +108,10 @@
 								</div>
 								<div class="modal-body">
 									<input type="button" value="+" id="addFile">
-									<button type="submit">완료</button>
- 								</div>
+									<button type="submit" id="uploadButton">완료</button>
+									<br>
+									<div id="progressImg" style="width:0%; background-color: red;"></div>전송상황
+			 					</div>
 								<div class="modal-footer" id="fileUpload-footer">
 										<a href="#this"	id="fileUpload2"></a>
 										<!--  
@@ -520,12 +522,13 @@
 
 <script type="text/x-javascript">
  	var cnt = 0;
+ 	var progressBar = null;
  	
  	function fn_addFile(){
  		cnt++;
  		console.log(cnt);
  		var str = "<p>" +
- 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"'>"+
+ 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"' required='required'>"+
  			//"<input type='button' value='삭제' class='deleteFile'>" +
  			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+cnt+"</a>"+ 
  			"</p>";
@@ -541,23 +544,41 @@
  	function fn_deleteFile(obj){
  	         obj.parent().remove();
  	}
- 		
+ 	
+ 	function fn_getProgressInfo(){								// 프로그래스 바 정보 얻기
+ 		$.ajax({
+			url:"/daou/fileUpload/progress", 
+			dataType : "json",
+			method: "post",
+			success: function(result){
+				//alert(+ result.pByteRead + " / " + result.pContentLength);
+				console.log(+ result.pByteRead + " / " + result.pContentLength);
+				if(result.pByteRead < result.pContentLength){
+					// 프로그래스바 진행상황 보여주기
+					console.log((result.pByteRead / result.pContentLength) * 100 );
+					$("#progressImg").css("width", (result.pByteRead / result.pContentLength) * 100 +"%");
+					$("#progressImg").html("전송중");
+					
+				}else{
+					clearInterval(progressBar);
+					//alert("끝");
+				}
+			}
+		});
+ 	}
 	$("#addFile").on("click", function(e){ 						//파일 추가 버튼
 		e.preventDefault();
 		fn_addFile();
 	});
 	
+	$(document).ready(function() {
+		<!-- 프로그래스 바 요청 -->
+		$('#uploadButton').click(function(){
+			console.log('uploadButton!!!!!');
+			progressBar = setInterval(function() {
+			 	   fn_getProgressInfo();
+			}, 100);
+		})
+	})
 	
-	
- /*
-	function fn_submitFile(){
-		// form 생성하고 addFile을 다 submit 하고 싶다 ~ 
-		var form = document.createElement("form");
-
-		 form.setAttribute("method", "post");
-		 form.setAttribute("action", "/daou/group/${groupNo}/fileUpload");
-		 $(document.body).append(form);
-		 form.submit();
-	}
-	*/
 </script>
