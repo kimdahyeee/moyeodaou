@@ -560,11 +560,12 @@
 		$('#uploadButton').click(function(){
 			console.log('uploadButton!!!!!');
 			$.ajax({
-				url:"/fileUpload/progress", 
+				url:"/daou/fileUpload/progress", 
+				dataType:"JSON",
 				method: "post",
 				success: function(result){
-				<!-- result JSON객체 파싱해서 보여주기 -->
-				alert('aaaa');
+					<!-- result JSON객체 파싱해서 보여주기 -->
+					alert(+ result.pByteRead + ' , ' + result.pContentLength);
 				}
 			});
 

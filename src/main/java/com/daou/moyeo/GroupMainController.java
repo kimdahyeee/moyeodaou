@@ -152,6 +152,7 @@ public class GroupMainController {
 	    try {
 	        String jsonStr = jsonResult.toJSONString();
 	 
+	        System.out.println("session안에 든 값들 ::"+jsonStr);
 	        response.setContentType("text/xml; charset=UTF-8");
 	        PrintWriter out = response.getWriter();
 	        out.println(jsonStr);
