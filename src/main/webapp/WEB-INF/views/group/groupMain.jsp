@@ -562,7 +562,6 @@
 				console.log(+ result.pByteRead + " / " + result.pContentLength);
 				if(result.pByteRead < result.pContentLength){
 					// 프로그래스바 진행상황 보여주기
-					//percentComplete = (result.pByteRead / result.pContentLength) * 100;
 					console.log((result.pByteRead / result.pContentLength) * 100 );
 					$("#progressImg").css("width", (result.pByteRead / result.pContentLength) * 100 +"%");
 					$("#progressImg").html("전송중");
