@@ -549,26 +549,52 @@
  	function fn_deleteFile(obj){
  	         obj.parent().remove();
  	}
- 		
-	$("#addFile").on("click", function(e){ 						//파일 추가 버튼
+ 	/*	
+ 	function fn_getProgressInfo(){								// 프로그래스 바 정보 얻기
+ 		$.ajax({
+			url:"/daou/fileUpload/progress", 
+			dataType : "json",
+			method: "post",
+			success: function(result){
+			<!-- result JSON객체 파싱해서 보여주기 -->
+				alert(result.pByteRead + " / " + result.pContentLength);
+				if(result.pByteRead != result.pContentLength){
+					fn_getProgressInfo();
+				}else{
+					alert("끝");
+				}
+			}
+		});
+ 	}
+ 	*/
+	$('#addFile').on("click", function(e){ 						//파일 추가 버튼
+		console.log("click??");
 		e.preventDefault();
 		fn_addFile();
 	});
 	
 	$(document).ready(function() {
 		<!-- 프로그래스 바 요청 -->
-		$('#uploadButton').click(function(){
-			console.log('uploadButton!!!!!');
+		$('#uploadButton').click(function(e){
+			//e.preventDefault();
+			//fn_getProgressInfo();
 			$.ajax({
-				url:"/fileUpload/progress", 
+				url:"/daou/fileUpload/progress", 
+				dataType : "json",
 				method: "post",
 				success: function(result){
 				<!-- result JSON객체 파싱해서 보여주기 -->
-				alert('aaaa');
+					alert(result.pByteRead + " / " + result.pContentLength);
+					/*
+					if(result.pByteRead != result.pContentLength){
+						fn_getProgressInfo();
+					}else{
+						alert("끝");
+					}
+					*/
 				}
 			});
-
 		})
-	})
+	
 	
 </script>

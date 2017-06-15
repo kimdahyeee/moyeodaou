@@ -34,12 +34,20 @@ public class AjaxProgressListener implements ProgressListener{
 			System.out.println(+ pBytesRead + " / " + pContentLength + " 읽혔음");	
 		}
 		
-		String attrName = "UPLOAD_INFO_PREFIX" + uploadId;
+		//String attrName = "UPLOAD_INFO_PREFIX" + uploadId;
+		String attrName = "UPLOAD_INFO_PREFIX";		
 		JSONObject currentUploadInfo = new JSONObject();
 		currentUploadInfo.put("pByteRead", pBytesRead);
 		currentUploadInfo.put("pContentLength", pContentLength);
 		
 		session.setAttribute(attrName, currentUploadInfo);
+		
+		Object uploadInfo = session.getAttribute(attrName);
+		JSONObject jsonResult = new JSONObject();
+		jsonResult = (JSONObject)uploadInfo;
+		String jsonString = jsonResult.toString();
+		
+		System.out.println("attrName:"+attrName + " getSession:"+jsonString);
 		
 	}
 

@@ -151,12 +151,16 @@ public class GroupMainController {
 	 
 	    try {
 	        String jsonStr = jsonResult.toJSONString();
-	 
+	        
+	        System.out.println("session에 있는 jsonResult:"+jsonStr);
 	        response.setContentType("text/xml; charset=UTF-8");
+	        
 	        PrintWriter out = response.getWriter();
 	        out.println(jsonStr);
 	        out.flush();
 	        out.close();
+	        
+	        
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
