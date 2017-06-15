@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="schedule">
+	<!-- Daeho 2017.06.15 caculate available date -->
+	<resultMap id="weekInfo" type="hashmap">
+		<result property="memberNo" column="MEMBER_NO" javaType="int"/>
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+		<result property="scheduleDay" column="SCHEDULE_DAY" javaType="int"/>
+		<result property="scheduleStartTime" column="SCHEDULE_START_TIME" javaType="int"/>
+		<result property="scheduleFinishTime" column="SCHEDULE_FINISH_TIME" javaType="int"/>
+	</resultMap>
 	
 	<insert id="insertScheduleInfo" parameterType="com.daou.moyeo.dto.ScheduleDTO">
 		INSERT INTO SCHEDULE_TB(
@@ -33,4 +41,17 @@
 	FROM SCHEDULE_TB
 	WHERE MEMBER_NO = #{memberNo}
 	</select>
+	
+	<select id="selectScheduleWeekList" parameterType="map" resultMap="weekInfo">
+		SELECT 
+			MEMBER_NO, 
+			GROUP_NO,
+			SCHEDULE_DAY, 
+			SCHEDULE_START_TIME, 
+			SCHEDULE_FINISH_TIME
+		FROM SCHEDULE_TB
+		WHERE GROUP_NO = #{groupNo} 
+			AND	WEEK_START_DATE = #{weekStartDate}
+	</select>
+	
 </mapper>
