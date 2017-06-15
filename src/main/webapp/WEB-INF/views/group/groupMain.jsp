@@ -528,12 +528,13 @@
 
 <script type="text/x-javascript">
  	var cnt = 0;
+ 	var progressBar = null;
  	
  	function fn_addFile(){
  		cnt++;
  		console.log(cnt);
  		var str = "<p>" +
- 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"'>"+
+ 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"' required='required'>"+
  			//"<input type='button' value='삭제' class='deleteFile'>" +
  			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+cnt+"</a>"+ 
  			"</p>";
@@ -556,13 +557,14 @@
 			dataType : "json",
 			method: "post",
 			success: function(result){
-				<!-- result JSON객체 파싱해서 보여주기 -->
 				//alert(+ result.pByteRead + " / " + result.pContentLength);
 				console.log(+ result.pByteRead + " / " + result.pContentLength);
-				if(result.pByteRead != result.pContentLength){
-					//fn_getProgressInfo();
+				if(result.pByteRead < result.pContentLength){
+					// 프로그래스바 진행상황 보여주기
+					
 				}else{
-					alert("끝");
+					clearInterval(progressBar);
+					//alert("끝");
 				}
 			}
 		});
@@ -576,9 +578,9 @@
 		<!-- 프로그래스 바 요청 -->
 		$('#uploadButton').click(function(){
 			console.log('uploadButton!!!!!');
-			setInterval(function() {
+			progressBar = setInterval(function() {
 			 	   fn_getProgressInfo();
-			}, 500);
+			}, 100);
 		})
 	})
 	
