@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daou.moyeo.board.service.BoardService;
 import com.daou.moyeo.group.service.GroupService;
+import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
@@ -44,6 +45,10 @@ public class GroupMainController {
 	@Resource(name="groupService")
 	private GroupService groupService;
 	
+	@Resource(name="scheduleService")
+	private ScheduleService scheduleService;
+	
+	
 	/**
 	 *  그룹 메인 화면
 	 * @param model
@@ -51,7 +56,9 @@ public class GroupMainController {
 	 * @return
 	 */
 	@RequestMapping(value = "/group/{groupNo}")
-	public String groupMainInit(@PathVariable("groupNo") int groupNo, Model model, Authentication auth) {		
+	public String groupMainInit(@PathVariable("groupNo") int groupNo,
+			Model model,
+			Authentication auth) {		
 		
 		//TODO 그룹 권한 삽입
 		System.out.println("Group Main Init()");
@@ -69,6 +76,7 @@ public class GroupMainController {
 		Map<String, Object> groupInfo = groupService.selectGroupInfo(groupNo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> groupMemberList = groupService.selectGroupMemberList(currentInfo);
+		
 		
 		//=============== FileList Test ===================//
 		/*for(int i=0;i<sharing_list.size();i++){

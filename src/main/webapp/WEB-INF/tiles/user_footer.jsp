@@ -13,7 +13,7 @@
         $.backstretch("<c:url value='resources/img/login-bg.jpg'/>", {speed: 500});
     </script>
 	
-	<script type="text/javascript" src="<c:url value='resources/js/common-scripts.js'/>"></script>
+	<%-- <script type="text/javascript" src="<c:url value='resources/js/common-scripts.js'/>"></script> --%>
 	<script type="text/javascript" src="<c:url value='resources/js/jquery.validate.js' />"></script>
 	<script type="text/javascript" src="<c:url value='resources/js/custom.js' />"></script>
 

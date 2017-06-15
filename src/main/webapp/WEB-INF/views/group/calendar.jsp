@@ -50,7 +50,12 @@
 
 			/* initialize the calendar
 			-----------------------------------------------------------------*/
-
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+			var sundayDate = new Date(yyyy, mm-1, dd-today.getUTCDay());
+			
 			$('#calendar').fullCalendar({
 				header : {
 					right : ''
@@ -66,14 +71,45 @@
 					}
 				},
 				minTime : '6:00:00',
+				maxTime : '20:00:00',
 				slotDuration : '1:00:00',
 				allDaySlot : false,
 				height : "auto",
-				eventOverlap:false
+				eventOverlap:false,
+                events: function(start, end, timezone, callback) {
+                	var requestInfo = {
+        					groupNo : ${groupNo}, 
+        					memberNo : <sec:authentication property="principal.memberNo"/>, 
+        					startDate : start.format()
+        			};
+                	
+                    $.ajax({
+                        url: "<c:url value='/calendarEvent'/>",
+                        type : 'post',
+                        headers: { 
+        	                'Accept': 'application/json',
+        	                'Content-Type': 'application/json' 
+        	            },
+                        data : JSON.stringify(requestInfo),
+                        dataType: 'json',
+                        success: function(data) {
+                            var events = [];
+                            $(data).each(function() {
+                                events.push({
+                                	title: $(this).attr('title'),
+                                    start: $(this).attr('start'),
+                                    end: $(this).attr('end')
+                                });
+                            });
+                            callback(events);
+                        }
+                    });
+         
+                }
 			});
 		}
-
 	});
+	
 	function fnCalendar() {
 		var obj = $('#calendar').fullCalendar('clientEvents').map(function(e) {
 			return {
@@ -82,57 +118,67 @@
 			};
 		});
 		
-		var scheduleInfo = new Array();
-		
 		for ( var k in obj) {
 			console.log(k, obj[k]);
 		}
-		for ( var key in obj) {
-			if (obj.hasOwnProperty(key)) {
-				var data = new Object();
-				
-				var startDate = new Date(obj[key].start);
-				var endDate = new Date(obj[key].end);
-				
-				data.scheduleDay = startDate.getUTCDay();
-				data.scheduleStartTime = startDate.getUTCHours();
-				
-				if(obj[key].end == null){
-					data.scheduleFinishTime = data.scheduleStartTime + 1;
-				} else{
-					if(endDate.getUTCHours() == 0){
-						data.scheduleFinishTime = 23;
-					} else {
-						data.scheduleFinishTime = endDate.getUTCHours() - 1;
+
+		if(obj.length != 0) {
+			var scheduleInfo = new Array();
+			
+			for ( var key in obj) {
+				if (obj.hasOwnProperty(key)) {
+					var data = new Object();
+					
+					var startDate = new Date(obj[key].start);
+					var endDate = new Date(obj[key].end);
+					
+					data.scheduleDay = startDate.getUTCDay();
+					data.scheduleStartTime = startDate.getUTCHours();
+					
+					if(obj[key].end == null){
+						data.scheduleFinishTime = data.scheduleStartTime + 1;
+					} else{
+						if(endDate.getUTCHours() == 0){
+							data.scheduleFinishTime = 23;
+						} else {
+							data.scheduleFinishTime = endDate.getUTCHours() - 1;
+						}
 					}
+					scheduleInfo.push(data);
 				}
-			/* 	alert(startDate.getUTCDay());
-				alert(startDate.getUTCHours());
-				alert(endDate.getUTCHours()); */
-				scheduleInfo.push(data);
 			}
+			
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+			var sundayDate = new Date(yyyy, mm-1, dd-today.getUTCDay());
+
+			var scheduleInfos = {
+					groupNo : ${groupNo}, 
+					memberNo : <sec:authentication property="principal.memberNo"/>, 
+					weekStartDate : sundayDate,
+					scheduleInfos : scheduleInfo
+			};
+			
+			console.log('Item: ', JSON.stringify(scheduleInfos));
+			
+			$.ajax({
+	            type: "POST",
+	            url: "/daou/insertSchedule", 
+	            processData : true,
+	            headers: { 
+	                'Accept': 'application/json',
+	                'Content-Type': 'application/json' 
+	            },
+	            data: JSON.stringify(scheduleInfos),
+	            dataType: "json",
+	            success: function(data) {
+	            	alert("저장되었습니다.");
+	            }
+	        });
+		} else {
+			alert("스케줄을 입력해 주세요.")
 		}
-		var scheduleInfos = {
-				groupNo : ${groupNo}, 
-				memberNo : <sec:authentication property="principal.memberNo"/>, 
-				scheduleInfos : scheduleInfo
-		};
-		
-		console.log('Item: ', JSON.stringify(scheduleInfos));
-		
-		$.ajax({
-            type: "POST",
-            url: "/daou/insertSchedule", 
-            processData : true,
-            headers: { 
-                'Accept': 'application/json',
-                'Content-Type': 'application/json' 
-            },
-            data: JSON.stringify(scheduleInfos),
-            dataType: "json",
-            success: function(data) {
-            	alert("저장되었습니다.");
-            }
-        });
 	}
 </script>

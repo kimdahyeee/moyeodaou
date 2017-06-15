@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="schedule">
+	<!-- Daeho 2017.06.15 caculate available date -->
+	<resultMap id="weekInfo" type="hashmap">
+		<result property="memberNo" column="MEMBER_NO" javaType="int"/>
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+		<result property="scheduleDay" column="SCHEDULE_DAY" javaType="int"/>
+		<result property="scheduleStartTime" column="SCHEDULE_START_TIME" javaType="int"/>
+		<result property="scheduleFinishTime" column="SCHEDULE_FINISH_TIME" javaType="int"/>
+	</resultMap>
 	
 	<insert id="insertScheduleInfo" parameterType="com.daou.moyeo.dto.ScheduleDTO">
 		INSERT INTO SCHEDULE_TB(
@@ -9,7 +17,8 @@
 			GROUP_NO, 
 			SCHEDULE_DAY, 
 			SCHEDULE_START_TIME, 
-			SCHEDULE_FINISH_TIME
+			SCHEDULE_FINISH_TIME,
+			WEEK_START_DATE
 		)
 		VALUES
 		<foreach collection="scheduleInfos" item="item" separator=",">
@@ -18,19 +27,39 @@
 			#{groupNo}, 
 			#{item.scheduleDay},
 			#{item.scheduleStartTime},
-			#{item.scheduleFinishTime}
+			#{item.scheduleFinishTime},
+			#{weekStartDate}
 		)
 		</foreach>
 	</insert>
 
-	<select id="selectScheduleList" parameterType="int" resultType="hashmap">
-	SELECT 
-		MEMBER_NO, 
-		GROUP_NO,
-		SCHEDULE_DAY, 
-		SCHEDULE_START_TIME, 
-		SCHEDULE_FINISH_TIME
-	FROM SCHEDULE_TB
-	WHERE MEMBER_NO = #{memberNo}
+	<resultMap type="hashmap" id="scheduleList">
+		<result property="title" column="TITLE" javaType="java.lang.String"/>
+		<result property="start" column="START" javaType="java.lang.String"/>
+		<result property="end" column="END" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<select id="selectScheduleList" parameterType="hashmap" resultMap="scheduleList">
+		SELECT 
+			'등록된 일정' AS TITLE,
+			DATE_ADD( DATE_ADD(WEEK_START_DATE, INTERVAL +SCHEDULE_DAY DAY), INTERVAL +SCHEDULE_START_TIME HOUR ) AS START,
+			DATE_ADD( DATE_ADD(WEEK_START_DATE, INTERVAL +SCHEDULE_DAY DAY), INTERVAL +SCHEDULE_FINISH_TIME+1 HOUR ) AS END
+		FROM SCHEDULE_TB
+		WHERE MEMBER_NO = #{memberNo}
+		AND		GROUP_NO = #{groupNo}
+		AND		WEEK_START_DATE = #{startDate}
 	</select>
+	
+	<select id="selectScheduleWeekList" parameterType="map" resultMap="weekInfo">
+		SELECT 
+			MEMBER_NO, 
+			GROUP_NO,
+			SCHEDULE_DAY, 
+			SCHEDULE_START_TIME, 
+			SCHEDULE_FINISH_TIME
+		FROM SCHEDULE_TB
+		WHERE GROUP_NO = #{groupNo} 
+			AND	WEEK_START_DATE = #{weekStartDate}
+	</select>
+	
 </mapper>
