@@ -23,4 +23,14 @@
 		</foreach>
 	</insert>
 
+	<select id="selectScheduleList" parameterType="int" resultType="hashmap">
+	SELECT 
+		MEMBER_NO, 
+		GROUP_NO,
+		SCHEDULE_DAY, 
+		SCHEDULE_START_TIME, 
+		SCHEDULE_FINISH_TIME
+	FROM SCHEDULE_TB
+	WHERE MEMBER_NO = #{memberNo}
+	</select>
 </mapper>

@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daou.moyeo.board.service.BoardService;
 import com.daou.moyeo.group.service.GroupService;
+import com.daou.moyeo.schedule.service.ScheduleService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
 import com.daou.moyeo.util.FileUtil;
@@ -142,12 +143,6 @@ public class GroupMainController {
 		int result = groupService.deleteGroupMember(deleteMemberInfo);
 		System.out.println("result : "  + result);
 		return "redirect:/main";
-	}
-	
-	@RequestMapping(value = "/group/{groupNo}/calendar")
-	public String calendarView(@PathVariable("groupNo") int groupNo, Model model) {
-		model.addAttribute("groupNo", groupNo);
-		return "calendar";
 	}
 	
 }

@@ -18,7 +18,8 @@ public class JsonController {
 	private ScheduleService scheduleService;
 	
 	@RequestMapping(value = "/insertSchedule", method=RequestMethod.POST, consumes = "application/json")
-	public void insertSchedule(@RequestBody ScheduleDTO scheduleDto, Model model) {
+	public ScheduleDTO insertSchedule(@RequestBody ScheduleDTO scheduleDto, Model model) {
 		scheduleService.insertScheduleInfo(scheduleDto);
+		return scheduleDto;
 	}
 }

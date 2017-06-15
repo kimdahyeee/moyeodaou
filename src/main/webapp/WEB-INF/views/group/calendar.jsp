@@ -68,7 +68,8 @@
 				minTime : '6:00:00',
 				slotDuration : '1:00:00',
 				allDaySlot : false,
-				height : "auto"
+				height : "auto",
+				eventOverlap:false
 			});
 		}
 
@@ -130,12 +131,7 @@
             data: JSON.stringify(scheduleInfos),
             dataType: "json",
             success: function(data) {
-               if(data.KEY == "SUCCESS"){
-                  alert("성공");
-                  //location.replace("/login");
-               }else{
-                  alert("실패");
-               }
+            	alert("저장되었습니다.");
             }
         });
 	}
