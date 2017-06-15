@@ -9,7 +9,8 @@
 			GROUP_NO, 
 			SCHEDULE_DAY, 
 			SCHEDULE_START_TIME, 
-			SCHEDULE_FINISH_TIME
+			SCHEDULE_FINISH_TIME,
+			WEEK_START_DATE
 		)
 		VALUES
 		<foreach collection="scheduleInfos" item="item" separator=",">
@@ -18,7 +19,8 @@
 			#{groupNo}, 
 			#{item.scheduleDay},
 			#{item.scheduleStartTime},
-			#{item.scheduleFinishTime}
+			#{item.scheduleFinishTime},
+			#{weekStartDate}
 		)
 		</foreach>
 	</insert>
