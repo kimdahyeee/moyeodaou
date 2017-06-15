@@ -22,12 +22,27 @@ public class JsonController {
 	@Resource(name="scheduleService")
 	private ScheduleService scheduleService;
 
+	/**
+	 * 스케줄 등록
+	 * @param scheduleDto
+	 * @return
+	 * @author KimDaHye
+	 */
 	@RequestMapping(value = "/insertSchedule", method=RequestMethod.POST, consumes = "application/json")
 	public ScheduleDTO insertSchedule(@RequestBody ScheduleDTO scheduleDto) {
 		scheduleService.insertScheduleInfo(scheduleDto);
 		return scheduleDto;
 	}
 
+	/**
+	 * 회원 스케줄 출력
+	 * @param scheduleUserInfo
+	 * @param req
+	 * @param res
+	 * @return
+	 * @throws IOException
+	 * @author KimDaHye 20170615
+	 */
 	@RequestMapping(value = "/calendarEvent", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public List<Map<String, Object>> calendarEvent(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		List<Map<String, Object>> scheduleList = scheduleService.selectScheduleList(scheduleUserInfo);
