@@ -29,10 +29,6 @@ public class CalculateSchedule extends Observable {
 		this.scheduleService = scheduleService;
 	}
 	
-	public void setSchedule() {
-		
-	}
-	
 	public void calculateSchedule(int groupNo) {
 		int[][] resultSchedule = new int[15][7];
 		List<Map<String, Object>> scheduleList = loadScheduleList(groupNo);
