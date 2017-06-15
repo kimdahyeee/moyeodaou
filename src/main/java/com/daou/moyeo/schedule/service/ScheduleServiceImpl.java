@@ -18,8 +18,8 @@ public class ScheduleServiceImpl extends SqlSessionDaoSupport implements Schedul
 	}
 
 	@Override
-	public List<Object> selectScheduleList(int memberNo) {
-		return getSqlSession().selectList("schedule.selectScheduleList", memberNo);
+	public List<Map<String, Object>> selectScheduleList(Map<String, Object> scheduleUserInfo) {
+		return getSqlSession().selectList("schedule.selectScheduleList", scheduleUserInfo);
 	}
 	
 	@Override

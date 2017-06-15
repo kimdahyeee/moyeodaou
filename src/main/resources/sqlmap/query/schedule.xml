@@ -33,15 +33,21 @@
 		</foreach>
 	</insert>
 
-	<select id="selectScheduleList" parameterType="int" resultType="hashmap">
-	SELECT 
-		MEMBER_NO, 
-		GROUP_NO,
-		SCHEDULE_DAY, 
-		SCHEDULE_START_TIME, 
-		SCHEDULE_FINISH_TIME
-	FROM SCHEDULE_TB
-	WHERE MEMBER_NO = #{memberNo}
+	<resultMap type="hashmap" id="scheduleList">
+		<result property="title" column="TITLE" javaType="java.lang.String"/>
+		<result property="start" column="START" javaType="java.lang.String"/>
+		<result property="end" column="END" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<select id="selectScheduleList" parameterType="hashmap" resultMap="scheduleList">
+		SELECT 
+			'등록된 일정' AS TITLE,
+			DATE_ADD( DATE_ADD(WEEK_START_DATE, INTERVAL +SCHEDULE_DAY DAY), INTERVAL +SCHEDULE_START_TIME HOUR ) AS START,
+			DATE_ADD( DATE_ADD(WEEK_START_DATE, INTERVAL +SCHEDULE_DAY DAY), INTERVAL +SCHEDULE_FINISH_TIME+1 HOUR ) AS END
+		FROM SCHEDULE_TB
+		WHERE MEMBER_NO = #{memberNo}
+		AND		GROUP_NO = #{groupNo}
+		AND		WEEK_START_DATE = #{startDate}
 	</select>
 	
 	<select id="selectScheduleWeekList" parameterType="map" resultMap="weekInfo">
