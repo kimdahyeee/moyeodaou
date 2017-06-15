@@ -9,9 +9,11 @@
 					<c:set var="notMemberInfo" value="${notMemberInfo}"/>
 					<c:choose>
 						<c:when test="${!empty notMemberInfo}">
-							<input type="hidden" name="code" value="${notMemberInfo.code}"/>
-							<input type="hidden" name="groupNo" value="${notMemberInfo.groupNo}"/>
-							<input type="text" class="form-control" placeholder="User ID" name="email" value="${notMemberInfo.email}" readonly autofocus> <br> 
+							<input type="hidden" name="code" id="code" value="${notMemberInfo.code}"/>
+							<input type="hidden" name="groupNo" id="groupNo" value="${notMemberInfo.groupNo}"/>
+							<div class="has-feedback">
+							<input type="text" class="form-control" placeholder="User ID" name="email" id="email" value="${notMemberInfo.email}" readonly autofocus> <br> 
+							</div>
 						</c:when>
 						<c:otherwise>
 						<div class="has-feedback">

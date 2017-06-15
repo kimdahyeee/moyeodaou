@@ -66,6 +66,7 @@ public class UserController {
 	 * @param name
 	 * @param password
 	 * @throws IOException
+	 * @author KimDaHye 20170615 수정(이메일관련)
 	 */
 	@ResponseBody
 	@RequestMapping( value="/user/insertUser", method=RequestMethod.POST )
@@ -74,6 +75,9 @@ public class UserController {
 										 @RequestParam("password") String password, 
 										 @RequestParam(value="code", required=false) String code,
 										 @RequestParam(value="groupNo", required=false) Integer groupNo) throws IOException {
+		
+		int userResult = 0;
+		int emailResult = 0;
 		String encodePW = encoder.encode(password);
 		
 		HashMap<String, String> resultMap = new HashMap<String, String>();
@@ -84,14 +88,12 @@ public class UserController {
 		userMap.put("password", encodePW);
 		
 		try{
-			userService.insertUser(userMap);
-			resultMap.put("KEY", "SUCCESS");
+			userResult = userService.insertUser(userMap);
 		} catch (Exception e) {
 			System.out.println(e);
 			resultMap.put("KEY", "FAIL");
 		}
 		
-		//TODO 회원가입 그룹 초대 오류 날 수도 있음(여기 처리할 것!)
 		if(code != null) {
 			Map<String, Object> groupMap = new HashMap<String, Object>();
 			int memberNo = emailService.getMemberNo(email);
@@ -99,7 +101,13 @@ public class UserController {
 			groupMap.put("groupNo", groupNo);
 			groupMap.put("memberNo", memberNo);
 			groupMap.put("token", code);
-			emailService.putNewMemberInGroup(groupMap);
+			emailResult = emailService.putNewMemberInGroup(groupMap);
+		}
+		
+		if (emailResult == 1 ) {
+			resultMap.put("KEY", "EMAIL_SUCCESS");
+		} else if ( userResult == 1 ) {
+			resultMap.put("KEY", "USER_SUCCESS");
 		}
 
 		return resultMap;

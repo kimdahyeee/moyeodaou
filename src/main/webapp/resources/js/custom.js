@@ -65,14 +65,19 @@ $(document).ready(function() {
                     data: {
                         "email": $("#email").val(),
                         "password": $("#password").val(),
-                        "name": $("#name").val()
+                        "name": $("#name").val(),
+                        "groupNo" : $("#groupNo").val(),
+                        "code" : $("#code").val()
                     },
                     dataType: "json",
                     success: function(data) {
-                       if(data.KEY == "SUCCESS"){
+                       if(data.KEY == "USER_SUCCESS"){
                           alert("회원가입 성공");
                           location.replace("/daou/");
-                       }else{
+                       } else if(data.KEY == "EMAIL_SUCCESS") { 
+                    	   alert("회원가입 & 그룹가입 성공");
+                    	   location.replace("/daou/");
+                       } else{
                           alert("이미 존재하는 아이디입니다.");
                        }
                     }

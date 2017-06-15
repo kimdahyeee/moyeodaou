@@ -112,7 +112,7 @@ public class EmailService extends SqlSessionDaoSupport{
 		System.out.println(token);
 		
 		hashOps.putAll(token, rmap);
-		redisTemplate.expire(token, 5, TimeUnit.MINUTES);
+		//redisTemplate.expire(token, 5, TimeUnit.MINUTES);
 		
 		System.out.println("===============================================");
 		
@@ -140,7 +140,7 @@ public class EmailService extends SqlSessionDaoSupport{
 		System.out.println(token);
 		
 		hashOps.putAll(token, rmap);
-		redisTemplate.expire(token, 5, TimeUnit.MINUTES);
+		//redisTemplate.expire(token, 5, TimeUnit.MINUTES);
 		
 		System.out.println("===============================================");
 		System.out.println("test" +hashOps.get(token, "email"));
@@ -150,8 +150,8 @@ public class EmailService extends SqlSessionDaoSupport{
 	/*
 	 * 회원의 그룹가입 삽입해주는 메소드
 	 * */
-	public void putNewMemberInGroup(Map<String, Object> map){
-		getSqlSession().insert("email.insertMemberGroupTB", map);
+	public int putNewMemberInGroup(Map<String, Object> map){
+		return getSqlSession().insert("email.insertMemberGroupTB", map);
 	}
 	
 }
