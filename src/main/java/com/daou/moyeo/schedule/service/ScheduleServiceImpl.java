@@ -1,6 +1,7 @@
 package com.daou.moyeo.schedule.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ public class ScheduleServiceImpl extends SqlSessionDaoSupport implements Schedul
 	}
 
 	@Override
-	public List<Object> selectScheduleList(int memberNo) {
-		return getSqlSession().selectList("schedule.selectScheduleList", memberNo);
+	public List<Map<String, Object>> selectScheduleList(Map<String, Object> scheduleUserInfo) {
+		return getSqlSession().selectList("schedule.selectScheduleList", scheduleUserInfo);
 	}
 	
 }

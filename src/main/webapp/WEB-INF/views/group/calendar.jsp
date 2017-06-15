@@ -50,7 +50,12 @@
 
 			/* initialize the calendar
 			-----------------------------------------------------------------*/
-
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+			var sundayDate = new Date(yyyy, mm-1, dd-today.getUTCDay());
+			
 			$('#calendar').fullCalendar({
 				header : {
 					right : ''
@@ -70,11 +75,41 @@
 				slotDuration : '1:00:00',
 				allDaySlot : false,
 				height : "auto",
-				eventOverlap:false
-				
+				eventOverlap:false,
+                events: function(start, end, timezone, callback) {
+                	var requestInfo = {
+        					groupNo : ${groupNo}, 
+        					memberNo : <sec:authentication property="principal.memberNo"/>, 
+        					startDate : start.format()
+        			};
+                	
+                    $.ajax({
+                        url: "<c:url value='/calendarEvent'/>",
+                        type : 'post',
+                        headers: { 
+        	                'Accept': 'application/json',
+        	                'Content-Type': 'application/json' 
+        	            },
+                        data : JSON.stringify(requestInfo),
+                        dataType: 'json',
+                        success: function(data) {
+                            var events = [];
+                            $(data).each(function() {
+                                events.push({
+                                	title: $(this).attr('title'),
+                                    start: $(this).attr('start'),
+                                    end: $(this).attr('end')
+                                });
+                            });
+                            callback(events);
+                        }
+                    });
+         
+                }
 			});
 		}
 	});
+	
 	function fnCalendar() {
 		var obj = $('#calendar').fullCalendar('clientEvents').map(function(e) {
 			return {
@@ -109,9 +144,6 @@
 							data.scheduleFinishTime = endDate.getUTCHours() - 1;
 						}
 					}
-				/* 	alert(startDate.getUTCDay());
-					alert(startDate.getUTCHours());
-					alert(endDate.getUTCHours()); */
 					scheduleInfo.push(data);
 				}
 			}

@@ -22,16 +22,7 @@ public class ScheduleController {
 	
 	@RequestMapping(value = "/group/{groupNo}/calendar")
 	public String calendarView(@PathVariable("groupNo") int groupNo, Model model, Authentication auth) {
-		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
-		int memberNo = u.getMemberNo();
-		
-		List<Object> scheduleList = scheduleService.selectScheduleList(memberNo);
-		if(scheduleList != null){
-			System.out.println(scheduleList);
-			model.addAttribute(scheduleList);
-		}
 		model.addAttribute("groupNo", groupNo);
-		
 		return "calendar";
 	}
 }
