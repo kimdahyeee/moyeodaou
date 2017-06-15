@@ -6,7 +6,6 @@
 	<!-- **********************************************************************************************************************************************************
     			  MAIN CONTENT
       *********************************************************************************************************************************************************** -->
-   
 	<!--main content start-->
 	<section id="main-content">
 		<section class="wrapper">
@@ -111,7 +110,9 @@
 								<div class="modal-body">
 									<input type="button" value="+" id="addFile">
 									<button type="submit" id="uploadButton">완료</button>
- 								</div>
+									<br>
+									<div id="progressImg" style="width:0%; background-color: red;"></div>전송상황
+			 					</div>
 								<div class="modal-footer" id="fileUpload-footer">
 										<a href="#this"	id="fileUpload2"></a>
 										<!--  
@@ -561,6 +562,10 @@
 				console.log(+ result.pByteRead + " / " + result.pContentLength);
 				if(result.pByteRead < result.pContentLength){
 					// 프로그래스바 진행상황 보여주기
+					//percentComplete = (result.pByteRead / result.pContentLength) * 100;
+					console.log((result.pByteRead / result.pContentLength) * 100 );
+					$("#progressImg").css("width", (result.pByteRead / result.pContentLength) * 100 +"%");
+					$("#progressImg").html("전송중");
 					
 				}else{
 					clearInterval(progressBar);

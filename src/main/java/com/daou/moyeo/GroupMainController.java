@@ -145,8 +145,8 @@ public class GroupMainController {
 	    else
 	    {
 	        jsonResult = new JSONObject();
-	        jsonResult.put("bytesRead", 0);
-	        jsonResult.put("contentLenght", 0);
+	        jsonResult.put("pBytesRead", 0);
+	        jsonResult.put("pContentLenght", 0);
 	    }
 	 
 	    try {
