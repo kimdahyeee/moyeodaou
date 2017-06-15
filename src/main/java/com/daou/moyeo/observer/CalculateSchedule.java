@@ -21,22 +21,21 @@ import com.daou.moyeo.schedule.service.ScheduleService;
 
 public class CalculateSchedule extends Observable {
 	
-	@Resource(name="scheduleService")
 	private ScheduleService scheduleService;
 	
 	private int[][] resultSchedule;
 	
-//	public CalculateSchedule(ScheduleService scheduleService) {
-//		this.scheduleService = scheduleService;
-//	}
+	public CalculateSchedule(ScheduleService scheduleService) {
+		this.scheduleService = scheduleService;
+	}
 	
 	public void setSchedule() {
 		
 	}
 	
-	public void calculateSchedule() {
+	public void calculateSchedule(int groupNo) {
 		int[][] resultSchedule = new int[15][7];
-		List<Map<String, Object>> scheduleList = loadScheduleList();
+		List<Map<String, Object>> scheduleList = loadScheduleList(groupNo);
 		Iterator itr = scheduleList.iterator();
 		
 		while(itr.hasNext()) {
@@ -63,14 +62,15 @@ public class CalculateSchedule extends Observable {
 		scheduleChanged();
 	}
 	
-	public List<Map<String, Object>> loadScheduleList() {
+	public List<Map<String, Object>> loadScheduleList(int groupNo) {
 		Map<String, Object> inputInfo = new HashMap<String, Object>();
 		String weekStartDate = getThisWeekStartDate();
 		
 		System.out.println(weekStartDate);
 		
-		inputInfo.put("groupNo", 7);
+		inputInfo.put("groupNo", groupNo);
 		inputInfo.put("weekStartDate", weekStartDate);
+		
 		
 		return scheduleService.selectScheduleWeekList(inputInfo);
 	}

@@ -23,20 +23,20 @@ public class JsonController {
 	static CalculateSchedule calculateSchedule;
 	static AvailableDateTransfer availableDateTransfer;
 	
-	public static void jsonController() {
-		calculateSchedule = new CalculateSchedule();
+	public void jsonController() {
+		calculateSchedule = new CalculateSchedule(scheduleService);
 		availableDateTransfer = new AvailableDateTransfer(calculateSchedule);
 	}
 	
-	public static void changeInfo() {
-		calculateSchedule.calculateSchedule();
+	public void changeInfo(int groupNo) {
+		calculateSchedule.calculateSchedule(groupNo);
 	}
 	
 	@RequestMapping(value = "/insertSchedule", method=RequestMethod.POST, consumes = "application/json")
 	public ScheduleDTO insertSchedule(@RequestBody ScheduleDTO scheduleDto, Model model) {
 		scheduleService.insertScheduleInfo(scheduleDto);
 		jsonController();
-		changeInfo();
+		changeInfo(scheduleDto.getGroupNo());
 		return scheduleDto;
 	}
 }

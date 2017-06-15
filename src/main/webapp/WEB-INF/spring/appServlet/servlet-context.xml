@@ -56,5 +56,6 @@
 	<beans:bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
 		<beans:property name="connectionFactory" ref="jedisConnectinFactory" />
 	</beans:bean>
+	
 
 </beans:beans>
