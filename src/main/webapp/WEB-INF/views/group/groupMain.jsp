@@ -579,18 +579,6 @@
 			setInterval(function() {
 			 	   fn_getProgressInfo();
 			}, 500);
-			 	
-			/*
-			$.ajax({
-				url:"/daou/fileUpload/progress", 
-				dataType:"JSON",
-				method: "post",
-				success: function(result){
-					<!-- result JSON객체 파싱해서 보여주기 -->
-					alert(+ result.pByteRead + ' , ' + result.pContentLength);
-				}
-			});
-			*/
 		})
 	})
 	
