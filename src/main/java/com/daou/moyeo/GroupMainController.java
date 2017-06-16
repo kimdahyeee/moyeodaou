@@ -30,6 +30,7 @@ import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
+import com.daou.moyeo.util.AjaxMultipartResolver;
 import com.daou.moyeo.util.FileUtil;
 
 @Controller

@@ -1,13 +1,19 @@
 
 package com.daou.moyeo.util;
 
-import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
@@ -38,7 +44,6 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
         actualFileUpload = newFileUpload(getFileItemFactory());
         actualFileUpload.setSizeMax(fileUpload.getSizeMax());
         actualFileUpload.setHeaderEncoding(encoding);
-        
         actualFileUpload.setProgressListener(getListener());
         return actualFileUpload;
     }
@@ -48,8 +53,8 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
          
     	try {           
             AjaxProgressListener listener = getListener();
-        
-            System.out.println(request.getParameter("file_"+cnt));
+            
+           System.out.println(request.getParameter("file_"+cnt));
             listener.setUploadId(request.getParameter("file_"+cnt));
             cnt++;
             listener.setSession(request.getSession());
