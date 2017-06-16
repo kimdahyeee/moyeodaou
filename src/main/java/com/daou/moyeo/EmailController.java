@@ -117,7 +117,7 @@ public class EmailController {
 	    				return "/user/denied";
 	    			}
 	    		}
-
+	    			
 	    		result = hashOps.get(code, "token");
 	    		
 	    		if(code != result){
