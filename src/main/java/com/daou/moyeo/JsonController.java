@@ -1,7 +1,6 @@
 package com.daou.moyeo;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,32 +8,35 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daou.moyeo.dto.ScheduleDTO;
-import com.daou.moyeo.observer.AvailableDateTransfer;
 import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
 
 @RestController
 public class JsonController {
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+	
+	@Resource(name="redisTemplate")
+	private HashOperations<String, String, String> hashOps;
 
 	@Resource(name="scheduleService")
 	private ScheduleService scheduleService;
 	
-	static CalculateSchedule calculateSchedule;
-	static AvailableDateTransfer availableDateTransfer;
+	private CalculateSchedule calculateSchedule;
 	
-	public void jsonController() {
-		calculateSchedule = new CalculateSchedule(scheduleService);
-		availableDateTransfer = new AvailableDateTransfer(calculateSchedule);
-	}
-	
-	public void changeInfo(int groupNo) {
-		calculateSchedule.calculateSchedule(groupNo);
+	public void update(int groupNo) {
+		calculateSchedule = new CalculateSchedule(scheduleService,redisTemplate, hashOps);
+		calculateSchedule.setGroupNo(groupNo);
+		calculateSchedule.calculateSchedule();
 	}
 
 	/**
@@ -46,8 +48,7 @@ public class JsonController {
 	@RequestMapping(value = "/insertSchedule", method=RequestMethod.POST, consumes = "application/json")
 	public ScheduleDTO insertSchedule(@RequestBody ScheduleDTO scheduleDto) {
 		scheduleService.insertScheduleInfo(scheduleDto);
-		jsonController();
-		changeInfo(scheduleDto.getGroupNo());
+		update(scheduleDto.getGroupNo());
 		return scheduleDto;
 	}
 
