@@ -143,6 +143,12 @@ public class EmailController {
 	    		
 	    		return "redirect:/main/"; 
 	    	} else {
+	    		
+	    		if (auth != null) {
+	    			System.out.println("이미 로그인 된 user가 있음");
+	    			return "/user/denied";
+	    		}
+	    		
 	    		Map<String, Object> notMemberInfo= new HashMap<String, Object>();
 	    		
 	    		notMemberInfo.put("code", code);

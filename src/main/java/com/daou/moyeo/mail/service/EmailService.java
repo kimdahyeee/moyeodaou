@@ -127,6 +127,7 @@ public class EmailService extends SqlSessionDaoSupport{
 		
 		map.put("groupNo", groupNo);
 		map.put("token", token);
+		map.put("email", email);
 		
 		rmap.put("memberNo", Integer.toString(-1));
 		rmap.put("groupNo", Integer.toString(groupNo));

@@ -84,7 +84,6 @@ public class GroupMainController {
 			map = sharing_list.get(i);						
 			System.out.println(map.get("file_name") + "," + map.get("member_no") + "," + map.get("group_file_no"));
 		}	*/
-		
 		model.addAttribute("sharingList", sharingList);
 		model.addAttribute("allMainBoardList", allMainBoardList);
 		model.addAttribute("groupNo", groupNo);
