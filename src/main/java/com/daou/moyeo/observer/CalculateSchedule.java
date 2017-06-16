@@ -12,26 +12,51 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
 
-import javax.annotation.Resource;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.daou.moyeo.schedule.service.ScheduleService;
 
-
-public class CalculateSchedule extends Observable {
+public class CalculateSchedule {
+	
 	
 	private ScheduleService scheduleService;
 	
-	private int[][] resultSchedule;
+	private String[] dayList = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
 	
-	public CalculateSchedule(ScheduleService scheduleService) {
+	private int groupNo;
+
+	private Map<String, String> availableDateMap;
+	
+	private RedisTemplate<String, String> redisTemplate;
+	
+	private HashOperations<String, String, String> hashOps;
+	
+	public CalculateSchedule(ScheduleService scheduleService,
+			RedisTemplate<String, String> redisTemplate,
+			HashOperations<String, String, String> hashOps) {
 		this.scheduleService = scheduleService;
+		this.redisTemplate = redisTemplate;
+		this.hashOps = hashOps;
+	}
+
+	public void setGroupNo(int groupNo) {
+		this.groupNo = groupNo;
 	}
 	
-	public void calculateSchedule(int groupNo) {
+	public void calculateSchedule() {
+		int groupNo = this.groupNo;
 		int[][] resultSchedule = new int[15][7];
 		List<Map<String, Object>> scheduleList = loadScheduleList(groupNo);
+		
+		Map<String, String> resultMap = new HashMap<String, String>();
+		
+		int temp_start = 0;
+		int temp_end = 0;
+		String temp_str = "";
+		boolean isStart = false;
+		
 		Iterator itr = scheduleList.iterator();
 		
 		while(itr.hasNext()) {
@@ -54,8 +79,50 @@ public class CalculateSchedule extends Observable {
 			
 		}
 		
-		this.resultSchedule = resultSchedule;
+		for(int i = 0; i < 15; i++)  {
+			
+			for(int j = 0; j < 7; j++) {
+				System.out.print(" [");
+				System.out.print(resultSchedule[i][j]);
+				System.out.print("]");
+			}
+			System.out.println("");
+		}
+		
+		/* caculate available Date logic */
+		for(int i = 0; i < 7; i++) {
+			for(int j = 0; j < 15; j++) {
+				if(resultSchedule[j][i] == 0 && isStart == false) {
+					temp_start = j + 6;
+					isStart = true;
+				} else if (resultSchedule[j][i] == 0 && isStart == true) {
+					temp_end = j + 6;
+					if(j == 14) {
+						temp_str += ((temp_start + "-" + temp_end) + ";");
+						isStart = false;
+					}
+				} else if (resultSchedule[j][i] != 0 && isStart == true) {
+					temp_str += ((temp_start + "-" + temp_end) + ";");
+					isStart = false;
+				} 
+			}
+			System.out.println(dayList[i] + " : " + temp_str);
+			resultMap.put(dayList[i], temp_str);
+			temp_str = "";
+			temp_start = 0;
+			temp_end = 0;
+		}
+		
+		setAvailableDateMap(resultMap);
 		scheduleChanged();
+	}
+	
+	public void setAvailableDateMap(Map<String, String> availableDateMap) {
+		this.availableDateMap = availableDateMap;
+	}
+	
+	public Map<String, String> getAvailableDateMap() {
+		return this.availableDateMap;
 	}
 	
 	public List<Map<String, Object>> loadScheduleList(int groupNo) {
@@ -66,7 +133,6 @@ public class CalculateSchedule extends Observable {
 		
 		inputInfo.put("groupNo", groupNo);
 		inputInfo.put("weekStartDate", weekStartDate);
-		
 		
 		return scheduleService.selectScheduleWeekList(inputInfo);
 	}
@@ -83,11 +149,6 @@ public class CalculateSchedule extends Observable {
 	}
 	
 	public void scheduleChanged() {
-		setChanged();
-		notifyObservers();
-	}
-	
-	public int[][] getAvailableDate() {
-		return resultSchedule;
+		hashOps.putAll("available_date:" + this.groupNo, this.availableDateMap);
 	}
 }

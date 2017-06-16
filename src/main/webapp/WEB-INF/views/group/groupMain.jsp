@@ -501,7 +501,7 @@
 		
 		if(temp_name == input_name) {
 			console.log("same");
-			return '<b>'+ input_name + '</b>';
+			return '<b style="color:blue;">'+ input_name + '</b>';
 		} else {
 			console.log("not same");
 			return input_name;
