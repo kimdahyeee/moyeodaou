@@ -99,8 +99,8 @@ public class EmailController {
 	    }
 	    
 	    /* 인증 URL 타고 온 요청 확인하는 메소드*/
-	    @RequestMapping(value = "/invite/{groupNo}/{memberNo}/", method=RequestMethod.GET)
-	    public String checkRequest(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth, Model model){
+	    @RequestMapping(value = "/inviteUser/{groupNo}/{memberNo}/", method=RequestMethod.GET)
+	    public String checkRequestUser(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth, Model model){
 	    	
 	    	/* Session 확인 
 	    	 * groupNo, memberNo, token 으로 유효한 url 접근인지 확인. -> DB insert
@@ -109,12 +109,11 @@ public class EmailController {
 	    	System.out.println("checkRequest() - code:"+code);
 	    	String result = null;
 	    	
-	    	if(memberNo != -1) {
 	    		if (auth != null) {
 	    			UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 	    			if(memberNo != u.getMemberNo()){
 	    				System.out.println("session 일치 X , " + memberNo + "/"+u.getMemberNo());
-	    				return "/user/denied";
+	    				return "user/denied";
 	    			}
 	    		}
 	    			
@@ -142,13 +141,12 @@ public class EmailController {
 	    		SecurityContextHolder.getContext().setAuthentication(newAuth);
 	    		
 	    		return "redirect:/main/"; 
-	    	} else {
-	    		
-	    		if (auth != null) {
-	    			System.out.println("이미 로그인 된 user가 있음");
-	    			return "/user/denied";
-	    		}
-	    		
+	    	
+	    }
+	    
+	    @RequestMapping(value = "/inviteNotUser/{groupNo}/{memberNo}/", method=RequestMethod.GET)
+	    public String checkRequestNotUser(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth, Model model){
+   		
 	    		Map<String, Object> notMemberInfo= new HashMap<String, Object>();
 	    		
 	    		notMemberInfo.put("code", code);
@@ -156,8 +154,9 @@ public class EmailController {
 	    		notMemberInfo.put("email", hashOps.get(code, "email"));
 
 	    		model.addAttribute("notMemberInfo", notMemberInfo);
-
+	    		
+	    		System.out.println("+++++"+notMemberInfo.get("email"));
 	    		return "user/signUp"; 
-	    	}
+	    	
 	    }
 }
