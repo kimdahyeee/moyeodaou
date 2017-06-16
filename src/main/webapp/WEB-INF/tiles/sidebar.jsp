@@ -8,8 +8,7 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
               	  <p class="centered">
-              	  <a href="#"><img src="<c:url value='resources/img/ui-sam.jpg'/>" class="img-circle" width="60"></a>
-              	  ${groupInfo.groupImg}
+              	  <a href="#"><img src="/fileStore/${groupInfo.groupImg}" class="img-circle" width="60"></a>
               	  </p>
               	  <h5 class="centered">${groupInfo.groupName}</h5>
               	  	

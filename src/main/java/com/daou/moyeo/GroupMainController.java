@@ -1,6 +1,8 @@
 package com.daou.moyeo;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +10,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -22,9 +26,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daou.moyeo.board.service.BoardService;
 import com.daou.moyeo.group.service.GroupService;
+import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
+import com.daou.moyeo.util.AjaxMultipartResolver;
 import com.daou.moyeo.util.FileUtil;
 
 @Controller
@@ -40,6 +46,10 @@ public class GroupMainController {
 	@Resource(name="groupService")
 	private GroupService groupService;
 	
+	@Resource(name="scheduleService")
+	private ScheduleService scheduleService;
+	
+	
 	/**
 	 *  그룹 메인 화면
 	 * @param model
@@ -47,9 +57,10 @@ public class GroupMainController {
 	 * @return
 	 */
 	@RequestMapping(value = "/group/{groupNo}")
-	public String groupMainInit(@PathVariable("groupNo") int groupNo, Model model, Authentication auth) {		
+	public String groupMainInit(@PathVariable("groupNo") int groupNo,
+			Model model,
+			Authentication auth) {		
 		
-		//TODO 그룹 권한 삽입
 		System.out.println("Group Main Init()");
 		
 		//Daeho 2017.06.07 chat
@@ -66,13 +77,13 @@ public class GroupMainController {
 		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> groupMemberList = groupService.selectGroupMemberList(currentInfo);
 		
+		
 		//=============== FileList Test ===================//
 		/*for(int i=0;i<sharing_list.size();i++){
 			Map<String, Object> map;		
 			map = sharing_list.get(i);						
 			System.out.println(map.get("file_name") + "," + map.get("member_no") + "," + map.get("group_file_no"));
 		}	*/
-		
 		model.addAttribute("sharingList", sharingList);
 		model.addAttribute("allMainBoardList", allMainBoardList);
 		model.addAttribute("groupNo", groupNo);
@@ -118,13 +129,47 @@ public class GroupMainController {
 		List<Map<String, Object>> fileInfoList;
 		
 		System.out.println("GroupmainController mapping fileUpload");
-		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
+	    MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		fileInfoList = fileUtil.fileUpload(mhsr);
 		
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		fileService.insertFileInfo(fileInfoList, groupNo, u.getMemberNo());			
 	
 		return "redirect:/group/" + groupNo;
+	}
+	
+	@RequestMapping(value = "/fileUpload/progress", method = RequestMethod.POST)
+	public void uploadProgress(
+	        HttpSession session
+	        ,HttpServletResponse response) {
+	 
+		System.out.println("uploadProgress()");
+	    JSONObject jsonResult = null;
+	    Object uploadInfo = session.getAttribute("UPLOAD_INFO_PREFIX");
+	    if(uploadInfo != null)
+	    {
+	        jsonResult = (JSONObject)uploadInfo;
+	    }
+	    else
+	    {
+	        jsonResult = new JSONObject();
+	        jsonResult.put("pBytesRead", 0);
+	        jsonResult.put("pContentLenght", 0);
+	    }
+	 
+	    try {
+	        String jsonStr = jsonResult.toJSONString();
+	 
+	        System.out.println("session안에 든 값들 ::"+jsonStr);
+	        response.setContentType("text/xml; charset=UTF-8");
+	        PrintWriter out = response.getWriter();
+	        out.println(jsonStr);
+	        out.flush();
+	        out.close();
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
 	}
 	
 	@RequestMapping(value = "/group/{groupNo}/deleteGroup")

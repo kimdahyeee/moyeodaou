@@ -108,8 +108,10 @@
 								</div>
 								<div class="modal-body">
 									<input type="button" value="+" id="addFile">
-									<button type="submit">완료</button>
- 								</div>
+									<button type="submit" id="uploadButton">완료</button>
+									<br>
+									<div id="progressImg" style="width:0%; background-color: red;"></div>전송상황
+			 					</div>
 								<div class="modal-footer" id="fileUpload-footer">
 										<a href="#this"	id="fileUpload2"></a>
 										<!--  
@@ -290,13 +292,17 @@
 						</div>
 					<div class="chat_member_list">
 						<strong>현재 접속 리스트</strong>
-						<ul id="chat_member_list"></ul>
+						<ul id="chat_member_list">
+						</ul>
 					</div>
 
 					<div class="chat_list" >
 						<strong>대화</strong><br>
-						<div id="chat_scroll" style="overflow:auto; height:300px;">
-							<ul id="chat_list"></ul>
+						<div id="chat_scroll" style="overflow:auto; height:400px;">
+							<div class="centered"> 
+								<a id="more" href="javascript:more_history();" class="centered"><b>채팅 기록 더보기</b></a>
+							</div>
+							<ul id="chat_list"> </ul>
 						</div>
 					</div>
 						
@@ -315,16 +321,17 @@
 		</section>
 </section>
 
-<!-- chatting script -->
+<!-- 
+	title : chat client script
+	author : Daeho Han
+	-->
 <script>
-	 var host = "175.115.95.51";
-	// var host = "192.168.219.102";
-	//var host = "172.21.21.61";
-	//var host = "localhost"
+	var host = "175.115.95.51";
 	var port = "3000";
-	var chat_id = "";
 	var cnt = 0;
 	var notify_cnt = 0;
+	var more_cnt = 0;
+	var temp_id = null;
 
 	var group = {
 		group_no: '${groupInfo.groupNo}',
@@ -341,6 +348,7 @@
 	var member_list = [];
 	var chat_socket = null;
 	var group_socket = null;
+	var history_date = null;
 
 	$(document).ready(function() {
 		chat_socket = io.connect('http://'+ host + ':' + port +'/chat');
@@ -349,7 +357,6 @@
 		init_list();
 		
 		member_list = set_member_list(member_list);
-
 		
 		//Enroll Chatting info
 		chat_socket.emit('chat_join', { member: member, channel: channel });
@@ -366,7 +373,13 @@
 			var temp_len = temp_keys.length;
 
 			for(var i = 0; i < temp_len; i++) {
-				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + ":"+ result[temp_keys[i]].state+'</li>');
+				var state;
+				if(result[temp_keys[i]].state == 'disconnected') {
+					state = '<span style="color:red;"><b>부재중</b></span>';
+				} else {
+					state = '<span style="color:green;"><b>접속중</b></span>';
+				}
+				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + " : "+ state +'</li>');
 			}
 
 			data = decodeURI(data.msg);
@@ -376,28 +389,24 @@
 		});
 		
         chat_socket.on('history', function(data) {
-            var len = data.length;
-            for(var i = len-1; i >= 0 ; i--) {
-                contents = decodeURI(data[i].CHAT_CONTENTS);
-                var msg = data[i].MEMBER_NAME + ":" + contents;
-                $('#chat_list').append('<li>' + msg + '</li>');
-            }
+        	append_contents(data);
 			$('#chat_scroll').scrollTop($('#chat_list').height());
+        });
+        
+        chat_socket.on('load_more_history', function(data) {
+        	before_contents(data);
         });
 
 		group_socket.on('notify', function (data) {
 			var time = data.split("*")[0];
 			var token = data.split("*")[1];
 			var from = data.split("*")[2];
+			
 			$("#notify_cnt").html(cnt++);
 			if(token != group.group_no) {
-				/*$('#chat_notify_list').append('
-						<li> <a href="/group">' + data + '</a> </li>
-						');*/
 				$('#chat_notify_list').append(' <li> <a href="#"> <span class="subject"> <span class="from">'+ from +'</span> <span class="time">'+ time +'</span> </span> <span class="message"> '+ token +'방에서 알림이 왔습니다. </span> </a> </li> ');
 				$('.chat_notify_list').scrollTop($('#chat_notify_list').height());
 			}
-			
 		});
 
 		chat_socket.on('connected_member', function (data) {
@@ -424,8 +433,13 @@
 
 		chat_socket.on("receive_message", function(data) {
 			data = decodeURI(data);
+			var member_name = data.split(":")[0];
+			var msg = data.split(":")[1];
 			
-			$('#chat_list').append('<li>' + data + '</li>');
+			member_name = trim(member_name);
+			member_name = check_me(member_name);
+			
+			$('#chat_list').append('<li>' + member_name + " : " + msg + '</li>');
 			$('#chat_scroll').scrollTop($('#chat_list').height());
 		});
 
@@ -448,10 +462,11 @@
 		});
 
 		// msg input and enter key
-		$('#chat_input').keyup(function (event) {
+		// * change event from keyup to keypress for IE issue (2017.06.15)
+		$('#chat_input').keypress(function (event) {
 			if (event.which == 13) {
 				chat_input();
-			}
+			} 
 		});
 		
 		//flick 
@@ -462,6 +477,10 @@
 		});
 	
 	});
+	
+	function more_history() {
+		chat_socket.emit("more_history", { channel: channel, history_date : history_date });
+	}
 	
 	function init_list() {
 		<c:forEach items="${otherGroupList}" var="ogList">
@@ -475,12 +494,71 @@
 				});
 		</c:forEach>
 	};
+	
+	function check_me (input_name) {
+		var temp_name = trim(member.member_name);
+		input_name = trim(input_name);
+		
+		if(temp_name == input_name) {
+			console.log("same");
+			return '<b>'+ input_name + '</b>';
+		} else {
+			console.log("not same");
+			return input_name;
+		}
+	}
+	
+	function trim(stringToTrim) {
+	    return stringToTrim.replace(/^\s+|\s+$/g,"");
+	}	
+        
+	function append_contents(data) {
+		var len = data.length-1;
+		
+		for(var i = len; i >= 0 ; i--) {
+			var contents = decodeURI(data[i].CHAT_CONTENTS);
+			var member_name = check_me(data[i].MEMBER_NAME);
+			var msg = member_name + ":" + contents;
+			
+			if(i == len) {
+				$("#chat_list").append('<span class="divider" id="divider"></span>')
+				$('#chat_list').append('<li id="msg">' + msg +'</li>'); 
+				history_date = data[i].SEND_TIME;
+			} else {
+				$('#chat_list').append('<li id="msg">' + msg +'</li>');
+			}
+		}
+	}
+	
+	function before_contents(data) {
+		var len = data.length-1;
+		
+		if(len == -1) {
+			alert("더 이상 불러올 기록이 없습니다");
+		} else {
+			for(var i = len; i >= 0 ; i--) {
+				var contents = decodeURI(data[i].CHAT_CONTENTS);
+				var member_name = check_me(data[i].MEMBER_NAME);
+				var msg = member_name + ":" + contents;
+				
+				if(i == len) {
+					$("[id='divider']").eq(more_cnt).html('==========이전 대화 목록==========');
+					$("[id='divider']").eq(more_cnt).before('<span class="divider" id="divider"></span>')
+					$("[id='divider']").eq(more_cnt+1).before('<li>' + msg + '</li>'); 
+					history_date = data[i].SEND_TIME;
+				} else {
+					$("[id='divider']").eq(more_cnt+1).before('<li>' + msg + '</li>'); 
+				}
+			}
+		}
+	}
+	
 
 	function chat_input() {
 		var encodedMsg = encodeURI($('#chat_input').val());
+		$('#chat_input').val(''); // clear input msg in chat_input area
 		chat_socket.emit('send_message', { channel: channel, member: member, message: encodedMsg });
 		group_socket.emit('send_notify', { channel: channel, member: member, message: encodedMsg });
-		$('#chat_input').val(''); // clear input msg in chat_input area
 	};
 
 	// current connected member and state Object
@@ -520,12 +598,13 @@
 
 <script type="text/x-javascript">
  	var cnt = 0;
+ 	var progressBar = null;
  	
  	function fn_addFile(){
  		cnt++;
  		console.log(cnt);
  		var str = "<p>" +
- 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"'>"+
+ 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"' required='required'>"+
  			//"<input type='button' value='삭제' class='deleteFile'>" +
  			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+cnt+"</a>"+ 
  			"</p>";
@@ -541,23 +620,42 @@
  	function fn_deleteFile(obj){
  	         obj.parent().remove();
  	}
- 		
+ 	
+ 	function fn_getProgressInfo(){								// 프로그래스 바 정보 얻기
+ 		$.ajax({
+			url:"/daou/fileUpload/progress", 
+			dataType : "json",
+			method: "post",
+			success: function(result){
+				//alert(+ result.pByteRead + " / " + result.pContentLength);
+				console.log(+ result.pByteRead + " / " + result.pContentLength);
+				if(result.pByteRead < result.pContentLength){
+					// 프로그래스바 진행상황 보여주기
+					console.log((result.pByteRead / result.pContentLength) * 100 );
+					$("#progressImg").css("width", (result.pByteRead / result.pContentLength) * 100 +"%");
+					$("#progressImg").html("전송중");
+					
+				}else{
+					console.log((result.pByteRead / result.pContentLength) * 100 );
+					clearInterval(progressBar);
+					//alert("끝");
+				}
+			}
+		});
+ 	}
 	$("#addFile").on("click", function(e){ 						//파일 추가 버튼
 		e.preventDefault();
 		fn_addFile();
 	});
 	
+	$(document).ready(function() {
+		<!-- 프로그래스 바 요청 -->
+		$('#uploadButton').click(function(){
+			console.log('uploadButton!!!!!');
+			progressBar = setInterval(function() {
+			 	   fn_getProgressInfo();
+			}, 10);
+		})
+	})
 	
-	
- /*
-	function fn_submitFile(){
-		// form 생성하고 addFile을 다 submit 하고 싶다 ~ 
-		var form = document.createElement("form");
-
-		 form.setAttribute("method", "post");
-		 form.setAttribute("action", "/daou/group/${groupNo}/fileUpload");
-		 $(document.body).append(form);
-		 form.submit();
-	}
-	*/
 </script>

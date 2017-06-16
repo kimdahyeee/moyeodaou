@@ -44,9 +44,6 @@ public class EmailController {
 	    @Resource(name="redisTemplate")
 	    private HashOperations<String, String, String> hashOps;
 		
-	    /*
-	     * 		그룹 초대 modal창 클릭시 
-	     * */
 	    @RequestMapping(value = "/group/{groupNo}/email", method=RequestMethod.POST)
 	    public String sendEmailAction (@PathVariable("groupNo") int groupNo, Authentication auth, HttpServletRequest req) throws Exception {
 	    	HttpSession session = req.getSession();
@@ -61,7 +58,6 @@ public class EmailController {
     	 	비회원 -> token 생성 및 회원가입 url 전송 -> UserController에서 그룹가입 자동 완료
 	    	url:/join/groupNo/notMember/token
 	    	 */
-	    	
 	    	
 	    	if(emailService.checkMemberOrNot(receiverEmail)){
 	    		// 회원
@@ -103,8 +99,8 @@ public class EmailController {
 	    }
 	    
 	    /* 인증 URL 타고 온 요청 확인하는 메소드*/
-	    @RequestMapping(value = "/invite/{groupNo}/{memberNo}/", method=RequestMethod.GET)
-	    public String checkRequest(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth, Model model){
+	    @RequestMapping(value = "/inviteUser/{groupNo}/{memberNo}/", method=RequestMethod.GET)
+	    public String checkRequestUser(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth, Model model){
 	    	
 	    	/* Session 확인 
 	    	 * groupNo, memberNo, token 으로 유효한 url 접근인지 확인. -> DB insert
@@ -113,31 +109,26 @@ public class EmailController {
 	    	System.out.println("checkRequest() - code:"+code);
 	    	String result = null;
 	    	
-	    	if(memberNo != -1) {
-	    		// session 확인
-	    		
 	    		if (auth != null) {
 	    			UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 	    			if(memberNo != u.getMemberNo()){
 	    				System.out.println("session 일치 X , " + memberNo + "/"+u.getMemberNo());
-	    				return "/user/denied";
+	    				return "user/denied";
 	    			}
 	    		}
-
-	    		map.put("groupNo", groupNo);
-	    		map.put("memberNo", memberNo);
-	    		map.put("token", code);
-	    		
+	    			
 	    		result = hashOps.get(code, "token");
 	    		
-
 	    		if(code != result){
 	    			// true (유효한 접근임을 확인)
 	    			System.out.println("CODE_TB에 저장된 값과 url 값이 동일");
 	    			// DB에 해당 회원 MEMBER_GROUP_TB에 새롭게 insert 해주는 Service 추가
+	    			map.put("groupNo", groupNo);
+		    		map.put("memberNo", memberNo);
+		    		map.put("token", code);
+		    		
 	    			emailService.putNewMemberInGroup(map);
 	    		}else{
-	    			System.out.println("groupNo, memberNo, token 중 DB에 존재하는 값과 일치하지 않음. "); 
 	    			return "user/login";
 	    		}
 	    		
@@ -150,17 +141,22 @@ public class EmailController {
 	    		SecurityContextHolder.getContext().setAuthentication(newAuth);
 	    		
 	    		return "redirect:/main/"; 
-	    	} else {
+	    	
+	    }
+	    
+	    @RequestMapping(value = "/inviteNotUser/{groupNo}/{memberNo}/", method=RequestMethod.GET)
+	    public String checkRequestNotUser(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth, Model model){
+   		
 	    		Map<String, Object> notMemberInfo= new HashMap<String, Object>();
-	    		System.out.println("checkRequest() - code:"+code);
-
+	    		
 	    		notMemberInfo.put("code", code);
 	    		notMemberInfo.put("groupNo", groupNo);
 	    		notMemberInfo.put("email", hashOps.get(code, "email"));
 
 	    		model.addAttribute("notMemberInfo", notMemberInfo);
-
+	    		
+	    		System.out.println("+++++"+notMemberInfo.get("email"));
 	    		return "user/signUp"; 
-	    	}
+	    	
 	    }
 }
