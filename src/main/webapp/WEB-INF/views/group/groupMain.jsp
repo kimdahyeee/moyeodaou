@@ -293,7 +293,6 @@
 					<div class="chat_member_list">
 						<strong>현재 접속 리스트</strong>
 						<ul id="chat_member_list">
-							<li>나:connected</li>
 						</ul>
 					</div>
 
@@ -373,7 +372,13 @@
 			var temp_len = temp_keys.length;
 
 			for(var i = 0; i < temp_len; i++) {
-				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + ":"+ result[temp_keys[i]].state+'</li>');
+				var state;
+				if(result[temp_keys[i]].state == 'disconnected') {
+					state = '<span style="color:red;"><b>부재중</b></span>';
+				} else {
+					state = '<span style="color:green;"><b>접속중</b></span>';
+				}
+				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + " : "+ state +'</li>');
 			}
 
 			data = decodeURI(data.msg);
