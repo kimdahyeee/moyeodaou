@@ -5,7 +5,8 @@
 	uri="http://www.springframework.org/security/tags"%>
 
 <!--  fullCalendar에만 적용 -->
-<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/fullcalendar.js'/>"></script>
+<script type="text/javascript"
+	src="<c:url value='/resources/js/fullCalendar/fullcalendar.js'/>"></script>
 <script src="<c:url value='/resources/js/fullCalendar/ko.js'/>"></script>
 
 <section id="main-content">
@@ -14,10 +15,6 @@
 			<div id="external-events">
 				<h4>드래그하여 일정을 추가해주세요.</h4>
 				<div class="fc-event">일정 추가</div>
-				<p>
-					<input type="checkbox" id="drop-remove" /> <label
-						for="drop-remove">remove after drop</label>
-				</p>
 			</div>
 			<div id="calendar"></div>
 			<input type="button" onclick="javascript:fnCalendar();" value="입력" />
@@ -62,14 +59,7 @@
 				},
 				defaultView : 'agendaWeek',
 				editable : true,
-				droppable : true, // this allows things to be dropped onto the calendar
-				drop : function() {
-					// is the "remove after drop" checkbox checked?
-					if ($('#drop-remove').is(':checked')) {
-						// if so, remove the element from the "Draggable Events" list
-						$(this).remove();
-					}
-				},
+				droppable : true,
 				minTime : '6:00:00',
 				maxTime : '20:00:00',
 				slotDuration : '1:00:00',
@@ -96,15 +86,45 @@
                             var events = [];
                             $(data).each(function() {
                                 events.push({
+                                	id: $(this).attr('id'),
                                 	title: $(this).attr('title'),
                                     start: $(this).attr('start'),
-                                    end: $(this).attr('end')
+                                    end: $(this).attr('end'),
+                                    color: 'yellow',   // an option!
+                                    textColor: 'black',
+                                    editable:false
                                 });
                             });
                             callback(events);
                         }
                     });
-         
+                },
+                eventClick : function(event, element) {
+                    var current = $(this);
+                    alert("event.id" + event.id);
+                    var scheduleNo = {
+        					scheduleNo : event.id 
+        			};
+                    if(confirm('삭제하시겠어요?')){
+                        $.ajax({
+                            url: "<c:url value='/deleteSchedule'/>",
+                            type: "POST",
+                            headers: { 
+            	                'Accept': 'application/json',
+            	                'Content-Type': 'application/json' 
+            	            },
+                            dataType: 'JSON',
+                            data : JSON.stringify(scheduleNo),
+                            success:function(result){
+                                if(result  == "1"){
+                              		$('#calendar').fullCalendar('removeEvents', event.id); 
+                                }
+                            },
+                            error: function (request, status, error) {  
+                                alert('Error on deleting the event ');
+                            }
+                        });
+                    } 
                 }
 			});
 		}

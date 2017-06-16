@@ -1,6 +1,5 @@
 package com.daou.moyeo.schedule.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,5 +25,11 @@ public class ScheduleServiceImpl extends SqlSessionDaoSupport implements Schedul
 	public List<Map<String, Object>> selectScheduleWeekList(Map<String, Object> inputInfo) {
 		return getSqlSession().selectList("schedule.selectScheduleWeekList", inputInfo);
 	}
+
+	@Override
+	public int deleteSchedule(int scheduleNo) {
+		return getSqlSession().delete("schedule.deleteSchedule", scheduleNo);
+	}
+	
 	
 }
