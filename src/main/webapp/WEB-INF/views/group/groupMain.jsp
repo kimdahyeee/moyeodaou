@@ -299,9 +299,9 @@
 
 					<div class="chat_list" >
 						<strong>대화</strong><br>
-						<div id="chat_scroll" style="overflow:auto; height:300px;">
-							<a>더보기</a>
-							<ul id="chat_list"></ul>
+						<div id="chat_scroll" style="overflow:auto; height:400px;">
+							<a href="javascript:more_history();" class="center">더보기</a>
+							<ul id="chat_list"> </ul>
 						</div>
 					</div>
 						
@@ -320,16 +320,18 @@
 		</section>
 </section>
 
-<!-- chatting script -->
+<!-- 
+	title : chat client script
+	author : Daeho Han
+	-->
 <script>
-	var host = "175.115.95.51";
-	// var host = "192.168.219.102";
-	//var host = "172.21.22.137";
-	//var host = "localhost"
+	//var host = "175.115.95.51";
+	var host = "172.21.22.137";
 	var port = "3000";
-	var chat_id = "";
 	var cnt = 0;
 	var notify_cnt = 0;
+	var more_cnt = 0;
+	var temp_id = null;
 
 	var group = {
 		group_no: '${groupInfo.groupNo}',
@@ -346,6 +348,7 @@
 	var member_list = [];
 	var chat_socket = null;
 	var group_socket = null;
+	var history_date = null;
 
 	$(document).ready(function() {
 		chat_socket = io.connect('http://'+ host + ':' + port +'/chat');
@@ -354,7 +357,6 @@
 		init_list();
 		
 		member_list = set_member_list(member_list);
-
 		
 		//Enroll Chatting info
 		chat_socket.emit('chat_join', { member: member, channel: channel });
@@ -381,28 +383,24 @@
 		});
 		
         chat_socket.on('history', function(data) {
-            var len = data.length;
-            for(var i = len-1; i >= 0 ; i--) {
-                contents = decodeURI(data[i].CHAT_CONTENTS);
-                var msg = data[i].MEMBER_NAME + ":" + contents;
-                $('#chat_list').append('<li>' + msg + '</li>');
-            }
+        	append_contents(data);
 			$('#chat_scroll').scrollTop($('#chat_list').height());
+        });
+        
+        chat_socket.on('load_more_history', function(data) {
+        	before_contents(data);
         });
 
 		group_socket.on('notify', function (data) {
 			var time = data.split("*")[0];
 			var token = data.split("*")[1];
 			var from = data.split("*")[2];
+			
 			$("#notify_cnt").html(cnt++);
 			if(token != group.group_no) {
-				/*$('#chat_notify_list').append('
-						<li> <a href="/group">' + data + '</a> </li>
-						');*/
 				$('#chat_notify_list').append(' <li> <a href="#"> <span class="subject"> <span class="from">'+ from +'</span> <span class="time">'+ time +'</span> </span> <span class="message"> '+ token +'방에서 알림이 왔습니다. </span> </a> </li> ');
 				$('.chat_notify_list').scrollTop($('#chat_notify_list').height());
 			}
-			
 		});
 
 		chat_socket.on('connected_member', function (data) {
@@ -453,6 +451,7 @@
 		});
 
 		// msg input and enter key
+		// * change event from keyup to keypress for IE issue (2017.06.15)
 		$('#chat_input').keypress(function (event) {
 			if (event.which == 13) {
 				chat_input();
@@ -468,6 +467,10 @@
 	
 	});
 	
+	function more_history() {
+		chat_socket.emit("more_history", { channel: channel, history_date : history_date });
+	}
+	
 	function init_list() {
 		<c:forEach items="${otherGroupList}" var="ogList">
 			group_info.push({GROUP_NO: '${ogList.groupNo}' });
@@ -480,6 +483,44 @@
 				});
 		</c:forEach>
 	};
+        
+	function append_contents(data) {
+		var len = data.length-1;
+		
+		for(var i = len; i >= 0 ; i--) {
+			var contents = decodeURI(data[i].CHAT_CONTENTS);
+				var msg = data[i].MEMBER_NAME + ":" + contents;
+			if(i == len) {
+				$("#chat_list").append('<span class="divider" id="divider"></span>')
+				$('#chat_list').append('<li id="msg">' + msg +'</li>'); 
+				history_date = data[i].SEND_TIME;
+			} else {
+				$('#chat_list').append('<li id="msg">' + msg +'</li>');
+			}
+		}
+	}
+	
+	function before_contents(data) {
+		var len = data.length-1;
+		
+		if(len == -1) {
+			alert("더 이상 불러올 기록이 없습니다");
+		} else {
+			for(var i = len; i >= 0 ; i--) {
+				var contents = decodeURI(data[i].CHAT_CONTENTS);
+				var msg = data[i].MEMBER_NAME + ":" + contents;
+				if(i == len) {
+					$("[id='divider']").eq(more_cnt).html('==========이전 대화 목록==========');
+					$("[id='divider']").eq(more_cnt).before('<span class="divider" id="divider"></span>')
+					$("[id='divider']").eq(more_cnt+1).before('<li>' + msg + '</li>'); 
+					history_date = data[i].SEND_TIME;
+				} else {
+					$("[id='divider']").eq(more_cnt+1).before('<li>' + msg + '</li>'); 
+				}
+			}
+		}
+	}
+	
 
 	function chat_input() {
 		var encodedMsg = encodeURI($('#chat_input').val());
