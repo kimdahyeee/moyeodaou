@@ -36,7 +36,7 @@ public class JsonController {
 		calculateSchedule.calculateSchedule(groupNo);
 	}
 
-	/**
+	/** 
 	 * 스케줄 등록
 	 * @param scheduleDto
 	 * @return

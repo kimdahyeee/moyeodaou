@@ -69,7 +69,7 @@ public class GroupController {
 	 * @throws Exception 
 	 */
 	@RequestMapping( value = "/createGroup", method=RequestMethod.POST)
-	public String fileUpload(HttpServletRequest request, @RequestParam Map<String, Object> reqParams, Authentication auth, Model model) throws Exception{
+	public String createGroup(HttpServletRequest request, @RequestParam Map<String, Object> reqParams, Authentication auth, Model model) throws Exception{
 		FileUtil fileUtil = new FileUtil();
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		List<Map<String, Object>> fileInfoList = fileUtil.fileUpload(mhsr);
