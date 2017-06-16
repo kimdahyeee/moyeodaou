@@ -109,14 +109,10 @@ public class EmailService extends SqlSessionDaoSupport{
 		rmap.put("token", token);
 		rmap.put("email", email);
 		
-		System.out.println(token);
+		getSqlSession().insert("email.insertToken", map);
 		
 		hashOps.putAll(token, rmap);
-		//redisTemplate.expire(token, 5, TimeUnit.MINUTES);
-		
-		System.out.println("===============================================");
-		
-		System.out.println("test" +hashOps.get(token, "email"));
+		redisTemplate.expire(token, 5, TimeUnit.MINUTES);
 		
 		return token;
 	}
@@ -137,13 +133,10 @@ public class EmailService extends SqlSessionDaoSupport{
 		rmap.put("token", token);
 		rmap.put("email", email);
 		
-		System.out.println(token);
+		getSqlSession().insert("email.insertTokenNonMember", map);
 		
 		hashOps.putAll(token, rmap);
-		//redisTemplate.expire(token, 5, TimeUnit.MINUTES);
-		
-		System.out.println("===============================================");
-		System.out.println("test" +hashOps.get(token, "email"));
+		redisTemplate.expire(token, 5, TimeUnit.MINUTES);
 		
 		return token;
 	}

@@ -15,7 +15,7 @@
 		<sec:intercept-url pattern="/signUp" access="isAnonymous()"/>
 		<sec:intercept-url pattern="/user/**" access="isAnonymous()"/>
 		<sec:intercept-url pattern="/invite/**" access="isAnonymous() or hasRole('ROLE_USER')"/>
-		<sec:intercept-url pattern="/group/{groupNo}/**" 
+		<sec:intercept-url pattern="/group/{groupNo}/**"
 				access="hasRole('ROLE_GROUP'+#groupNo+'_MASTER') or hasRole('ROLE_GROUP'+#groupNo+'_MEMBER')"/>
 		<sec:intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
         <sec:form-login 

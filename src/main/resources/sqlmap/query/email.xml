@@ -25,12 +25,12 @@
 	
 	<!-- 인증 token값 삽입 (회원)-->
 	<insert id="insertToken" parameterType="hashmap">
-	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN) VALUES (#{memberNo},#{groupNo}, #{token})
+	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN, EMAIL) VALUES (#{memberNo},#{groupNo}, #{token}, #{email})
 	</insert>
 	
 	<!-- 인증 token값 삽입 (비회원)-->
 	<insert id="insertTokenNonMember" parameterType="hashmap">
-	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN) VALUES (-1,#{groupNo}, #{token})
+	    INSERT INTO CODE_TB(MEMBER_NO, INVITE_GROUP_NO, TOKEN, EMAIL) VALUES (-1, #{groupNo}, #{token}, #{email)
 	</insert>
 	
 	<!-- MEMBER_GROUP_TB에 새로운 Member 추가 -->
