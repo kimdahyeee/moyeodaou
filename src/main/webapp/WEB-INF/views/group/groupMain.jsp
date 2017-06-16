@@ -293,14 +293,15 @@
 					<div class="chat_member_list">
 						<strong>현재 접속 리스트</strong>
 						<ul id="chat_member_list">
-							<li>나:connected</li>
 						</ul>
 					</div>
 
 					<div class="chat_list" >
 						<strong>대화</strong><br>
 						<div id="chat_scroll" style="overflow:auto; height:400px;">
-							<a href="javascript:more_history();" class="center">더보기</a>
+							<div class="centered"> 
+								<a id="more" href="javascript:more_history();" class="centered"><b>채팅 기록 더보기</b></a>
+							</div>
 							<ul id="chat_list"> </ul>
 						</div>
 					</div>
@@ -325,8 +326,7 @@
 	author : Daeho Han
 	-->
 <script>
-	//var host = "175.115.95.51";
-	var host = "172.21.22.137";
+	var host = "175.115.95.51";
 	var port = "3000";
 	var cnt = 0;
 	var notify_cnt = 0;
@@ -373,7 +373,13 @@
 			var temp_len = temp_keys.length;
 
 			for(var i = 0; i < temp_len; i++) {
-				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + ":"+ result[temp_keys[i]].state+'</li>');
+				var state;
+				if(result[temp_keys[i]].state == 'disconnected') {
+					state = '<span style="color:red;"><b>부재중</b></span>';
+				} else {
+					state = '<span style="color:green;"><b>접속중</b></span>';
+				}
+				$('#chat_member_list').append('<li>' + result[temp_keys[i]].member_name + " : "+ state +'</li>');
 			}
 
 			data = decodeURI(data.msg);
@@ -427,8 +433,13 @@
 
 		chat_socket.on("receive_message", function(data) {
 			data = decodeURI(data);
+			var member_name = data.split(":")[0];
+			var msg = data.split(":")[1];
 			
-			$('#chat_list').append('<li>' + data + '</li>');
+			member_name = trim(member_name);
+			member_name = check_me(member_name);
+			
+			$('#chat_list').append('<li>' + member_name + " : " + msg + '</li>');
 			$('#chat_scroll').scrollTop($('#chat_list').height());
 		});
 
@@ -483,13 +494,32 @@
 				});
 		</c:forEach>
 	};
+	
+	function check_me (input_name) {
+		var temp_name = trim(member.member_name);
+		input_name = trim(input_name);
+		
+		if(temp_name == input_name) {
+			console.log("same");
+			return '<b>'+ input_name + '</b>';
+		} else {
+			console.log("not same");
+			return input_name;
+		}
+	}
+	
+	function trim(stringToTrim) {
+	    return stringToTrim.replace(/^\s+|\s+$/g,"");
+	}	
         
 	function append_contents(data) {
 		var len = data.length-1;
 		
 		for(var i = len; i >= 0 ; i--) {
 			var contents = decodeURI(data[i].CHAT_CONTENTS);
-				var msg = data[i].MEMBER_NAME + ":" + contents;
+			var member_name = check_me(data[i].MEMBER_NAME);
+			var msg = member_name + ":" + contents;
+			
 			if(i == len) {
 				$("#chat_list").append('<span class="divider" id="divider"></span>')
 				$('#chat_list').append('<li id="msg">' + msg +'</li>'); 
@@ -508,7 +538,9 @@
 		} else {
 			for(var i = len; i >= 0 ; i--) {
 				var contents = decodeURI(data[i].CHAT_CONTENTS);
-				var msg = data[i].MEMBER_NAME + ":" + contents;
+				var member_name = check_me(data[i].MEMBER_NAME);
+				var msg = member_name + ":" + contents;
+				
 				if(i == len) {
 					$("[id='divider']").eq(more_cnt).html('==========이전 대화 목록==========');
 					$("[id='divider']").eq(more_cnt).before('<span class="divider" id="divider"></span>')
