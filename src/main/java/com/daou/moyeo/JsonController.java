@@ -1,7 +1,6 @@
 package com.daou.moyeo;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +65,15 @@ public class JsonController {
 		return scheduleList;
 	}
 	
+	/**
+	 * 회원 일정 삭제
+	 * @param scheduleUserInfo
+	 * @param req
+	 * @param res
+	 * @return
+	 * @throws IOException
+	 * @author KimDaHye 20170616
+	 */
 	@RequestMapping(value = "/deleteSchedule", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public int deleteSchedule(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		int scheduleNo = (Integer) scheduleUserInfo.get("scheduleNo");

@@ -60,7 +60,6 @@ public class GroupMainController {
 			Model model,
 			Authentication auth) {		
 		
-		//TODO 그룹 권한 삽입
 		System.out.println("Group Main Init()");
 		
 		//Daeho 2017.06.07 chat

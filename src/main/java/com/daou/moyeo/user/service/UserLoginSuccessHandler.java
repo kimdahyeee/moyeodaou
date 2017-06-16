@@ -40,7 +40,6 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 		  } else {
 			  map.put("RETURNURI", getReturnUrl(req, res));
 		  }
-		  System.out.println("get return uri : ::::::::" + map.get("RETURNURI"));
 		  
 		  String returnJson = om.writeValueAsString(map);
 		  OutputStream out = res.getOutputStream();
