@@ -2,7 +2,6 @@ package com.daou.moyeo;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,9 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +32,6 @@ import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
-import com.daou.moyeo.util.AjaxMultipartResolver;
 import com.daou.moyeo.util.FileUtil;
 
 @Controller
@@ -47,8 +48,13 @@ public class GroupMainController {
 	private GroupService groupService;
 	
 	@Resource(name="scheduleService")
-	private ScheduleService scheduleService;
+	private ScheduleService scheduleService;    
 	
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+
+	@Resource(name="redisTemplate")
+	private HashOperations<String, String, String> hashOps;
 	
 	/**
 	 *  그룹 메인 화면
@@ -63,6 +69,10 @@ public class GroupMainController {
 		
 		System.out.println("Group Main Init()");
 		
+		//Daeho 2017.06.16 schedule
+		Map<String, String> availableDate = new HashMap<String, String>();
+		CalculateSchedule cs = new CalculateSchedule(scheduleService, redisTemplate, hashOps);
+	
 		//Daeho 2017.06.07 chat
 		Map<String, Object> currentInfo = new HashMap<String, Object>();
 		UserDetailsVO u = (UserDetailsVO)auth.getPrincipal();
@@ -77,6 +87,11 @@ public class GroupMainController {
 		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> groupMemberList = groupService.selectGroupMemberList(currentInfo);
 		
+		availableDate = hashOps.entries("available_date:"+groupNo);
+		if(availableDate == null) {
+			cs.setGroupNo(groupNo);
+			cs.calculateSchedule();
+		}
 		
 		//=============== FileList Test ===================//
 		/*for(int i=0;i<sharing_list.size();i++){
@@ -92,6 +107,7 @@ public class GroupMainController {
 		model.addAttribute("groupMemberList", groupMemberList); 
 		model.addAttribute("memberNo", currentInfo.get("memberNo"));
 		model.addAttribute("memberName", currentInfo.get("memberName"));
+		model.addAttribute("availableDate", availableDate);
 		
 		return "groupMain";
 	}

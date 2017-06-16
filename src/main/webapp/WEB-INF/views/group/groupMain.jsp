@@ -255,27 +255,7 @@
 					</div>
 					<div class="mb" id="chat_form" style="display:none;">
 						<div class="white-panel desc donut-chart">
-							<div class="row">
-								<div class="col-sm-6 col-xs-6 goleft">
-									<p>
-										<i class="fa fa-database"></i> 50%
-									</p>
-								</div>
-							</div>
-							<canvas id="serverstatus01" height="120" width="120"></canvas>
-							<script>
-								var doughnutData = [
-										{
-											value: 50,
-											color:"#68dff0"
-										},
-										{
-											value : 50,
-											color : "#fdfdfd"
-										}
-									];
-									var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
-							</script>
+							<div id="available_date"></div>
 						</div>
 						<!--/grey-panel -->
 					</div>
@@ -320,6 +300,58 @@
 			<!-- /row -->
 		</section>
 </section>
+<!--  
+	title : available date client script
+	author : Daeho Han
+ -->
+<script>
+	var day = ['SUN', 'MON', "TUE", "WED", "THU", "FRI", "SAT"];
+	var week = [];
+	var result = new Object();
+	
+	$(document).ready(function() {
+		initAvailableDate();
+		parseDateInfo(week);
+		$("#available_date").html(displayAvailableDate());
+		
+	});
+	
+	function parseDateInfo(week) {
+		var len = week.length;
+		var temp;
+		for(var i = 0; i < len; i++) {
+			temp = week[i].split(";");
+			result[day[i]] = temp;
+		}
+	}
+	
+	function initAvailableDate() {
+		<c:forEach var="entry" items="${availableDate}" varStatus="status">
+			week.push('${entry.value}');
+		</c:forEach>
+	}
+	
+	function displayAvailableDate() {
+		var tag = "";
+		$.each(result, function(index, value) {
+			var len = (value.length-1)
+			tag += index + ":";
+			for(var i = 0; i < len; i++) {
+				var temp = value[i].split('-')[1];
+				if(temp == 0) {
+					value[i] = value[i].split('-')[0] + '-' + (Number(value[i].split('-')[0]) + 1);
+				}
+				tag += value[i];
+				if(i < len -1) {
+					tag += ", ";
+				}
+			}
+			tag += '<br>';
+		});
+		
+		return tag;
+	}
+</script>
 
 <!-- 
 	title : chat client script
@@ -500,10 +532,8 @@
 		input_name = trim(input_name);
 		
 		if(temp_name == input_name) {
-			console.log("same");
 			return '<b style="color:blue;">'+ input_name + '</b>';
 		} else {
-			console.log("not same");
 			return input_name;
 		}
 	}
