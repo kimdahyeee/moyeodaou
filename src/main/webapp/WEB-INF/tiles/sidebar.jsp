@@ -81,7 +81,7 @@
 					정말로 삭제하시겠어요?<br> (그룹원이 존재할 경우 삭제하실 수 없습니다.)
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default btn-lg btn-block" data-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 					<c:if test="${groupInfo.groupTotalCount eq 1}">
 						<a type="button" class="btn btn-primary" href="<c:url value='/group/${groupNo}/deleteGroup'/>">확인</a>
 					</c:if>
