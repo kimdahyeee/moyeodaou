@@ -10,6 +10,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +44,6 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
         actualFileUpload = newFileUpload(getFileItemFactory());
         actualFileUpload.setSizeMax(fileUpload.getSizeMax());
         actualFileUpload.setHeaderEncoding(encoding);
-        
         actualFileUpload.setProgressListener(getListener());
         return actualFileUpload;
     }
@@ -54,23 +54,7 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
     	try {           
             AjaxProgressListener listener = getListener();
             
-            /*
-            DiskFileItemFactory factory = new DiskFileItemFactory();
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            
-            List<FileItem> itemList = upload.parseRequest(request);
-            Iterator<FileItem> iter = itemList.iterator();
-            while(iter.hasNext()){
-            	FileItem item = (FileItem)iter.next();
-            	if(!(item.isFormField())){	//upload 파일 요청일 때
-            		String fileName = item.getName();
-            		System.out.println("파일이름:"+fileName+"/jsp id:"+item.getFieldName()+"/size:"+item.getSize());
-            		
-            	}
-            }
-            */
-            
-            System.out.println(request.getParameter("file_"+cnt));
+           System.out.println(request.getParameter("file_"+cnt));
             listener.setUploadId(request.getParameter("file_"+cnt));
             cnt++;
             listener.setSession(request.getSession());

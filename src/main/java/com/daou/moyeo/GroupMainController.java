@@ -28,6 +28,7 @@ import com.daou.moyeo.board.service.BoardService;
 import com.daou.moyeo.group.service.GroupService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
+import com.daou.moyeo.util.AjaxMultipartResolver;
 import com.daou.moyeo.util.FileUtil;
 
 @Controller
