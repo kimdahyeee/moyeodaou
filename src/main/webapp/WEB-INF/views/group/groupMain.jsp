@@ -299,7 +299,9 @@
 					<div class="chat_list" >
 						<strong>대화</strong><br>
 						<div id="chat_scroll" style="overflow:auto; height:400px;">
-							<a href="javascript:more_history();" class="center">더보기</a>
+							<div class="centered"> 
+								<a id="more" href="javascript:more_history();" class="centered"><b>채팅 기록 더보기</b></a>
+							</div>
 							<ul id="chat_list"> </ul>
 						</div>
 					</div>
