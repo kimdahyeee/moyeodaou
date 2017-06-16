@@ -536,6 +536,7 @@
 			alert("더 이상 불러올 기록이 없습니다");
 		} else {
 			for(var i = len; i >= 0 ; i--) {
+				var contents = decodeURI(data[i].CHAT_CONTENTS);
 				var member_name = check_me(data[i].MEMBER_NAME);
 				var msg = member_name + ":" + contents;
 				
