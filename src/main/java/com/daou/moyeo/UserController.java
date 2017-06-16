@@ -112,5 +112,10 @@ public class UserController {
 
 		return resultMap;
 	}
+	
+	@RequestMapping(value = "/denied")
+	public String deniedView() {
+		return "user/denied";
+	}
 }
  
