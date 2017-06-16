@@ -597,16 +597,15 @@
 </script>
 
 <script type="text/x-javascript">
- 	var cnt = 0;
+ 	var fileCnt = 0;
  	var progressBar = null;
- 	
+ 	console.log("initCnt:"+fileCnt);
  	function fn_addFile(){
- 		cnt++;
- 		console.log(cnt);
+ 		fileCnt++;
+ 		console.log(fileCnt);
  		var str = "<p>" +
- 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"' required='required'>"+
- 			//"<input type='button' value='삭제' class='deleteFile'>" +
- 			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+cnt+"</a>"+ 
+ 			"<input type='file' id='file_"+(fileCnt)+"' name='file_"+(fileCnt)+"' required='required'>"+
+ 			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+fileCnt+"</a>"+ 
  			"</p>";
  		$("#fileUpload-footer").append(str);
  		console.log('end');
@@ -618,7 +617,9 @@
  	}
  		
  	function fn_deleteFile(obj){
- 	         obj.parent().remove();
+ 			fileCnt--;
+ 		   	console.log(fileCnt);
+ 	        obj.parent().remove();
  	}
  	
  	function fn_getProgressInfo(){								// 프로그래스 바 정보 얻기
@@ -651,11 +652,22 @@
 	$(document).ready(function() {
 		<!-- 프로그래스 바 요청 -->
 		$('#uploadButton').click(function(){
-			console.log('uploadButton!!!!!');
 			progressBar = setInterval(function() {
 			 	   fn_getProgressInfo();
 			}, 10);
 		})
 	})
-	
+	/*
+	$(document).ready(function() {
+		$('#file_1').on("change",function(){
+			var fileText = $('#file_1').val();
+			fileText = fileText.slice(fileText.indexOf(".")+ 1).toLowerCase();
+			if(fileText != "jpg" && fileText != "png"){ 				
+				alert('업로드 파일은 JPG, PNG 확장자만 가능합니다');
+				$(#file_1).val("");
+				return;
+			}
+		});
+	});
+	*/
 </script>

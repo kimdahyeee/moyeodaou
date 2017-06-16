@@ -54,11 +54,11 @@
 									<label class="col-sm-2 col-sm-2 control-label">이미지</label>
 									<div class="col-sm-10">
 										<input type="file" class="btn btn-theme02" name="groupImg"
-											required="required">
+											id="groupImgType" required="required">
 									</div>
 								</div>
 								<div class="centered">
-									<button type="submit" class="btn btn-primary">생성</button>
+									<button type="submit" class="btn btn-primary" id="createBtn">생성</button>
 									<button type="button" class="btn btn-default"
 										data-dismiss="modal">취소</button>
 								</div>
@@ -100,3 +100,18 @@
 	</div>
 </section>
 <!-- /MAIN CONTENT -->
+
+<script>
+
+	$(document).ready(function() {
+		$('#groupImgType').on("change",function(){
+			var groupImgText = $('#groupImgType').val();
+			groupImgText = groupImgText.slice(groupImgText.indexOf(".")+ 1).toLowerCase();
+			if(groupImgText != "jpg" && groupImgText != "png"){ 				
+				alert('그룹 이미지는 JPG, PNG 확장자만 가능합니다');
+				$('#groupImgType').val("");
+				return;
+			}
+		});
+	});
+</script>
