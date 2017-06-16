@@ -326,8 +326,7 @@
 	author : Daeho Han
 	-->
 <script>
-	//var host = "175.115.95.51";
-	var host = "172.21.22.137";
+	var host = "175.115.95.51";
 	var port = "3000";
 	var cnt = 0;
 	var notify_cnt = 0;
