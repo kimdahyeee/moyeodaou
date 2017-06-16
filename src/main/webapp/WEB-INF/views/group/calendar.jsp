@@ -15,6 +15,7 @@
 			<div id="external-events">
 				<h4>드래그하여 일정을 추가해주세요.</h4>
 				<div class="fc-event">일정 추가</div>
+				<h5>등록된 일정은 노랑(클릭 시 삭제가능)</h5>
 			</div>
 			<div id="calendar"></div>
 			<input type="button" onclick="javascript:fnCalendar();" value="입력" />
@@ -133,6 +134,7 @@
 	function fnCalendar() {
 		var obj = $('#calendar').fullCalendar('clientEvents').map(function(e) {
 			return {
+				id : e.id,
 				start : e.start,
 				end : e.end
 			};
@@ -147,24 +149,26 @@
 			
 			for ( var key in obj) {
 				if (obj.hasOwnProperty(key)) {
-					var data = new Object();
-					
-					var startDate = new Date(obj[key].start);
-					var endDate = new Date(obj[key].end);
-					
-					data.scheduleDay = startDate.getUTCDay();
-					data.scheduleStartTime = startDate.getUTCHours();
-					
-					if(obj[key].end == null){
-						data.scheduleFinishTime = data.scheduleStartTime + 1;
-					} else{
-						if(endDate.getUTCHours() == 0){
-							data.scheduleFinishTime = 23;
-						} else {
-							data.scheduleFinishTime = endDate.getUTCHours() - 1;
+					if(obj[key].id == null) {
+						var data = new Object();
+						
+						var startDate = new Date(obj[key].start);
+						var endDate = new Date(obj[key].end);
+						
+						data.scheduleDay = startDate.getUTCDay();
+						data.scheduleStartTime = startDate.getUTCHours();
+						
+						if(obj[key].end == null){
+							data.scheduleFinishTime = data.scheduleStartTime + 1;
+						} else{
+							if(endDate.getUTCHours() == 0){
+								data.scheduleFinishTime = 23;
+							} else {
+								data.scheduleFinishTime = endDate.getUTCHours() - 1;
+							}
 						}
+						scheduleInfo.push(data);
 					}
-					scheduleInfo.push(data);
 				}
 			}
 			
