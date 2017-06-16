@@ -312,7 +312,7 @@
 	$(document).ready(function() {
 		initAvailableDate();
 		parseDateInfo(week);
-		$("#available_date").html(displayAvailableDate());
+		$("#available_date").html("<b style='color:black;'>"+displayAvailableDate() + "</b>");
 		
 	});
 	
