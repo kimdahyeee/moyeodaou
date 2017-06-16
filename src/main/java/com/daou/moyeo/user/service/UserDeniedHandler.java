@@ -20,7 +20,8 @@ public class UserDeniedHandler implements AccessDeniedHandler {
 			AccessDeniedException ade) throws IOException, ServletException {
 		
 		req.setAttribute("errMsg",ade.getMessage());
-		req.getRequestDispatcher("/WEB-INF/views/user/denied.jsp").forward(req, res);
+		res.sendRedirect(req.getContextPath()+"/denied");
+		//req.getRequestDispatcher("/WEB-INF/views/user/denied.jsp").forward(req, res);
 	}
 	
 }
