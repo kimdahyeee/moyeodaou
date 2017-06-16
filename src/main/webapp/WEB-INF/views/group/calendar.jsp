@@ -18,8 +18,8 @@
 				<h5>등록된 일정은 노랑(클릭 시 삭제가능)</h5>
 			</div>
 			<div id="calendar"></div>
-			<input type="button" onclick="javascript:fnCalendar();" value="입력" />
 			<div style="clear: both"></div>
+			<button type="button" class="btn btn-primary mt col-md-2 col-md-offset-5" onclick="javascript:fnCalendar();"> 등록 </button>
 		</div>
 	</section>
 </section>
@@ -101,31 +101,29 @@
                     });
                 },
                 eventClick : function(event, element) {
-                    var current = $(this);
-                    alert("event.id" + event.id);
-                    var scheduleNo = {
-        					scheduleNo : event.id 
-        			};
-                    if(confirm('삭제하시겠어요?')){
-                        $.ajax({
-                            url: "<c:url value='/deleteSchedule'/>",
-                            type: "POST",
-                            headers: { 
-            	                'Accept': 'application/json',
-            	                'Content-Type': 'application/json' 
-            	            },
-                            dataType: 'JSON',
-                            data : JSON.stringify(scheduleNo),
-                            success:function(result){
-                                if(result  == "1"){
-                              		$('#calendar').fullCalendar('removeEvents', event.id); 
-                                }
-                            },
-                            error: function (request, status, error) {  
-                                alert('Error on deleting the event ');
-                            }
-                        });
-                    } 
+	                    var scheduleNo = {
+	        					scheduleNo : event.id 
+	        			};
+	                    if(confirm('삭제하시겠어요?')){
+	                        $.ajax({
+	                            url: "<c:url value='/deleteSchedule'/>",
+	                            type: "POST",
+	                            headers: { 
+	            	                'Accept': 'application/json',
+	            	                'Content-Type': 'application/json' 
+	            	            },
+	                            dataType: 'JSON',
+	                            data : JSON.stringify(scheduleNo),
+	                            success:function(result){
+	                                if(result  == "1"){
+	                              		$('#calendar').fullCalendar('removeEvents', event.id); 
+	                                }
+	                            },
+	                            error: function (request, status, error) {  
+	                                alert('Error on deleting the event ');
+	                            }
+	                        });
+	                    }
                 }
 			});
 		}
@@ -198,11 +196,17 @@
 	            data: JSON.stringify(scheduleInfos),
 	            dataType: "json",
 	            success: function(data) {
-	            	alert("저장되었습니다.");
+	            	alert("저장되었습니다."); 
+	            	loadEvents();
 	            }
 	        });
 		} else {
 			alert("스케줄을 입력해 주세요.")
 		}
+	}
+	
+	function loadEvents() {
+		$('#calendar').fullCalendar( 'removeEvents');
+    	$('#calendar').fullCalendar( 'refetchEvents' );
 	}
 </script>
