@@ -1,6 +1,7 @@
 package com.daou.moyeo;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class JsonController {
 
 	@Resource(name="scheduleService")
 	private ScheduleService scheduleService;
+	
 	static CalculateSchedule calculateSchedule;
 	static AvailableDateTransfer availableDateTransfer;
 	
@@ -62,5 +64,12 @@ public class JsonController {
 	public List<Map<String, Object>> calendarEvent(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		List<Map<String, Object>> scheduleList = scheduleService.selectScheduleList(scheduleUserInfo);
 		return scheduleList;
+	}
+	
+	@RequestMapping(value = "/deleteSchedule", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public int deleteSchedule(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
+		int scheduleNo = (Integer) scheduleUserInfo.get("scheduleNo");
+		int result = scheduleService.deleteSchedule(scheduleNo);
+		return result;
 	}
 }

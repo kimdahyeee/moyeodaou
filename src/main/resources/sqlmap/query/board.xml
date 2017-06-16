@@ -38,13 +38,13 @@
 	</select>
 	
 	<delete id="deleteBoard">
-		DELETE FROM GROUP_BOARD_TB WHERE BOARD_NO = #{board_no}
+		DELETE FROM GROUP_BOARD_TB WHERE BOARD_NO = #{boardNo}
 	</delete>
 	
 	<update id="updateBoard">
 		UPDATE GROUP_BOARD_TB
 		SET	 	 CONTENTS= #{contents}
-		WHERE	 BOARD_NO = #{board_no}
+		WHERE	 BOARD_NO = #{boardNo}
 	</update>
 	
 	<resultMap type="hashmap" id="boardList">
