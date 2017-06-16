@@ -30,6 +30,7 @@ import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
+import com.daou.moyeo.util.AjaxMultipartResolver;
 import com.daou.moyeo.util.FileUtil;
 
 @Controller
@@ -83,7 +84,6 @@ public class GroupMainController {
 			map = sharing_list.get(i);						
 			System.out.println(map.get("file_name") + "," + map.get("member_no") + "," + map.get("group_file_no"));
 		}	*/
-		
 		model.addAttribute("sharingList", sharingList);
 		model.addAttribute("allMainBoardList", allMainBoardList);
 		model.addAttribute("groupNo", groupNo);

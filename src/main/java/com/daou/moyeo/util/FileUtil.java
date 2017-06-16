@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
@@ -113,5 +114,6 @@ public class FileUtil {
 		
 		return fileInfoList;
 	}
+	
 }
 

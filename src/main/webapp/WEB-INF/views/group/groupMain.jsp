@@ -636,6 +636,7 @@
 					$("#progressImg").html("전송중");
 					
 				}else{
+					console.log((result.pByteRead / result.pContentLength) * 100 );
 					clearInterval(progressBar);
 					//alert("끝");
 				}
@@ -653,7 +654,7 @@
 			console.log('uploadButton!!!!!');
 			progressBar = setInterval(function() {
 			 	   fn_getProgressInfo();
-			}, 100);
+			}, 10);
 		})
 	})
 	
