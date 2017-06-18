@@ -79,19 +79,17 @@ public class GroupController {
 		
 		TransactionStatus status = transactionManager.getTransaction(def);
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
+		Map<String, Object> groupMap = new HashMap<String, Object>();
+		groupMap.put("groupName", reqParams.get("groupName"));
+		groupMap.put("groupDesc", reqParams.get("groupDesc"));
+		groupMap.put("groupImg", fileInfoList.get(0).get("FILE_STORED_NAME"));
+		Map<String, Object> memGroupMap = new HashMap<String, Object>();
+		memGroupMap.put("groupName", reqParams.get("groupName"));
+		memGroupMap.put("memberNO", u.getMemberNo());
 		
 		try {
-			Map<String, Object> groupMap = new HashMap<String, Object>();
-			groupMap.put("groupName", reqParams.get("groupName"));
-			groupMap.put("groupDesc", reqParams.get("groupDesc"));
-			groupMap.put("groupImg", fileInfoList.get(0).get("FILE_STORED_NAME"));
 			groupService.insertGroup(groupMap);
-			
-			Map<String, Object> memGroupMap = new HashMap<String, Object>();
-			memGroupMap.put("groupName", reqParams.get("groupName"));
-			memGroupMap.put("memberNO", u.getMemberNo());
 			groupService.insertMemberGroup(memGroupMap);
-			
 			transactionManager.commit(status);
 		} catch (Exception e) {
 			transactionManager.rollback(status);
