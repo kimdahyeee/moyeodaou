@@ -79,6 +79,7 @@ public class JsonController {
 	@RequestMapping(value = "/deleteSchedule", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public int deleteSchedule(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		int scheduleNo = (Integer) scheduleUserInfo.get("scheduleNo");
+		update((Integer) scheduleUserInfo.get("groupNo"));
 		int result = scheduleService.deleteSchedule(scheduleNo);
 		return result;
 	}
