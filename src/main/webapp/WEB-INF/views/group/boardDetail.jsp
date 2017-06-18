@@ -20,7 +20,7 @@
 						<h4 class="mb">
 							<i class="fa fa-angle-right"></i> 게시글
 						</h4>
-						<form class="form-horizontal style-form" method="post" action="<c:url value='/group/${groupNo}/detailBoard/${ boardDetailMap.board_no}/update'/>">
+						<form class="form-horizontal style-form" method="post" action="<c:url value='/group/${groupNo}/detailBoard/${ boardDetailMap.boardNo}/update'/>">
 							<div class="form-group">
 								<label class="col-sm-2 col-sm-2 control-label">제목</label>
 								<div class="col-sm-10">
@@ -30,7 +30,7 @@
 							<div class="form-group">
 								<label class="col-lg-2 col-sm-2 control-label">작성자</label>
 								<div class="col-lg-10">
-									<p class="form-control-static">${boardDetailMap.member_name }</p>
+									<p class="form-control-static">${boardDetailMap.memberName }</p>
 								</div>
 							</div>
 							<div class="form-group">
@@ -39,11 +39,10 @@
 									<p class="form-control-static">${ boardDetailMap.contents}</p>
 								</div>
 							</div>
-							<c:set var="authorNO" value="${boardDetailMap.member_no}" />
+							<c:set var="authorNO" value="${boardDetailMap.memberNo}" />
 							<sec:authentication property="principal.memberNo" var="currentUserNO"/>
 							<c:if test="${ authorNO eq currentUserNO }">
-								<a href="<c:url value='/group/${groupNo}/deleteBoard/${ boardDetailMap.board_no}'/>" class="btn btn-default btn-lg btn-block" >삭제</a>
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+								<a href="<c:url value='/group/${groupNo}/deleteBoard/${ boardDetailMap.boardNo}'/>" class="btn btn-default btn-lg btn-block" >삭제</a>
 								<button type="submit" class="btn btn-default btn-lg btn-block">수정</button>
 							</c:if>
 							<a href="<c:url value='/group/${groupNo}/boardList'/>" class="btn btn-primary btn-lg btn-block">목록</a>

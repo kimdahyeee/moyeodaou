@@ -21,10 +21,7 @@ public class EmailUtil {
  
 	 @Autowired
 	 private EmailUtil emailUtil;
-	 
-	 /*
-	  	 configoureAndSend -> sendEmail 의 흐름으로 그룹초대 email 발송
-	  */
+	
 	public boolean configureAndSend(HttpSession session, String receiverEmail, String joinCode, int groupNo, int memberNo) {
     	EmailDTO email = new EmailDTO();
     	
@@ -38,27 +35,26 @@ public class EmailUtil {
 	    String content = sb.toString();						
 	    
 	    // TODO url 설정하기	
-	    content = content + "\n" +"http://localhost:8181/daou/invite/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
+	    if(memberNo != -1)
+	    	content = content + "\n" +"http://172.21.22.137:8181/daou/inviteUser/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
+	    else
+	    	content = content + "\n" +"http://172.21.22.137:8181/daou/inviteNotUser/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
 	    
 	    email.setReciver(reciver);
         email.setSubject(subject);
         email.setContent(content);
         
-        try {													// 이메일 발송 성공 , 실패 ??
+        try {													
 			return emailUtil.sendEmail(email);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("hee hee hee");
 			e.printStackTrace();
 			return false;
 		}						
         
     }
 	
-	/*
-	 * 설정된 Mime Msg로 발송
-	 * */
-    private boolean sendEmail(EmailDTO emailDTO) throws Exception {
+	private boolean sendEmail(EmailDTO emailDTO) throws Exception {
          
         MimeMessage msg = mailSender.createMimeMessage();
         msg.setSubject(emailDTO.getSubject());

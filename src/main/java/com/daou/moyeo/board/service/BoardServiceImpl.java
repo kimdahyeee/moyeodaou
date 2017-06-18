@@ -26,9 +26,9 @@ public class BoardServiceImpl extends SqlSessionDaoSupport implements BoardServi
 	}
 
 	@Override
-	public int updateBoard(int board_no, String contents) {
+	public int updateBoard(int boardNo, String contents) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("board_no", board_no);
+		map.put("boardNo", boardNo);
 		map.put("contents", contents);
 		return getSqlSession().update("board.updateBoard", map);
 	}

@@ -1,6 +1,9 @@
 package com.daou.moyeo.user.service;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +19,8 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserLoginSuccessHandler.class);
@@ -23,25 +28,22 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth)
 			throws IOException, ServletException {
-			logger.info(auth.getName());
-			logger.info(auth.getAuthorities().toString());
-		  logger.info(auth.getDetails().toString());
-		  logger.info(auth.getPrincipal().toString());
-		  for(GrantedAuthority a : auth.getAuthorities()){
-		   logger.info(a.getAuthority());
-		  }
-		   
+		
 		  UserDetails u = (UserDetails) auth.getPrincipal();
-		   
-		  logger.info(String.valueOf(u.isAccountNonExpired()));
-		  logger.info(String.valueOf(u.isAccountNonLocked()));
-		  logger.info(String.valueOf(u.isCredentialsNonExpired()));
-		  logger.info(String.valueOf(u.isEnabled()));
-		   
 		  System.out.println(u);
+		  ObjectMapper om = new ObjectMapper();
+		  Map<String, Object> map = new HashMap<String, Object>();
 		  
-		  //res.sendRedirect(req.getContextPath()+"/main");
-		  res.sendRedirect(getReturnUrl(req, res));
+		  map.put("KEY", "SUCCESS");
+		  if(getReturnUrl(req, res).equals("/daou")){
+			  map.put("RETURNURI", req.getContextPath()+"/main");
+		  } else {
+			  map.put("RETURNURI", getReturnUrl(req, res));
+		  }
+		  
+		  String returnJson = om.writeValueAsString(map);
+		  OutputStream out = res.getOutputStream();
+		  out.write(returnJson.getBytes());
 	}
 	
 	/** 

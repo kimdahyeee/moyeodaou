@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
@@ -22,6 +23,10 @@ public class FileUtil {
 	public static String getRandomName(){
 		return UUID.randomUUID().toString().replaceAll("-","");
 	}
+	
+	/*
+	 * Progress bar 구현을 위한 리스너 설정 
+	 * */
 	
 	/**
 	 *  file downLoad
@@ -37,7 +42,8 @@ public class FileUtil {
 		filePath = (String)fileInfo.get("file_path");
 		originalFileName = (String)fileInfo.get("file_name");
 		
-		fileByte = FileUtils.readFileToByteArray(new File(filePath));	
+		fileByte = FileUtils.readFileToByteArray(new File("c:/home/mean17/fileStore/" +filePath));	
+		//fileByte = FileUtils.readFileToByteArray(new File("/home/mean17/fileStore/" +filePath));	
 		
 		response.setContentType("application/octet-stream");
 	    response.setContentLength(fileByte.length);
@@ -48,6 +54,8 @@ public class FileUtil {
 	    
 	    response.getOutputStream().flush();
 	    response.getOutputStream().close();
+	    
+	    
 	}
 	
 	/**
@@ -56,8 +64,9 @@ public class FileUtil {
 	 * @return
 	 */
 	public List<Map<String, Object>> fileUpload(MultipartHttpServletRequest mhsr){
-		String path = "c://abc/";							
-		
+		String path = "c:/home/mean17/fileStore/";
+		//String path = "/home/mean17/fileStore/";
+
 		MultipartFile mfile = null;							
 		String originalFileName;							
 		Iterator<String> iter;
@@ -69,20 +78,26 @@ public class FileUtil {
 		try{							
 			iter = mhsr.getFileNames();
 			File file = new File(path);
+			
 	        if(file.exists() == false){
 	            file.mkdirs();
 	        }
 	        
 			while (iter.hasNext()) { 
-				mfile = mhsr.getFile(iter.next());				
+				
+				mfile = mhsr.getFile(iter.next());	
+				System.out.println("지금봐야할거" + mfile.getName());
 				originalFileName = mfile.getOriginalFilename();
 			
 				String temp = originalFileName.substring(originalFileName.lastIndexOf('.'));
-				storedName = path + getRandomName() + temp;
-				file = new File(storedName);		
+				storedName = getRandomName() + temp;
+				file = new File(path + storedName);		
 				
-				if(mfile.isEmpty() == false)
-					mfile.transferTo(file);						
+				if(mfile.isEmpty() == false){
+					System.out.println("===================file=========================");
+					System.out.println(file);
+					mfile.transferTo(file);
+				}
 				
 				map = new HashMap<String, Object>();
 				map.put("FILE_ORIGINAL_NAME", originalFileName);
@@ -99,5 +114,6 @@ public class FileUtil {
 		
 		return fileInfoList;
 	}
+	
 }
 

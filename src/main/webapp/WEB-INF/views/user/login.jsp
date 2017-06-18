@@ -4,12 +4,15 @@
 
 	<div id="login-page">
 		<div class="container">
-			<form class="form-login" method="post" action="<c:url value='/login'/>">
+			<form class="form-login" method="post" id="validateLogin" >
 				<h2 class="form-login-heading">sign in now</h2>
 				<div class="login-wrap">
-					<input type="text" class="form-control" placeholder="id" name="email" id="email" autofocus > <br> 
-					<input type="password" class="form-control" placeholder="Password" name="password" id="password" > <br>
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+					<div class="has-feedback">
+						<input type="text" class="form-control" placeholder="id" name="email" id="email" autofocus > <br> 
+					</div>
+					<div class="has-feedback">
+						<input type="password" class="form-control" placeholder="Password" name="password" id="password" > <br>
+					</div>
 					<button class="btn btn-theme btn-block" type="submit">
 						<i class="fa fa-lock"></i> 로그인
 					</button>

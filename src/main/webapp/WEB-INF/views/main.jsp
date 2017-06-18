@@ -35,26 +35,25 @@
 						</div>
 						<div class="modal-body">
 							<form class="form-horizontal style-form"
-								action="<c:url value='/createGroup?${_csrf.parameterName}=${_csrf.token}'/>"
+								action="<c:url value='/createGroup'/>"
 								method="post" enctype="multipart/form-data">
 								<div class="form-group">
 									<label class="col-sm-2 col-sm-2 control-label">그룹명</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" name="groupName">
+										<input type="text" class="form-control" name="groupName" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 col-sm-2 control-label">그룹 소개</label>
 									<div class="col-sm-10">
 										<input type="text" class="form-control"
-											placeholder="50자 내로 입력해주세요!" name="groupDesc">
+											placeholder="50자 내로 입력해주세요!" name="groupDesc" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 col-sm-2 control-label">이미지</label>
 									<div class="col-sm-10">
-										<input type="file" class="btn btn-theme02" name="groupImg"
-											required="required">
+										<input type="file" class="btn btn-theme02" name="groupImg" required>
 									</div>
 								</div>
 								<div class="centered">
@@ -87,7 +86,7 @@
 										<div class="col-sm-6 col-xs-6"></div>
 									</div>
 									<div class="centered">
-										<img src="${groupList[status.index].groupImg }" width="120">
+										<img src="/fileStore/${groupList[status.index].groupImg }" width="120">
 									</div>
 								</div>
 							</a>

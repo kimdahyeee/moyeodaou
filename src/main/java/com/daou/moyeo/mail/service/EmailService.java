@@ -1,6 +1,8 @@
 package com.daou.moyeo.mail.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +15,15 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.daou.moyeo.user.vo.UserDetailsVO;
 
 @Service("emailService")
 public class EmailService extends SqlSessionDaoSupport{
@@ -99,13 +109,10 @@ public class EmailService extends SqlSessionDaoSupport{
 		rmap.put("token", token);
 		rmap.put("email", email);
 		
-		System.out.println(token);
+		getSqlSession().insert("email.insertToken", map);
 		
 		hashOps.putAll(token, rmap);
-		
-		System.out.println("===============================================");
-		
-		System.out.println("test" +hashOps.get(token, "email"));
+		redisTemplate.expire(token, 5, TimeUnit.MINUTES);
 		
 		return token;
 	}
@@ -120,27 +127,25 @@ public class EmailService extends SqlSessionDaoSupport{
 		
 		map.put("groupNo", groupNo);
 		map.put("token", token);
+		map.put("email", email);
 		
 		rmap.put("memberNo", Integer.toString(-1));
 		rmap.put("groupNo", Integer.toString(groupNo));
 		rmap.put("token", token);
 		rmap.put("email", email);
 		
-		System.out.println(token);
+		getSqlSession().insert("email.insertTokenNonMember", map);
 		
 		hashOps.putAll(token, rmap);
 		redisTemplate.expire(token, 5, TimeUnit.MINUTES);
-		
-		System.out.println("===============================================");
-		System.out.println("test" +hashOps.get(token, "email"));
 		
 		return token;
 	}
 	/*
 	 * 회원의 그룹가입 삽입해주는 메소드
 	 * */
-	public void putNewMemberInGroup(Map<String, Object> map){
-		getSqlSession().insert("email.insertMemberGroupTB", map);
+	public int putNewMemberInGroup(Map<String, Object> map){
+		return getSqlSession().insert("email.insertMemberGroupTB", map);
 	}
 	
 }

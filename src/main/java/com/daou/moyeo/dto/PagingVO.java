@@ -20,7 +20,6 @@ public class PagingVO {
 	private int firstPageNoOnPageList;
 	private int lastPageNoOnPageList;
 	private int firstRecordIndex;
-	private int lastRecordIndex;
 	
 	public int getCurrentPageNo() {
 		return currentPageNo;
@@ -76,11 +75,6 @@ public class PagingVO {
 	public int getFirstRecordIndex() {
 		firstRecordIndex = (getCurrentPageNo() - 1) * getRecordCountPerPage();
 		return firstRecordIndex;
-	}
-
-	public int getLastRecordIndex() {
-		lastRecordIndex = getCurrentPageNo() * getRecordCountPerPage();
-		return lastRecordIndex;
 	}
 	
 }

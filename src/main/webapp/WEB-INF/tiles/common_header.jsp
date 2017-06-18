@@ -6,9 +6,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="_csrf" content="${_csrf.token}"/>
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>모여다우</title>
+	<title>모여다우</title>
+	
+	<link rel='stylesheet' href="<c:url value='/resources/css/fullcalendar.min.css'/>"  type="text/css" />
+	<link rel='stylesheet' href="<c:url value='/resources/css/fullcalendar.print.css'/>" type="text/css"  media='print' />
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/moment.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/jquery.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/fullCalendar/jquery-ui.min.js'/>"></script>
 	
 	<!-- Bootstrap core CSS -->
 	<link href="<c:url value='/resources/css/bootstrap.css'/>" rel="stylesheet">
@@ -22,27 +26,28 @@
 	
 	<link href="<c:url value='/resources/css/style-responsive.css'/>" rel="stylesheet">
 	
+	<!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+	
 	<script src="<c:url value='/resources/js/chart-master/Chart.js'/>"></script>
+	<!--<script src="<c:url value='/resources/node_modules/socket.io-client/dist/socket.io.js'/>"></script>-->
+	<script src="<c:url value='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js'/>"></script>
 	
-	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-	
-	<script src="<c:url value='/resources/node_modules/socket.io-client/dist/socket.io.js'/>"></script>
 
 </head>
 <body>
    	<sec:authentication property="principal.username" var="email" />
    	<sec:authentication property="principal.memberNo" var="memberNo" />
    	<sec:authentication property="principal.memberName" var="memberName" />
-	<section id="container"> <!-- **********************************************************************************************************************************************************
-      TOP BAR CONTENT & NOTIFICATIONS
-      *********************************************************************************************************************************************************** -->
+	<section id="container"> 
+	
 	<!--header start--> 
 	<header class="header black-bg">
 	<div class="sidebar-toggle-box">
 		<div class="fa fa-bars tooltips" data-placement="right"
 			data-original-title="Toggle Navigation"></div>
 	</div>
-	<!--logo start--> <a href="<c:url value='/main'/>" class="logo"><b>모여다우</b></a> <!--logo end-->
+	<!--logo start--> 
+	<a href="<c:url value='/main'/>" class="logo"><b>모여다우</b></a> <!--logo end-->
 	<div class="nav notify-row" id="top_menu">
 		<!--  notification start -->
 		<ul class="nav top-menu">
@@ -70,7 +75,8 @@
 		            	<input type="submit" class="logout" value="Logout"/>
 	           	</li>	
 	    	</ul>
-	    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
       	</form>
     </div>
 	</header> <!--header end--> 
+	
+	

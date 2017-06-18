@@ -8,8 +8,7 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
               	  <p class="centered">
-              	  <a href="#"><img src="<c:url value='resources/img/ui-sam.jpg'/>" class="img-circle" width="60"></a>
-              	  ${groupInfo.groupImg}
+              	  <a href="#"><img src="/fileStore/${groupInfo.groupImg}" class="img-circle" width="60"></a>
               	  </p>
               	  <h5 class="centered">${groupInfo.groupName}</h5>
               	  	
@@ -42,7 +41,7 @@
                   </li>
                   </sec:authorize>
                   <li class="sub-menu">
-                      <a href="#" data-toggle="modal" data-target="#addSchedule">
+                      <a href="<c:url value='/group/${groupNo}/calendar'/>">
                           <i class="fa fa-dashboard"></i>
                           <span>일정등록</span>
                       </a>
@@ -107,7 +106,6 @@
 							<label class="col-sm-2 col-sm-2 control-label">email주소</label>
 							<div class="col-sm-10">
 								<input type="email" name="receiverId" class="form-control">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 							</div>
 						</div>
 						<div class="centered">
@@ -119,5 +117,5 @@
 				</div>
 			</div>
 		</div>
-	</div> <!--sidebar end--> 
-	
+	</div> 
+	<!--sidebar end-->

@@ -1,6 +1,7 @@
 package com.daou.moyeo;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +9,14 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +28,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daou.moyeo.board.service.BoardService;
 import com.daou.moyeo.group.service.GroupService;
+import com.daou.moyeo.observer.CalculateSchedule;
+import com.daou.moyeo.schedule.service.ScheduleService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
 import com.daou.moyeo.util.FileUtil;
@@ -39,6 +47,15 @@ public class GroupMainController {
 	@Resource(name="groupService")
 	private GroupService groupService;
 	
+	@Resource(name="scheduleService")
+	private ScheduleService scheduleService;    
+	
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+
+	@Resource(name="redisTemplate")
+	private HashOperations<String, String, String> hashOps;
+	
 	/**
 	 *  그룹 메인 화면
 	 * @param model
@@ -46,11 +63,16 @@ public class GroupMainController {
 	 * @return
 	 */
 	@RequestMapping(value = "/group/{groupNo}")
-	public String groupMainInit(@PathVariable("groupNo") int groupNo, Model model, Authentication auth) {		
+	public String groupMainInit(@PathVariable("groupNo") int groupNo,
+			Model model,
+			Authentication auth) {		
 		
-		//TODO 그룹 권한 삽입
 		System.out.println("Group Main Init()");
 		
+		//Daeho 2017.06.16 schedule
+		Map<String, String> availableDate = new HashMap<String, String>();
+		CalculateSchedule cs = new CalculateSchedule(scheduleService, redisTemplate, hashOps);
+	
 		//Daeho 2017.06.07 chat
 		Map<String, Object> currentInfo = new HashMap<String, Object>();
 		UserDetailsVO u = (UserDetailsVO)auth.getPrincipal();
@@ -58,12 +80,18 @@ public class GroupMainController {
 		currentInfo.put("memberName", u.getMemberName());
 		currentInfo.put("groupNo", groupNo);
 		
-		List<Map<String, Object>> sharing_list = fileService.getFileList(groupNo);  // load Group Fille List
+		List<Map<String, Object>> sharingList = fileService.getFileList(groupNo);  // load Group Fille List
 		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // load Group Board List
 		
 		Map<String, Object> groupInfo = groupService.selectGroupInfo(groupNo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> groupMemberList = groupService.selectGroupMemberList(currentInfo);
+		
+		availableDate = hashOps.entries("available_date:"+groupNo);
+		if(availableDate == null) {
+			cs.setGroupNo(groupNo);
+			cs.calculateSchedule();
+		}
 		
 		//=============== FileList Test ===================//
 		/*for(int i=0;i<sharing_list.size();i++){
@@ -71,8 +99,7 @@ public class GroupMainController {
 			map = sharing_list.get(i);						
 			System.out.println(map.get("file_name") + "," + map.get("member_no") + "," + map.get("group_file_no"));
 		}	*/
-		
-		model.addAttribute("sharing_list", sharing_list);
+		model.addAttribute("sharingList", sharingList);
 		model.addAttribute("allMainBoardList", allMainBoardList);
 		model.addAttribute("groupNo", groupNo);
 		model.addAttribute("groupInfo", groupInfo); // daeho 2017.06.07 chat
@@ -80,6 +107,7 @@ public class GroupMainController {
 		model.addAttribute("groupMemberList", groupMemberList); 
 		model.addAttribute("memberNo", currentInfo.get("memberNo"));
 		model.addAttribute("memberName", currentInfo.get("memberName"));
+		model.addAttribute("availableDate", availableDate);
 		
 		return "groupMain";
 	}
@@ -117,13 +145,47 @@ public class GroupMainController {
 		List<Map<String, Object>> fileInfoList;
 		
 		System.out.println("GroupmainController mapping fileUpload");
-		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
+	    MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		fileInfoList = fileUtil.fileUpload(mhsr);
 		
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		fileService.insertFileInfo(fileInfoList, groupNo, u.getMemberNo());			
 	
 		return "redirect:/group/" + groupNo;
+	}
+	
+	@RequestMapping(value = "/fileUpload/progress", method = RequestMethod.POST)
+	public void uploadProgress(
+	        HttpSession session
+	        ,HttpServletResponse response) {
+	 
+		System.out.println("uploadProgress()");
+	    JSONObject jsonResult = null;
+	    Object uploadInfo = session.getAttribute("UPLOAD_INFO_PREFIX");
+	    if(uploadInfo != null)
+	    {
+	        jsonResult = (JSONObject)uploadInfo;
+	    }
+	    else
+	    {
+	        jsonResult = new JSONObject();
+	        jsonResult.put("pBytesRead", 0);
+	        jsonResult.put("pContentLenght", 0);
+	    }
+	 
+	    try {
+	        String jsonStr = jsonResult.toJSONString();
+	 
+	        System.out.println("session안에 든 값들 ::"+jsonStr);
+	        response.setContentType("text/xml; charset=UTF-8");
+	        PrintWriter out = response.getWriter();
+	        out.println(jsonStr);
+	        out.flush();
+	        out.close();
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
 	}
 	
 	@RequestMapping(value = "/group/{groupNo}/deleteGroup")
@@ -143,4 +205,5 @@ public class GroupMainController {
 		System.out.println("result : "  + result);
 		return "redirect:/main";
 	}
+	
 }
