@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daou.moyeo.dto.ScheduleDTO;
-import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
+import com.daou.moyeo.util.CalculateSchedule;
 
 @RestController
 public class JsonController {

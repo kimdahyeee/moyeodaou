@@ -28,10 +28,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daou.moyeo.board.service.BoardService;
 import com.daou.moyeo.group.service.GroupService;
-import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
 import com.daou.moyeo.user.service.FileService;
 import com.daou.moyeo.user.vo.UserDetailsVO;
+import com.daou.moyeo.util.CalculateSchedule;
 import com.daou.moyeo.util.FileUtil;
 
 @Controller

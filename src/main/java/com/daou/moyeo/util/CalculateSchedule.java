@@ -5,7 +5,7 @@
  * Contents : Observable 클래스를 상속 받아 가능한 날짜를 계산하고 Observer들에게 notify 하는 클래스
  */
 
-package com.daou.moyeo.observer;
+package com.daou.moyeo.util;
 
 import java.util.Calendar;
 import java.util.HashMap;
