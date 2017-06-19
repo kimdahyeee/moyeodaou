@@ -139,8 +139,14 @@
 					<h3>회의 가능 시간</h3>
 					</div>
 					<div class="mb" id="chat_form" style="display:none;">
+							<div class="current_added_list">
+							<strong>현재 등록 리스트</strong>
+							<ul id="current_added_list">
+							</ul>
+							</div>
 						<div class="white-panel desc donut-chart">
-							<div id="available_date"></div>
+							<div id="available_date">
+							</div>
 						</div>
 						<!--/grey-panel -->
 					</div>
@@ -185,58 +191,6 @@
 			<!-- /row -->
 		</section>
 </section>
-<!--  
-	title : available date client script
-	author : Daeho Han
- -->
-<script>
-	var day = ['SUN', 'MON', "TUE", "WED", "THU", "FRI", "SAT"];
-	var week = [];
-	var result = new Object();
-	
-	$(document).ready(function() {
-		initAvailableDate();
-		parseDateInfo(week);
-		$("#available_date").html("<b style='color:black;'>"+displayAvailableDate() + "</b>");
-		
-	});
-	
-	function parseDateInfo(week) {
-		var len = week.length;
-		var temp;
-		for(var i = 0; i < len; i++) {
-			temp = week[i].split(";");
-			result[day[i]] = temp;
-		}
-	}
-	
-	function initAvailableDate() {
-		<c:forEach var="entry" items="${availableDate}" varStatus="status">
-			week.push('${entry.value}');
-		</c:forEach>
-	}
-	
-	function displayAvailableDate() {
-		var tag = "";
-		$.each(result, function(index, value) {
-			var len = (value.length-1)
-			tag += index + ":";
-			for(var i = 0; i < len; i++) {
-				var temp = value[i].split('-')[1];
-				if(temp == 0) {
-					value[i] = value[i].split('-')[0] + '-' + (Number(value[i].split('-')[0]) + 1);
-				}
-				tag += value[i];
-				if(i < len -1) {
-					tag += ", ";
-				}
-			}
-			tag += '<br>';
-		});
-		
-		return tag;
-	}
-</script>
 
 <!-- 
 	title : chat client script
@@ -262,7 +216,7 @@
 	
 	var group_info = [];
 	var channel = group.group_no;
-	var member_list = [];
+	var member_list = new Object();
 	var chat_socket = null;
 	var group_socket = null;
 	var history_date = null;
@@ -272,8 +226,8 @@
 		group_socket = io.connect('http://' + host + ':' + port + '/group');
 	
 		init_list();
+		console.log(member_list);
 		
-		member_list = set_member_list(member_list);
 		
 		//Enroll Chatting info
 		chat_socket.emit('chat_join', { member: member, channel: channel });
@@ -405,10 +359,11 @@
 		</c:forEach>
 		
 		<c:forEach items="${groupMemberList}" var="gmList">
-			member_list.push({
+		console.log('${gmList.memberNo}');
+			member_list['${gmList.memberNo}'] = {
 				MEMBER_NO: '${gmList.memberNo}',
 				MEMBER_NAME: '${gmList.memberName}' 
-				});
+				};
 		</c:forEach>
 	};
 	
@@ -478,37 +433,21 @@
 
 	// current connected member and state Object
 	function current_connect(memeber_list, connect_list) {
-		console.log("current_connect");
-		var temp_key = Object.keys(member_list);
-		var mem_len = temp_key.length;
 		var con_len = connect_list.length;
 		var current_connected_users = new Object();
-
-		for(var i = 0; i < mem_len; i++) {
-			current_connected_users[temp_key[i]] = { member_name : member_list[temp_key[i]], state : 'disconnected' };
-		}
-
-		for(var i = 0; i < con_len; i++) {
-			var result = member_list[connect_list[i]];
-			if(result != undefined)  {
-				current_connected_users[connect_list[i]] = { member_name : result, state : 'connected' };
+		
+		$.each(member_list, function(index, value) {
+			current_connected_users[index] = { member_name : value.MEMBER_NAME, state : 'disconnected' };
+			for(var i = 0; i < con_len; i++) {
+				if(index == connect_list[i]) {
+					current_connected_users[index].state = 'connected';
+				}
 			}
-		}
+		});
 
 		return current_connected_users;
 	};
 
-	// member list in same group
-	function set_member_list(member_list) {
-		var len = member_list.length;
-		var result = [];
-
-		for(var i = 0; i < len; i++) {
-			var member = member_list;
-			result[member[i].MEMBER_NO] = member[i].MEMBER_NAME;
-		}
-		return result;
-	};
 </script>
 
 <script type="text/x-javascript">
@@ -520,8 +459,13 @@
 	});
  	
  	function fn_addFile(){
+<<<<<<< HEAD
  		fileCnt++;
  		console.log(fileCnt);
+=======
+ 		cnt++
+ 		console.log(cnt);
+>>>>>>> unregister_member
  		var str = "<p>" +
  			"<input type='file' id='file' name='file_"+(fileCnt)+"' required='required'>"+
  			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+"</a>"+ 
@@ -611,4 +555,99 @@
 		});
 	});
 	*/
+	
+</script>
+
+<!--  
+	title : available date client script
+	author : Daeho Han
+ -->
+<script>
+	var day = ['SUN', 'MON', "TUE", "WED", "THU", "FRI", "SAT"];
+	var week = [];
+	var result = new Object();
+	var added_member_list = [];
+	
+	$(document).ready(function() {
+		initAvailableDate();
+		init_schedule_member();
+		parseDateInfo(week);
+		$("#available_date").html("<b style='color:black;'>"+displayAvailableDate() + "</b>");
+		append_added_member_list(member_list, added_member_list);
+	});
+	
+	function parseDateInfo(week) {
+		var len = week.length;
+		var temp;
+		for(var i = 0; i < len; i++) {
+			temp = week[i].split(";");
+			result[day[i]] = temp;
+		}
+	}
+	
+	
+	function init_schedule_member() {
+		<c:forEach items="${addedScheduleMemberList}" var="asmList">
+			added_member_list.push('${asmList.memberNo}');
+		</c:forEach>
+
+	}
+	
+	function initAvailableDate() {
+		<c:forEach var="entry" items="${availableDate}" varStatus="status">
+			week.push('${entry.value}');
+		</c:forEach>
+	}
+	
+	function current_added_schedule(member_list, added_schedule_list)  {
+		var current_added_member = new Object();
+		var len = added_schedule_list.length;
+		
+		$.each(member_list, function(index, value) {
+			current_added_member[index] = { member_name : value.MEMBER_NAME, state : 'no'};
+			for(var i = 0; i < len; i++) {
+				if(index == added_schedule_list[i]) {
+					current_added_member[index].state = 'yes';
+				}
+			}
+		});
+		
+		return current_added_member;
+	};
+	
+	function append_added_member_list(member_list, added_member_list) {
+		var current_added_member = current_added_schedule(member_list, added_member_list); 
+		
+		$.each(current_added_member, function (index, value){
+			var state;
+			if(value.state == "no") {	
+				state = '<span style="color:red;"><b>미등록<b></span>';
+			} else {
+				state = '<span style="color:green;"><b>등록완료<b></span>';
+				
+			}
+			$('#current_added_list').append('<li>' + current_added_member[index].member_name + " : "+ state +'</li>');
+		});
+	}
+	
+	function displayAvailableDate() {
+		var tag = "";
+		$.each(result, function(index, value) {
+			var len = (value.length-1)
+			tag += index + ":";
+			for(var i = 0; i < len; i++) {
+				var temp = value[i].split('-')[1];
+				if(temp == 0) {
+					value[i] = value[i].split('-')[0] + '-' + (Number(value[i].split('-')[0]) + 1);
+				}
+				tag += value[i];
+				if(i < len -1) {
+					tag += ", ";
+				}
+			}
+			tag += '<br>';
+		});
+		
+		return tag;
+	}
 </script>

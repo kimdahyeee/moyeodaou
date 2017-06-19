@@ -86,8 +86,11 @@ public class GroupMainController {
 		Map<String, Object> groupInfo = groupService.selectGroupInfo(groupNo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> groupMemberList = groupService.selectGroupMemberList(currentInfo);
+		List<Map<String, Object>> addedScheduleMemberList = scheduleService.selectAddedScheduleMember(currentInfo);
+		System.out.println(addedScheduleMemberList.size());
 		
 		availableDate = hashOps.entries("available_date:"+groupNo);
+		
 		if(availableDate == null) {
 			cs.setGroupNo(groupNo);
 			cs.calculateSchedule();
@@ -108,6 +111,7 @@ public class GroupMainController {
 		model.addAttribute("memberNo", currentInfo.get("memberNo"));
 		model.addAttribute("memberName", currentInfo.get("memberName"));
 		model.addAttribute("availableDate", availableDate);
+		model.addAttribute("addedScheduleMemberList", addedScheduleMemberList);
 		
 		return "groupMain";
 	}
