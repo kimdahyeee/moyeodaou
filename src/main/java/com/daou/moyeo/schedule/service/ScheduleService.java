@@ -10,4 +10,5 @@ public interface ScheduleService {
 	public List<Map<String,Object>> selectScheduleWeekList(Map<String, Object> inputInfo);
 	public List<Map<String, Object>> selectScheduleList(Map<String, Object> scheduleUserInfo);
 	public int deleteSchedule(int scheduleNo);
+	public List<Map<String, Object>> selectAddedScheduleMember(Map<String, Object> scheduleUserInfo);
 }

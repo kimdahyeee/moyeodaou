@@ -151,4 +151,5 @@ public class CalculateSchedule {
 	public void scheduleChanged() {
 		hashOps.putAll("available_date:" + this.groupNo, this.availableDateMap);
 	}
+	
 }

@@ -31,5 +31,9 @@ public class ScheduleServiceImpl extends SqlSessionDaoSupport implements Schedul
 		return getSqlSession().delete("schedule.deleteSchedule", scheduleNo);
 	}
 	
+	@Override
+	public List<Map<String, Object>> selectAddedScheduleMember(Map<String, Object> scheduleUserInfo) {
+		return getSqlSession().selectList("schedule.selectAddedScheduleMember", scheduleUserInfo);
+	}
 	
 }
