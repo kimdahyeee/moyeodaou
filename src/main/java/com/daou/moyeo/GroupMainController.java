@@ -79,6 +79,7 @@ public class GroupMainController {
 		currentInfo.put("memberNo", u.getMemberNo());
 		currentInfo.put("memberName", u.getMemberName());
 		currentInfo.put("groupNo", groupNo);
+		currentInfo.put("weekStartDate", cs.getThisWeekStartDate());
 		
 		List<Map<String, Object>> sharingList = fileService.getFileList(groupNo);  // load Group Fille List
 		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // load Group Board List
