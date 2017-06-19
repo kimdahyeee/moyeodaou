@@ -125,121 +125,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- /////////////////////////////////////// Schedule Modal //////////////////////////////////////////////////  -->
-					<%-- <div class="modal fade" id="addSchedule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">일정등록<h4>
-								</div>
-								<div class="modal-body">
-								
-								<div id="right">
-									<table id="table2">
-									<colgroup>
-										<col width="50"/>
-										<col width="100"/>
-										<col width="100"/>
-										<col width="100"/>
-										<col width="100"/>
-										<col width="100"/>
-									</colgroup>
-									<tbody>
-									<tr>
-										<!-- if checkbox is checked, clone school subjects to the whole table row  -->
-										<td class="mark blank"><input id="week" type="checkbox" title="Apply school subjects to the week"/></td>
-										<td class="mark dark">Monday</td>
-										<td class="mark dark">Tuesday</td>
-										<td class="mark dark">Wednesday</td>
-										<td class="mark dark">Thursday</td>
-										<td class="mark dark">Friday</td>
-									</tr>
-									<tr>
-										<td class="mark dark">8:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">9:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">10:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">11:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">12:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">13:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">14:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">15:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">16:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									</tbody>
-								</table>
-							</div><!-- right container -->
-								
-								</div>
-								<div class="modal-footer">
-								</div>
-							</div>
-						</div>
-					</div> --%>
-					
-					
-					
 				</div>
 				<!-- /col-lg-9 END SECTION MIDDLE -->
 
@@ -255,27 +140,7 @@
 					</div>
 					<div class="mb" id="chat_form" style="display:none;">
 						<div class="white-panel desc donut-chart">
-							<div class="row">
-								<div class="col-sm-6 col-xs-6 goleft">
-									<p>
-										<i class="fa fa-database"></i> 50%
-									</p>
-								</div>
-							</div>
-							<canvas id="serverstatus01" height="120" width="120"></canvas>
-							<script>
-								var doughnutData = [
-										{
-											value: 50,
-											color:"#68dff0"
-										},
-										{
-											value : 50,
-											color : "#fdfdfd"
-										}
-									];
-									var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
-							</script>
+							<div id="available_date"></div>
 						</div>
 						<!--/grey-panel -->
 					</div>
@@ -320,6 +185,58 @@
 			<!-- /row -->
 		</section>
 </section>
+<!--  
+	title : available date client script
+	author : Daeho Han
+ -->
+<script>
+	var day = ['SUN', 'MON', "TUE", "WED", "THU", "FRI", "SAT"];
+	var week = [];
+	var result = new Object();
+	
+	$(document).ready(function() {
+		initAvailableDate();
+		parseDateInfo(week);
+		$("#available_date").html("<b style='color:black;'>"+displayAvailableDate() + "</b>");
+		
+	});
+	
+	function parseDateInfo(week) {
+		var len = week.length;
+		var temp;
+		for(var i = 0; i < len; i++) {
+			temp = week[i].split(";");
+			result[day[i]] = temp;
+		}
+	}
+	
+	function initAvailableDate() {
+		<c:forEach var="entry" items="${availableDate}" varStatus="status">
+			week.push('${entry.value}');
+		</c:forEach>
+	}
+	
+	function displayAvailableDate() {
+		var tag = "";
+		$.each(result, function(index, value) {
+			var len = (value.length-1)
+			tag += index + ":";
+			for(var i = 0; i < len; i++) {
+				var temp = value[i].split('-')[1];
+				if(temp == 0) {
+					value[i] = value[i].split('-')[0] + '-' + (Number(value[i].split('-')[0]) + 1);
+				}
+				tag += value[i];
+				if(i < len -1) {
+					tag += ", ";
+				}
+			}
+			tag += '<br>';
+		});
+		
+		return tag;
+	}
+</script>
 
 <!-- 
 	title : chat client script
@@ -500,10 +417,8 @@
 		input_name = trim(input_name);
 		
 		if(temp_name == input_name) {
-			console.log("same");
-			return '<b>'+ input_name + '</b>';
+			return '<b style="color:blue;">'+ input_name + '</b>';
 		} else {
-			console.log("not same");
 			return input_name;
 		}
 	}

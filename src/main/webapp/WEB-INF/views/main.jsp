@@ -40,14 +40,14 @@
 								<div class="form-group">
 									<label class="col-sm-2 col-sm-2 control-label">그룹명</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" name="groupName">
+										<input type="text" class="form-control" name="groupName" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 col-sm-2 control-label">그룹 소개</label>
 									<div class="col-sm-10">
 										<input type="text" class="form-control"
-											placeholder="50자 내로 입력해주세요!" name="groupDesc">
+											placeholder="50자 내로 입력해주세요!" name="groupDesc" required>
 									</div>
 								</div>
 								<div class="form-group">

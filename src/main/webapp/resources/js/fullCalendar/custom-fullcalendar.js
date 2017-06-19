@@ -74,6 +74,7 @@
                 },
                 eventClick : function(event, element) {
 	                    var scheduleNo = {
+	                    		groupNo : $("#groupNo").val(), 
 	        					scheduleNo : event.id 
 	        			};
 	                    if(confirm('삭제하시겠어요?')){
