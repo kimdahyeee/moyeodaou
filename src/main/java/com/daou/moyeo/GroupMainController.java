@@ -2,6 +2,8 @@ package com.daou.moyeo;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +73,12 @@ public class GroupMainController {
 		
 		//Daeho 2017.06.16 schedule
 		Map<String, String> availableDate = new HashMap<String, String>();
+		ArrayList<String> dayList = new ArrayList<String>(
+				Arrays.asList("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"));
 		CalculateSchedule cs = new CalculateSchedule(scheduleService, redisTemplate, hashOps);
+		
+		
+		List<String> values = hashOps.multiGet("available_date:"+groupNo, dayList);
 	
 		//Daeho 2017.06.07 chat
 		Map<String, Object> currentInfo = new HashMap<String, Object>();
@@ -90,12 +97,19 @@ public class GroupMainController {
 		List<Map<String, Object>> addedScheduleMemberList = scheduleService.selectAddedScheduleMember(currentInfo);
 		System.out.println(addedScheduleMemberList.size());
 		
-		availableDate = hashOps.entries("available_date:"+groupNo);
+		int i = 0;
 		
-		if(availableDate == null) {
+		if(values == null) {
+			System.out.println("null");
 			cs.setGroupNo(groupNo);
 			cs.calculateSchedule();
+			values = hashOps.multiGet("available_date:"+groupNo, dayList);
 		}
+		
+		for (String day: dayList) {
+			availableDate.put(day, values.get(i++));
+		}
+		
 		
 		model.addAttribute("sharingList", sharingList);
 		model.addAttribute("allMainBoardList", allMainBoardList);
