@@ -86,7 +86,7 @@ public class FileUtil {
 			while (iter.hasNext()) { 
 				
 				mfile = mhsr.getFile(iter.next());	
-				System.out.println("지금봐야할거" + mfile.getName());
+				System.out.println("mfile 사이즈" + mfile.getSize());
 				originalFileName = mfile.getOriginalFilename();
 			
 				String temp = originalFileName.substring(originalFileName.lastIndexOf('.'));

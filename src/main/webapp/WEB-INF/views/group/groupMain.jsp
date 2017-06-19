@@ -110,7 +110,7 @@
 									<input type="button" value="+" id="addFile">
 									<button type="submit" id="uploadButton">완료</button>
 									<br>
-									<div id="progressImg" style="width:0%; background-color: red;"></div>전송상황
+									<div id="progressImg" style="width:0%; background-color: green;"></div>전송상황
 			 					</div>
 								<div class="modal-footer" id="fileUpload-footer">
 										<a href="#this"	id="fileUpload2"></a>
@@ -460,19 +460,13 @@
 	});
  	
  	function fn_addFile(){
-<<<<<<< HEAD
- 		fileCnt++;
- 		console.log(fileCnt);
-=======
  		cnt++
  		console.log(cnt);
->>>>>>> unregister_member
  		var str = "<p>" +
  			"<input type='file' id='file' name='file_"+(fileCnt)+"' required='required'>"+
  			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+"</a>"+ 
  			"</p>";
  		$("#fileUpload-footer").append(str);
- 		console.log('end');
  		
 		$(".delete").on("click", function(e){ 						// 삭제 버튼
 			e.preventDefault();
@@ -495,7 +489,7 @@
 			var fileText = $('[id="file"]').eq(index).val();
 			fileText = fileText.slice(fileText.indexOf(".")+ 1).toLowerCase();
 			if(fileText != "jpg" && fileText != "png" && fileText != "pptx" && fileText != "xlsx" && fileText != "docx"){ 				
-				alert('그룹 이미지는 JPG, PNG, PPTX, XLSX, DOCX 확장자만 가능합니다');
+				alert('공유 파일은 JPG, PNG, PPTX, XLSX, DOCX 확장자만 가능합니다');
 				$('[id="file"]').eq(index).val("");
 				return;
 			}
@@ -503,9 +497,7 @@
  	}
  	
  	function fn_deleteFile(obj){
- 			//fileCnt--;
- 		   	//console.log(fileCnt);
- 	        obj.parent().remove();
+ 			obj.parent().remove();
  	}
  	
  	function fn_getProgressInfo(){								// 프로그래스 바 정보 얻기
@@ -540,7 +532,7 @@
 		$('#uploadButton').click(function(){
 			progressBar = setInterval(function() {
 			 	   fn_getProgressInfo();
-			}, 10);
+			}, 50);
 		})
 	})
 	/*

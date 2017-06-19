@@ -44,7 +44,7 @@
    <beans:bean id="multipartResolver"
 		class="com.daou.moyeo.util.AjaxMultipartResolver">
 		
-		<beans:property name="maxUploadSize" value="10000000" />
+		<beans:property name="maxUploadSize" value="-1" />
 	</beans:bean>
 
 	<beans:bean id="jedisConnectinFactory"
