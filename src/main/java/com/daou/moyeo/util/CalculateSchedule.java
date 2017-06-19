@@ -80,7 +80,6 @@ public class CalculateSchedule {
 		}
 		
 		for(int i = 0; i < 14; i++)  {
-			
 			for(int j = 0; j < 7; j++) {
 				System.out.print(" [");
 				System.out.print(resultSchedule[i][j]);
