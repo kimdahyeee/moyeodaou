@@ -32,7 +32,7 @@
                           <div class="form-group">
                               <label class="col-sm-2 col-sm-2 control-label">내용</label>
                               <div class="col-sm-10">
-                                  <textarea class="form-control" rows="15" name="contents"></textarea>
+                                  <textarea class="form-control" rows="15" maxlength="5000" name="contents" placeholder="최대 5000자 이하로 입력해주세요."></textarea>
                               </div>
                           </div>
                           <button type="submit" class="btn btn-primary btn-lg btn-block">작성 완료</button>
