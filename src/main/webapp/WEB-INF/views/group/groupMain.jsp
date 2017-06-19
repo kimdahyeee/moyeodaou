@@ -506,18 +506,14 @@
 			dataType : "json",
 			method: "post",
 			success: function(result){
-				//alert(+ result.pByteRead + " / " + result.pContentLength);
-				console.log(+ result.pByteRead + " / " + result.pContentLength);
 				if(result.pByteRead < result.pContentLength){
 					// 프로그래스바 진행상황 보여주기
-					console.log((result.pByteRead / result.pContentLength) * 100 );
 					$("#progressImg").css("width", (result.pByteRead / result.pContentLength) * 100 +"%");
 					$("#progressImg").html("전송중");
 					
 				}else{
 					console.log((result.pByteRead / result.pContentLength) * 100 );
 					clearInterval(progressBar);
-					//alert("끝");
 				}
 			}
 		});
