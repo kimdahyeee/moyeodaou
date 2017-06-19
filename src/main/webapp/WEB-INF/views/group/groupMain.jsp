@@ -170,7 +170,7 @@
 
 					<div class="chat_list" >
 						<strong>대화</strong><br>
-						<div id="chat_scroll" style="overflow:auto; height:400px;">
+						<div id="chat_scroll" style="overflow:scroll; overflow-x:hidden; height:400px;">
 							<div class="centered"> 
 								<a id="more" href="javascript:more_history();" class="centered"><b>채팅 기록 더보기</b></a>
 							</div>
@@ -460,8 +460,8 @@
 	});
  	
  	function fn_addFile(){
- 		cnt++
- 		console.log(cnt);
+ 		fileCnt++;
+ 		console.log(fileCnt);
  		var str = "<p>" +
  			"<input type='file' id='file' name='file_"+(fileCnt)+"' required='required'>"+
  			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+"</a>"+ 
@@ -552,7 +552,7 @@
 	author : Daeho Han
  -->
 <script>
-	var day = ['SUN', 'MON', "TUE", "WED", "THU", "FRI", "SAT"];
+	var day = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 	var week = [];
 	var result = new Object();
 	var added_member_list = [];
@@ -560,7 +560,6 @@
 	$(document).ready(function() {
 		initAvailableDate();
 		init_schedule_member();
-		parseDateInfo(week);
 		$("#available_date").html("<b style='color:black;'>"+displayAvailableDate() + "</b>");
 		append_added_member_list(member_list, added_member_list);
 	});
@@ -583,9 +582,14 @@
 	}
 	
 	function initAvailableDate() {
-		<c:forEach var="entry" items="${availableDate}" varStatus="status">
-			week.push('${entry.value}');
+		var temp;	
+		var key;
+		<c:forEach items="${availableDate}" var="entry" varStatus="status">	
+			key = trim('${entry.key}');
+			temp = '${entry.value}'.split(';');
+			result[key] = { time : temp, seq : day.indexOf(key)};
 		</c:forEach>
+		
 	}
 	
 	function current_added_schedule(member_list, added_schedule_list)  {
@@ -622,14 +626,14 @@
 	function displayAvailableDate() {
 		var tag = "";
 		$.each(result, function(index, value) {
-			var len = (value.length-1)
-			tag += index + ":";
+			var len = ((value.time.length)-1)
+			tag += index + " : ";
 			for(var i = 0; i < len; i++) {
-				var temp = value[i].split('-')[1];
+				var temp = value.time[i].split('-')[1];
 				if(temp == 0) {
-					value[i] = value[i].split('-')[0] + '-' + (Number(value[i].split('-')[0]) + 1);
+					value.time[i] = value.time[i].split('-')[0] + '-' + (Number(value.time[i].split('-')[0]) + 1);
 				}
-				tag += value[i];
+				tag += value.time[i];
 				if(i < len -1) {
 					tag += ", ";
 				}
