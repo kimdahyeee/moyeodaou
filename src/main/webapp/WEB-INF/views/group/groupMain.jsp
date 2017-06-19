@@ -556,12 +556,15 @@
 	var week = [];
 	var result = new Object();
 	var added_member_list = [];
+	var sortedResult = [];
 	
 	$(document).ready(function() {
 		initAvailableDate();
-		init_schedule_member();
+		initScheduleMember();
+		sortAvailableDate();
+		console.log(result);
 		$("#available_date").html("<b style='color:black;'>"+displayAvailableDate() + "</b>");
-		append_added_member_list(member_list, added_member_list);
+		appendAddedMember(member_list, added_member_list);
 	});
 	
 	function parseDateInfo(week) {
@@ -574,7 +577,7 @@
 	}
 	
 	
-	function init_schedule_member() {
+	function initScheduleMember() {
 		<c:forEach items="${addedScheduleMemberList}" var="asmList">
 			added_member_list.push('${asmList.memberNo}');
 		</c:forEach>
@@ -592,7 +595,7 @@
 		
 	}
 	
-	function current_added_schedule(member_list, added_schedule_list)  {
+	function currentAddedSchedule(member_list, added_schedule_list)  {
 		var current_added_member = new Object();
 		var len = added_schedule_list.length;
 		
@@ -608,8 +611,8 @@
 		return current_added_member;
 	};
 	
-	function append_added_member_list(member_list, added_member_list) {
-		var current_added_member = current_added_schedule(member_list, added_member_list); 
+	function appendAddedMember(member_list, added_member_list) {
+		var current_added_member = currentAddedSchedule(member_list, added_member_list); 
 		
 		$.each(current_added_member, function (index, value){
 			var state;
@@ -623,23 +626,42 @@
 		});
 	}
 	
+	function sortAvailableDate() {
+		sortedResult = [];
+		$.each(result, function(index, value) {
+			sortedResult.push(value);
+		});
+		
+		sortedResult.sort(compareSequence);
+	}
+	
+	function compareSequence(day1, day2) {
+		if(day1.seq > day2.seq) return 1;
+		if(day1.seq <= day2.seq) return -1;
+		
+		return 0;
+	}
+	
 	function displayAvailableDate() {
 		var tag = "";
-		$.each(result, function(index, value) {
-			var len = ((value.time.length)-1)
-			tag += index + " : ";
-			for(var i = 0; i < len; i++) {
-				var temp = value.time[i].split('-')[1];
+		var slen = sortedResult.length;
+		
+		for (var i = 0; i < slen; i++) {
+			var len = (sortedResult[i].time.length - 1) ;
+			tag += day[i] + " : ";
+			if(len == 0) tag += "가능한 시간 없음";
+			for (var j = 0; j < len; j++) {
+				var temp = sortedResult[i].time[j].split('-')[1];
 				if(temp == 0) {
-					value.time[i] = value.time[i].split('-')[0] + '-' + (Number(value.time[i].split('-')[0]) + 1);
+					sortedResult[i].time[j] = sortedResult[i].time[j].split('-')[0] + '-' + (Number(sortedResult[i].time[j].split('-')[0]) + 1);
 				}
-				tag += value.time[i];
-				if(i < len -1) {
+				tag += sortedResult[i].time[j];
+				if(j < (len-1)) {
 					tag += ", ";
 				}
 			}
 			tag += '<br>';
-		});
+		}
 		
 		return tag;
 	}
