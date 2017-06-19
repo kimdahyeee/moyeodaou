@@ -47,7 +47,7 @@ public class CalculateSchedule {
 	
 	public void calculateSchedule() {
 		int groupNo = this.groupNo;
-		int[][] resultSchedule = new int[15][7];
+		int[][] resultSchedule = new int[14][7];
 		List<Map<String, Object>> scheduleList = loadScheduleList(groupNo);
 		
 		Map<String, String> resultMap = new HashMap<String, String>();
@@ -79,7 +79,7 @@ public class CalculateSchedule {
 			
 		}
 		
-		for(int i = 0; i < 15; i++)  {
+		for(int i = 0; i < 14; i++)  {
 			
 			for(int j = 0; j < 7; j++) {
 				System.out.print(" [");
@@ -91,13 +91,13 @@ public class CalculateSchedule {
 		
 		/* caculate available Date logic */
 		for(int i = 0; i < 7; i++) {
-			for(int j = 0; j < 15; j++) {
+			for(int j = 0; j < 14; j++) {
 				if(resultSchedule[j][i] == 0 && isStart == false) {
 					temp_start = j + 6;
 					isStart = true;
 				} else if (resultSchedule[j][i] == 0 && isStart == true) {
 					temp_end = j + 6;
-					if(j == 14) {
+					if(j == 13) {
 						temp_str += ((temp_start + "-" + temp_end) + ";");
 						isStart = false;
 					}

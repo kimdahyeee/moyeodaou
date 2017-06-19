@@ -631,7 +631,7 @@
 			for(var i = 0; i < len; i++) {
 				var temp = value.time[i].split('-')[1];
 				if(temp == 0) {
-					value[i] = value.time[i].split('-')[0] + '-' + (Number(value.time[i].split('-')[0]) + 1);
+					value.time[i] = value.time[i].split('-')[0] + '-' + (Number(value.time[i].split('-')[0]) + 1);
 				}
 				tag += value.time[i];
 				if(i < len -1) {
