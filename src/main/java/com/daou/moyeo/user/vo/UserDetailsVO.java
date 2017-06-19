@@ -36,9 +36,9 @@ public class UserDetailsVO implements UserDetails {
 		return authorities;
 	}
 	
-	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+	/*public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
-	}
+	}*/
 
 	@Override
 	public String getPassword() {
@@ -153,36 +153,5 @@ public class UserDetailsVO implements UserDetails {
 
 		return sb.toString();
 	}
-	
-	/*private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
-	
-	private int memberNo;
-
-	public UserDetailsVO(String username, String password, boolean enabled, boolean accountNonExpired,
-			boolean credentialsNonExpired, boolean accountNonLocked,
-			Collection<? extends GrantedAuthority> authorities, int memberNo) {
-		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-		this.memberNo = memberNo;
-	}
-
-	
-	public int getMemberNo() {
-		return memberNo;
-	}
-
-	public void setMemberNo(int memberNo) {
-		this.memberNo = memberNo;
-	}
-	
-	public void setAuthorities(String authority) {
-		super.authorities.add(new SimpleGrantedAuthority(authority));
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "; memberNo: "+this.memberNo;
-	}*/
-	
-	
 	
 }

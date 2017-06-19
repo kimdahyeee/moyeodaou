@@ -19,6 +19,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
+import com.daou.moyeo.user.vo.UserDetailsVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -29,7 +30,7 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth)
 			throws IOException, ServletException {
 		
-		  UserDetails u = (UserDetails) auth.getPrincipal();
+		  UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		  System.out.println(u);
 		  ObjectMapper om = new ObjectMapper();
 		  Map<String, Object> map = new HashMap<String, Object>();
