@@ -82,6 +82,7 @@
 				FROM MEMBER_GROUP_TB 
 				WHERE GROUP_NO = #{groupNo})
 				AND NOT MEMBER_NO = #{memberNo}
+				AND WEEK_START_DATE = #{weekStartDate}
 		 GROUP BY MEMBER_NO;
 	</select>
 	

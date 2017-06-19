@@ -138,14 +138,15 @@
 					<div class="flat_item">
 					<h3>회의 가능 시간</h3>
 					</div>
-					<div class="mb" id="chat_form" style="display:none;">
+					<div class="mb" id="chat_form">
+						<div class=" desc">
 							<div class="current_added_list">
-							<strong>현재 등록 리스트</strong>
-							<ul id="current_added_list">
-							</ul>
+								<strong>현재 등록 리스트</strong>
+								<ul id="current_added_list">
+								</ul>
 							</div>
-						<div class="white-panel desc donut-chart">
-							<div id="available_date">
+							<strong>가능한 날짜/시간</strong>
+							<div id="available_date" class="centered">
 							</div>
 						</div>
 						<!--/grey-panel -->
