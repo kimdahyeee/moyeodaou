@@ -50,15 +50,6 @@ public class EmailController {
 	    	String receiverEmail = req.getParameter("receiverId");										 	
 	    	String token;
 	    	
-	    	System.out.println("EmailController() - receiver : " + req.getParameter("receiverId"));
-	        
-	    	/* 수신 email 이 회원 인지 아닌지 확인하는 서비스
-    	 	회원 -> MemberNo얻고 같은 그룹에서 온 초대는 제외검사 -> Token 생성 -> 그룹가입 msg 전송 -> 수신자 확인 url 접속 -> DB에 저장된 token 값 확인 -> 완료
-    	 	url:/invite/groupNo/memberNo/token
-    	 	비회원 -> token 생성 및 회원가입 url 전송 -> UserController에서 그룹가입 자동 완료
-	    	url:/join/groupNo/notMember/token
-	    	 */
-	    	
 	    	if(emailService.checkMemberOrNot(receiverEmail)){
 	    		// 회원
 	    		Map<String, Object> map = new HashMap<String, Object>();
@@ -72,28 +63,20 @@ public class EmailController {
 			    	
 		    		if(emailUtil.configureAndSend(session, receiverEmail, token, groupNo, receiverNo)){
 			        	// 성공
-		    			System.out.println("발송) 회원 -> 성공");
 		    			return "redirect:/group/" + groupNo;
 			        }else{
 			        	// 실패
-			        	System.out.println("발송) 회원 -> 실패");
 			        	return "redirect:/group/" + groupNo;
 			    	}
 		    	}else{																		// 같은 그룹에서 온 초대
-		    		System.out.println("같은 그룹에서 온 초대 발송 X");
 		    		return "redirect:/group/" + groupNo;
 		    	}
 		    	
 	    	}else{
 	    		token = emailService.createToken(groupNo, receiverEmail);
 	    		
-	    		if(emailUtil.configureAndSend(session, receiverEmail, token, groupNo, -1)){		// 비회원 receiverNo : -1
-	    			System.out.println("발송) 비회원 -> 성공");
-		    		
-	    		}else{
-	    			System.out.println("발송) 비회원 -> 실패");
-		    		
-	    		}
+	    		emailUtil.configureAndSend(session, receiverEmail, token, groupNo, -1);		// 비회원 receiverNo : -1
+	    		
 	    		return "redirect:/group/" + groupNo;
 	    	}
 	    }
@@ -102,17 +85,12 @@ public class EmailController {
 	    @RequestMapping(value = "/inviteUser/{groupNo}/{memberNo}/", method=RequestMethod.GET)
 	    public String checkRequestUser(@PathVariable("groupNo") int groupNo, @PathVariable("memberNo") int memberNo, @RequestParam("joincode") String code, Authentication auth, Model model){
 	    	
-	    	/* Session 확인 
-	    	 * groupNo, memberNo, token 으로 유효한 url 접근인지 확인. -> DB insert
-	    	 * */
 	    	Map<String, Object> map = new HashMap<String, Object>();
-	    	System.out.println("checkRequest() - code:"+code);
 	    	String result = null;
 	    	
 	    		if (auth != null) {
 	    			UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 	    			if(memberNo != u.getMemberNo()){
-	    				System.out.println("session 일치 X , " + memberNo + "/"+u.getMemberNo());
 	    				return "user/denied";
 	    			}
 	    		}
@@ -120,9 +98,6 @@ public class EmailController {
 	    		result = hashOps.get(code, "token");
 	    		
 	    		if(code != result){
-	    			// true (유효한 접근임을 확인)
-	    			System.out.println("CODE_TB에 저장된 값과 url 값이 동일");
-	    			// DB에 해당 회원 MEMBER_GROUP_TB에 새롭게 insert 해주는 Service 추가
 	    			map.put("groupNo", groupNo);
 		    		map.put("memberNo", memberNo);
 		    		map.put("token", code);
@@ -155,7 +130,6 @@ public class EmailController {
 
 	    		model.addAttribute("notMemberInfo", notMemberInfo);
 	    		
-	    		System.out.println("+++++"+notMemberInfo.get("email"));
 	    		return "user/signUp"; 
 	    	
 	    }
