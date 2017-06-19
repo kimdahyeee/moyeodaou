@@ -39,11 +39,13 @@ public class FileUtil {
 		String originalFileName;		
 		byte fileByte[] = null;
 		
-		filePath = (String)fileInfo.get("file_path");
-		originalFileName = (String)fileInfo.get("file_name");
+		filePath = (String)fileInfo.get("filePath");
+		originalFileName = (String)fileInfo.get("fileName");
 		
-		//fileByte = FileUtils.readFileToByteArray(new File("c:/home/mean17/fileStore/" +filePath));	
-		fileByte = FileUtils.readFileToByteArray(new File("/home/mean17/fileStore/" +filePath));	
+		System.out.println("c:/home/mean17/fileStore/" +filePath);
+		fileByte = FileUtils.readFileToByteArray(new File("c:/home/mean17/fileStore/" +filePath));	
+		//fileByte = FileUtils.readFileToByteArray(new File("/home/mean17/fileStore/" +filePath));	
+		
 		
 		response.setContentType("application/octet-stream");
 	    response.setContentLength(fileByte.length);
@@ -64,8 +66,8 @@ public class FileUtil {
 	 * @return
 	 */
 	public List<Map<String, Object>> fileUpload(MultipartHttpServletRequest mhsr){
-		//String path = "c:/home/mean17/fileStore/";
-		String path = "/home/mean17/fileStore/";
+		String path = "c:/home/mean17/fileStore/";
+		//String path = "/home/mean17/fileStore/";
 
 		MultipartFile mfile = null;							
 		String originalFileName;							

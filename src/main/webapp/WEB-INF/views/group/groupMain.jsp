@@ -460,8 +460,8 @@
 	});
  	
  	function fn_addFile(){
- 		cnt++
- 		console.log(cnt);
+ 		fileCnt++;
+ 		console.log(fileCnt);
  		var str = "<p>" +
  			"<input type='file' id='file' name='file_"+(fileCnt)+"' required='required'>"+
  			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+"</a>"+ 

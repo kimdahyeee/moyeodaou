@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 
 public class AjaxProgressListener implements ProgressListener{
 	
-	HttpSession session;											// 정보가 담길 session
+	HttpSession session;											
 	
     public void setSession(HttpSession session){
     	this.session = session;

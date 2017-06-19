@@ -36,9 +36,9 @@ public class EmailUtil {
 	    
 	    // TODO url 설정하기	
 	    if(memberNo != -1)
-	    	content = content + "\n" +"http://172.21.22.137:8181/daou/inviteUser/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
+	    	content = content + "\n" +"http://175.115.95.51:8181/daou/inviteUser/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
 	    else
-	    	content = content + "\n" +"http://172.21.22.137:8181/daou/inviteNotUser/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
+	    	content = content + "\n" +"http://175.115.95.51:8181/daou/inviteNotUser/" + groupNo + "/" + memberNo + "/?joincode=" + joinCode;				
 	    
 	    email.setReciver(reciver);
         email.setSubject(subject);
