@@ -600,12 +600,16 @@
  	var fileCnt = 0;
  	var progressBar = null;
  	console.log("initCnt:"+fileCnt);
+ 	
+ 	$(document).ready(function() {
+	});
+ 	
  	function fn_addFile(){
  		fileCnt++;
  		console.log(fileCnt);
  		var str = "<p>" +
- 			"<input type='file' id='file_"+(fileCnt)+"' name='file_"+(fileCnt)+"' required='required'>"+
- 			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+fileCnt+"</a>"+ 
+ 			"<input type='file' id='file' name='file_"+(fileCnt)+"' required='required'>"+
+ 			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+"</a>"+ 
  			"</p>";
  		$("#fileUpload-footer").append(str);
  		console.log('end');
@@ -614,11 +618,33 @@
 			e.preventDefault();
 			fn_deleteFile($(this));
 		});
+		/*
+		$('[id="file"]').eq(0).on("change",function(){
+			var groupImgText = $('[id="file"]').eq(0).val();
+			groupImgText = groupImgText.slice(groupImgText.indexOf(".")+ 1).toLowerCase();
+			if(groupImgText != "jpg" && groupImgText != "png"){ 				
+				alert('그룹 이미지는 JPG, PNG 확장자만 가능합니다');
+				$('[id="file"]').eq(0).val("");
+				return;
+			}
+		});*/
+		
+		$('[id="file"]').on("change",function(){
+			var index = $('[id="file"]').index(this);
+			console.log("순서:"+index);
+			var fileText = $('[id="file"]').eq(index).val();
+			fileText = fileText.slice(fileText.indexOf(".")+ 1).toLowerCase();
+			if(fileText != "jpg" && fileText != "png" && fileText != "pptx" && fileText != "xlsx" && fileText != "docx"){ 				
+				alert('그룹 이미지는 JPG, PNG, PPTX, XLSX, DOCX 확장자만 가능합니다');
+				$('[id="file"]').eq(index).val("");
+				return;
+			}
+		});
  	}
- 		
+ 	
  	function fn_deleteFile(obj){
- 			fileCnt--;
- 		   	console.log(fileCnt);
+ 			//fileCnt--;
+ 		   	//console.log(fileCnt);
  	        obj.parent().remove();
  	}
  	
