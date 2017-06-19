@@ -79,7 +79,7 @@ public class GroupMainController {
 		
 		
 		List<String> values = hashOps.multiGet("available_date:"+groupNo, dayList);
-	
+		
 		//Daeho 2017.06.07 chat
 		Map<String, Object> currentInfo = new HashMap<String, Object>();
 		UserDetailsVO u = (UserDetailsVO)auth.getPrincipal();
@@ -95,12 +95,10 @@ public class GroupMainController {
 		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> groupMemberList = groupService.selectGroupMemberList(currentInfo);
 		List<Map<String, Object>> addedScheduleMemberList = scheduleService.selectAddedScheduleMember(currentInfo);
-		System.out.println(addedScheduleMemberList.size());
 		
 		int i = 0;
-		
-		if(values == null) {
-			System.out.println("null");
+		if(values.get(0) == null) {
+			System.out.println("Redis null!");
 			cs.setGroupNo(groupNo);
 			cs.calculateSchedule();
 			values = hashOps.multiGet("available_date:"+groupNo, dayList);
