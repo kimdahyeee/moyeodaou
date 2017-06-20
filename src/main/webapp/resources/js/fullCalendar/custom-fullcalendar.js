@@ -85,6 +85,8 @@ $(document).ready(function() {
 	                            success:function(result){
 	                                if(result  == "1"){
 	                              		$('#calendar').fullCalendar('removeEvents', event.id); 
+	                                } else {
+	                                	alert('실패');
 	                                }
 	                            },
 	                            error: function (request, status, error) {  
