@@ -1,4 +1,4 @@
-package com.daou.moyeo.user.service;
+package com.daou.moyeo.file.service;
 
 import java.util.HashMap;
 import java.util.List;
