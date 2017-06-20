@@ -75,7 +75,6 @@ public class FileUtil {
 		Map<String, Object> map = null;							
 		String storedName = null;
 		
-		System.out.println("fileUpload() call");
 		try{							
 			iter = mhsr.getFileNames();
 			File file = new File(path);
@@ -94,8 +93,6 @@ public class FileUtil {
 				file = new File(path + storedName);		
 				
 				if(mfile.isEmpty() == false){
-					System.out.println("===================file=========================");
-					System.out.println(file);
 					mfile.transferTo(file);
 				}
 				
@@ -105,11 +102,10 @@ public class FileUtil {
 				map.put("FILE_SIZE", mfile.getSize());
 				fileInfoList.add(map);
 				
-				System.out.println(storedName);
 			}
 			
 		}catch (Exception e) {
-			System.out.println("Hee - " + e.getMessage());
+			System.out.println(e.getMessage());
 		}
 		
 		return fileInfoList;

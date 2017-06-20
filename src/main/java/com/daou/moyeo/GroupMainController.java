@@ -69,8 +69,6 @@ public class GroupMainController {
 			Model model,
 			Authentication auth) {		
 		
-		System.out.println("Group Main Init()");
-		
 		//Daeho 2017.06.16 schedule
 		Map<String, String> availableDate = new HashMap<String, String>();
 		ArrayList<String> dayList = new ArrayList<String>(
@@ -79,7 +77,7 @@ public class GroupMainController {
 		
 		
 		List<String> values = hashOps.multiGet("available_date:"+groupNo, dayList);
-	
+		
 		//Daeho 2017.06.07 chat
 		Map<String, Object> currentInfo = new HashMap<String, Object>();
 		UserDetailsVO u = (UserDetailsVO)auth.getPrincipal();
@@ -95,12 +93,11 @@ public class GroupMainController {
 		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> groupMemberList = groupService.selectGroupMemberList(currentInfo);
 		List<Map<String, Object>> addedScheduleMemberList = scheduleService.selectAddedScheduleMember(currentInfo);
-		System.out.println(addedScheduleMemberList.size());
 		
 		int i = 0;
-		
-		if(values == null) {
-			System.out.println("null");
+
+		if(values.get(0) == null) {
+			System.out.println("Redis null!");
 			cs.setGroupNo(groupNo);
 			cs.calculateSchedule();
 			values = hashOps.multiGet("available_date:"+groupNo, dayList);
@@ -140,7 +137,6 @@ public class GroupMainController {
 		try {
 			fileUtil.fileDownload(fileInfo, response);
 		} catch (IOException e) {
-			System.out.println("file download error");
 			e.printStackTrace();
 		}
     }
@@ -157,8 +153,7 @@ public class GroupMainController {
 		
 		List<Map<String, Object>> fileInfoList;
 		
-		System.out.println("GroupmainController mapping fileUpload");
-	    MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
+		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		fileInfoList = fileUtil.fileUpload(mhsr);
 		
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
@@ -172,8 +167,7 @@ public class GroupMainController {
 	        HttpSession session
 	        ,HttpServletResponse response) {
 	 
-		System.out.println("uploadProgress()");
-	    JSONObject jsonResult = null;
+		JSONObject jsonResult = null;
 	    Object uploadInfo = session.getAttribute("UPLOAD_INFO_PREFIX");
 	    if(uploadInfo != null)
 	    {
@@ -189,7 +183,6 @@ public class GroupMainController {
 	    try {
 	        String jsonStr = jsonResult.toJSONString();
 	 
-	        System.out.println("session안에 든 값들 ::"+jsonStr);
 	        response.setContentType("text/xml; charset=UTF-8");
 	        PrintWriter out = response.getWriter();
 	        out.println(jsonStr);
@@ -204,7 +197,6 @@ public class GroupMainController {
 	@RequestMapping(value = "/group/{groupNo}/deleteGroup")
 	public String groupDelete(@PathVariable("groupNo") int groupNo){
 		int result = groupService.deleteGroup(groupNo);
-		System.out.println("result : "  + result);
 		return "redirect:/main";
 	}
 	
@@ -215,7 +207,6 @@ public class GroupMainController {
 		deleteMemberInfo.put("memberNo", u.getMemberNo());
 		deleteMemberInfo.put("groupNo", groupNo);
 		int result = groupService.deleteGroupMember(deleteMemberInfo);
-		System.out.println("result : "  + result);
 		return "redirect:/main";
 	}
 	

@@ -80,7 +80,6 @@ public class CalculateSchedule {
 		}
 		
 		for(int i = 0; i < 14; i++)  {
-			
 			for(int j = 0; j < 7; j++) {
 				System.out.print(" [");
 				System.out.print(resultSchedule[i][j]);
@@ -98,19 +97,22 @@ public class CalculateSchedule {
 				} else if (resultSchedule[j][i] == 0 && isStart == true) {
 					temp_end = j + 6;
 					if(j == 13) {
-						temp_str += ((temp_start + "-" + temp_end) + ";");
+						temp_str += ((temp_start + "-" + temp_end)  + ";");
 						isStart = false;
 					}
 				} else if (resultSchedule[j][i] != 0 && isStart == true) {
 					temp_str += ((temp_start + "-" + temp_end) + ";");
 					isStart = false;
-				} 
+				} else if (resultSchedule[j][i] != 0 && isStart == false) {
+					continue;
+				}
 			}
 			System.out.println(dayList[i] + " : " + temp_str);
 			resultMap.put(dayList[i], temp_str);
 			temp_str = "";
 			temp_start = 0;
 			temp_end = 0;
+			isStart = false;
 		}
 		
 		setAvailableDateMap(resultMap);
@@ -149,6 +151,7 @@ public class CalculateSchedule {
 	}
 	
 	public void scheduleChanged() {
+		hashOps.delete("available_date:" + this.groupNo, "MON", "TUE", "WED", "THU", "FRI", "SAT");
 		hashOps.putAll("available_date:" + this.groupNo, this.availableDateMap);
 	}
 	
