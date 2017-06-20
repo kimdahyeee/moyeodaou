@@ -151,6 +151,7 @@ public class CalculateSchedule {
 	}
 	
 	public void scheduleChanged() {
+		hashOps.delete("available_date:" + this.groupNo, "MON", "TUE", "WED", "THU", "FRI", "SAT");
 		hashOps.putAll("available_date:" + this.groupNo, this.availableDateMap);
 	}
 	
