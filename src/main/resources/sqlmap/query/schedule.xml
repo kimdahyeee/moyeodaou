@@ -19,6 +19,11 @@
 		<result property="scheduleFinishTime" column="SCHEDULE_FINISH_TIME" javaType="int"/>
 	</resultMap>
 	
+	<resultMap id="addedMemberInfo"  type="hashmap">
+		<result property="groupNo" column="GROUP_NO" javaType="int"/>
+		<result property="memberNo" column="MEMBER_NO" javaType="int"/>
+	</resultMap>
+	
 	
 	<insert id="insertScheduleInfo" parameterType="com.daou.moyeo.dto.ScheduleDTO">
 		INSERT INTO SCHEDULE_TB(
@@ -64,6 +69,21 @@
 		FROM SCHEDULE_TB
 		WHERE GROUP_NO = #{groupNo} 
 			AND	WEEK_START_DATE = #{weekStartDate}
+	</select>
+	
+	<select id="selectAddedScheduleMember" parameterType="int" resultMap="addedMemberInfo">
+		SELECT 
+			MEMBER_NO, 
+			GROUP_NO 
+		FROM SCHEDULE_TB 
+		WHERE MEMBER_NO IN 
+				(SELECT 
+					MEMBER_NO 
+				FROM MEMBER_GROUP_TB 
+				WHERE GROUP_NO = #{groupNo})
+				AND NOT MEMBER_NO = #{memberNo}
+				AND WEEK_START_DATE = #{weekStartDate}
+		 GROUP BY MEMBER_NO;
 	</select>
 	
 	<delete id="deleteSchedule">

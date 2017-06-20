@@ -1,4 +1,4 @@
-	$(document).ready(function() {
+$(document).ready(function() {
 		if ($("#calendar").length > 0) {
 			$('#external-events .fc-event').each(function() {
 				// store data so the calendar knows to render an event upon drop
@@ -20,12 +20,6 @@
 
 			/* initialize the calendar
 			-----------------------------------------------------------------*/
-			var today = new Date();
-			var dd = today.getDate();
-			var mm = today.getMonth()+1; //January is 0!
-			var yyyy = today.getFullYear();
-			var sundayDate = new Date(yyyy, mm-1, dd-today.getUTCDay());
-			
 			$('#calendar').fullCalendar({
 				header : {
 					right : ''
@@ -73,9 +67,11 @@
                     });
                 },
                 eventClick : function(event, element) {
-	                    var scheduleNo = {
+	                    var scheduleUserInfo = {
+	                    		groupNo : $("#groupNo").val(), 
 	        					scheduleNo : event.id 
 	        			};
+
 	                    if(confirm('삭제하시겠어요?')){
 	                        $.ajax({
 	                            url: "/daou/deleteSchedule",
@@ -85,10 +81,12 @@
 	            	                'Content-Type': 'application/json' 
 	            	            },
 	                            dataType: 'JSON',
-	                            data : JSON.stringify(scheduleNo),
+	                            data : JSON.stringify(scheduleUserInfo),
 	                            success:function(result){
 	                                if(result  == "1"){
 	                              		$('#calendar').fullCalendar('removeEvents', event.id); 
+	                                } else {
+	                                	alert('실패');
 	                                }
 	                            },
 	                            error: function (request, status, error) {  
@@ -143,7 +141,7 @@
 			var mm = today.getMonth()+1; //January is 0!
 			var yyyy = today.getFullYear();
 			var sundayDate = new Date(yyyy, mm-1, dd-today.getUTCDay());
-
+			
 			var scheduleInfos = {
 					groupNo : $("#groupNo").val(), 
 					memberNo : $("#memberNo").val(),
@@ -178,6 +176,3 @@
     	$('#calendar').fullCalendar( 'refetchEvents' );
 	}
 	
-	function calSunday(){
-		
-	}

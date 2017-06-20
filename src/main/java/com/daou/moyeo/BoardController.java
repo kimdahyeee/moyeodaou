@@ -139,8 +139,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping(value ="/updateBoard/{boardNo}", method=RequestMethod.POST)
-	public String updateBoard( @PathVariable("groupNo") int groupNo, @PathVariable("boardNo") int boardNo,
-			@RequestParam("contents") String contents){
+	public String updateBoard( @PathVariable("groupNo") int groupNo, @PathVariable("boardNo") int boardNo,@RequestParam("contents") String contents){
 		boardService.updateBoard(boardNo, contents);
 		return  "redirect:/group/"+groupNo+"/boardList";
 	}

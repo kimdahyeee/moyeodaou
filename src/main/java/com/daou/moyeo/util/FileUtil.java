@@ -39,11 +39,12 @@ public class FileUtil {
 		String originalFileName;		
 		byte fileByte[] = null;
 		
-		filePath = (String)fileInfo.get("file_path");
-		originalFileName = (String)fileInfo.get("file_name");
+		filePath = (String)fileInfo.get("filePath");
+		originalFileName = (String)fileInfo.get("fileName");
 		
-		fileByte = FileUtils.readFileToByteArray(new File("c:/home/mean17/fileStore/" +filePath));	
-		//fileByte = FileUtils.readFileToByteArray(new File("/home/mean17/fileStore/" +filePath));	
+		//fileByte = FileUtils.readFileToByteArray(new File("c:/home/mean17/fileStore/" +filePath));	
+		fileByte = FileUtils.readFileToByteArray(new File("/home/mean17/fileStore/" +filePath));	
+		
 		
 		response.setContentType("application/octet-stream");
 	    response.setContentLength(fileByte.length);
@@ -64,8 +65,8 @@ public class FileUtil {
 	 * @return
 	 */
 	public List<Map<String, Object>> fileUpload(MultipartHttpServletRequest mhsr){
-		String path = "c:/home/mean17/fileStore/";
-		//String path = "/home/mean17/fileStore/";
+		//String path = "c:/home/mean17/fileStore/";
+		String path = "/home/mean17/fileStore/";
 
 		MultipartFile mfile = null;							
 		String originalFileName;							
@@ -74,7 +75,6 @@ public class FileUtil {
 		Map<String, Object> map = null;							
 		String storedName = null;
 		
-		System.out.println("fileUpload() call");
 		try{							
 			iter = mhsr.getFileNames();
 			File file = new File(path);
@@ -86,7 +86,6 @@ public class FileUtil {
 			while (iter.hasNext()) { 
 				
 				mfile = mhsr.getFile(iter.next());	
-				System.out.println("지금봐야할거" + mfile.getName());
 				originalFileName = mfile.getOriginalFilename();
 			
 				String temp = originalFileName.substring(originalFileName.lastIndexOf('.'));
@@ -94,8 +93,6 @@ public class FileUtil {
 				file = new File(path + storedName);		
 				
 				if(mfile.isEmpty() == false){
-					System.out.println("===================file=========================");
-					System.out.println(file);
 					mfile.transferTo(file);
 				}
 				
@@ -105,11 +102,10 @@ public class FileUtil {
 				map.put("FILE_SIZE", mfile.getSize());
 				fileInfoList.add(map);
 				
-				System.out.println(storedName);
 			}
 			
 		}catch (Exception e) {
-			System.out.println("Hee - " + e.getMessage());
+			System.out.println(e.getMessage());
 		}
 		
 		return fileInfoList;

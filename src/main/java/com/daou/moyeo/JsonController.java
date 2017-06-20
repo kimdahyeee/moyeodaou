@@ -8,35 +8,38 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daou.moyeo.dto.ScheduleDTO;
-import com.daou.moyeo.observer.AvailableDateTransfer;
-import com.daou.moyeo.observer.CalculateSchedule;
 import com.daou.moyeo.schedule.service.ScheduleService;
+import com.daou.moyeo.util.CalculateSchedule;
 
 @RestController
 public class JsonController {
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+	
+	@Resource(name="redisTemplate")
+	private HashOperations<String, String, String> hashOps;
 
 	@Resource(name="scheduleService")
 	private ScheduleService scheduleService;
 	
-	static CalculateSchedule calculateSchedule;
-	static AvailableDateTransfer availableDateTransfer;
+	private CalculateSchedule calculateSchedule;
 	
-	public void jsonController() {
-		calculateSchedule = new CalculateSchedule(scheduleService);
-		availableDateTransfer = new AvailableDateTransfer(calculateSchedule);
-	}
-	
-	public void changeInfo(int groupNo) {
-		calculateSchedule.calculateSchedule(groupNo);
+	public void update(int groupNo) {
+		calculateSchedule = new CalculateSchedule(scheduleService,redisTemplate, hashOps);
+		calculateSchedule.setGroupNo(groupNo);
+		calculateSchedule.calculateSchedule();
 	}
 
-	/**
+	/** 
 	 * 스케줄 등록
 	 * @param scheduleDto
 	 * @return
@@ -45,8 +48,7 @@ public class JsonController {
 	@RequestMapping(value = "/insertSchedule", method=RequestMethod.POST, consumes = "application/json")
 	public ScheduleDTO insertSchedule(@RequestBody ScheduleDTO scheduleDto) {
 		scheduleService.insertScheduleInfo(scheduleDto);
-		jsonController();
-		changeInfo(scheduleDto.getGroupNo());
+		update(scheduleDto.getGroupNo());
 		return scheduleDto;
 	}
 
@@ -62,6 +64,8 @@ public class JsonController {
 	@RequestMapping(value = "/calendarEvent", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public List<Map<String, Object>> calendarEvent(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		List<Map<String, Object>> scheduleList = scheduleService.selectScheduleList(scheduleUserInfo);
+		System.out.println(scheduleUserInfo);
+		System.out.println(scheduleList);
 		return scheduleList;
 	}
 	
@@ -77,6 +81,8 @@ public class JsonController {
 	@RequestMapping(value = "/deleteSchedule", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public int deleteSchedule(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		int scheduleNo = (Integer) scheduleUserInfo.get("scheduleNo");
+		int groupNo = (Integer) scheduleUserInfo.get("scheduleNo");
+		update(groupNo);
 		int result = scheduleService.deleteSchedule(scheduleNo);
 		return result;
 	}

@@ -110,7 +110,7 @@
 									<input type="button" value="+" id="addFile">
 									<button type="submit" id="uploadButton">완료</button>
 									<br>
-									<div id="progressImg" style="width:0%; background-color: red;"></div>전송상황
+									<div id="progressImg" style="width:0%; background-color: green;"></div>전송상황
 			 					</div>
 								<div class="modal-footer" id="fileUpload-footer">
 										<a href="#this"	id="fileUpload2"></a>
@@ -125,121 +125,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- /////////////////////////////////////// Schedule Modal //////////////////////////////////////////////////  -->
-					<%-- <div class="modal fade" id="addSchedule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">일정등록<h4>
-								</div>
-								<div class="modal-body">
-								
-								<div id="right">
-									<table id="table2">
-									<colgroup>
-										<col width="50"/>
-										<col width="100"/>
-										<col width="100"/>
-										<col width="100"/>
-										<col width="100"/>
-										<col width="100"/>
-									</colgroup>
-									<tbody>
-									<tr>
-										<!-- if checkbox is checked, clone school subjects to the whole table row  -->
-										<td class="mark blank"><input id="week" type="checkbox" title="Apply school subjects to the week"/></td>
-										<td class="mark dark">Monday</td>
-										<td class="mark dark">Tuesday</td>
-										<td class="mark dark">Wednesday</td>
-										<td class="mark dark">Thursday</td>
-										<td class="mark dark">Friday</td>
-									</tr>
-									<tr>
-										<td class="mark dark">8:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">9:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">10:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">11:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">12:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">13:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">14:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">15:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td class="mark dark">16:00</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									</tbody>
-								</table>
-							</div><!-- right container -->
-								
-								</div>
-								<div class="modal-footer">
-								</div>
-							</div>
-						</div>
-					</div> --%>
-					
-					
-					
 				</div>
 				<!-- /col-lg-9 END SECTION MIDDLE -->
 
@@ -253,29 +138,16 @@
 					<div class="flat_item">
 					<h3>회의 가능 시간</h3>
 					</div>
-					<div class="mb" id="chat_form" style="display:none;">
-						<div class="white-panel desc donut-chart">
-							<div class="row">
-								<div class="col-sm-6 col-xs-6 goleft">
-									<p>
-										<i class="fa fa-database"></i> 50%
-									</p>
-								</div>
+					<div class="mb" id="chat_form">
+						<div class=" desc">
+							<div class="current_added_list">
+								<strong>현재 등록 리스트</strong>
+								<ul id="current_added_list">
+								</ul>
 							</div>
-							<canvas id="serverstatus01" height="120" width="120"></canvas>
-							<script>
-								var doughnutData = [
-										{
-											value: 50,
-											color:"#68dff0"
-										},
-										{
-											value : 50,
-											color : "#fdfdfd"
-										}
-									];
-									var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
-							</script>
+							<strong>가능한 날짜/시간</strong>
+							<div id="available_date" class="centered">
+							</div>
 						</div>
 						<!--/grey-panel -->
 					</div>
@@ -298,7 +170,7 @@
 
 					<div class="chat_list" >
 						<strong>대화</strong><br>
-						<div id="chat_scroll" style="overflow:auto; height:400px;">
+						<div id="chat_scroll" style="overflow:scroll; overflow-x:hidden; height:400px;">
 							<div class="centered"> 
 								<a id="more" href="javascript:more_history();" class="centered"><b>채팅 기록 더보기</b></a>
 							</div>
@@ -345,7 +217,7 @@
 	
 	var group_info = [];
 	var channel = group.group_no;
-	var member_list = [];
+	var member_list = new Object();
 	var chat_socket = null;
 	var group_socket = null;
 	var history_date = null;
@@ -355,8 +227,8 @@
 		group_socket = io.connect('http://' + host + ':' + port + '/group');
 	
 		init_list();
+		console.log(member_list);
 		
-		member_list = set_member_list(member_list);
 		
 		//Enroll Chatting info
 		chat_socket.emit('chat_join', { member: member, channel: channel });
@@ -488,10 +360,11 @@
 		</c:forEach>
 		
 		<c:forEach items="${groupMemberList}" var="gmList">
-			member_list.push({
+		console.log('${gmList.memberNo}');
+			member_list['${gmList.memberNo}'] = {
 				MEMBER_NO: '${gmList.memberNo}',
 				MEMBER_NAME: '${gmList.memberName}' 
-				});
+				};
 		</c:forEach>
 	};
 	
@@ -500,10 +373,8 @@
 		input_name = trim(input_name);
 		
 		if(temp_name == input_name) {
-			console.log("same");
-			return '<b>'+ input_name + '</b>';
+			return '<b style="color:blue;">'+ input_name + '</b>';
 		} else {
-			console.log("not same");
 			return input_name;
 		}
 	}
@@ -563,62 +434,70 @@
 
 	// current connected member and state Object
 	function current_connect(memeber_list, connect_list) {
-		console.log("current_connect");
-		var temp_key = Object.keys(member_list);
-		var mem_len = temp_key.length;
 		var con_len = connect_list.length;
 		var current_connected_users = new Object();
-
-		for(var i = 0; i < mem_len; i++) {
-			current_connected_users[temp_key[i]] = { member_name : member_list[temp_key[i]], state : 'disconnected' };
-		}
-
-		for(var i = 0; i < con_len; i++) {
-			var result = member_list[connect_list[i]];
-			if(result != undefined)  {
-				current_connected_users[connect_list[i]] = { member_name : result, state : 'connected' };
+		
+		$.each(member_list, function(index, value) {
+			current_connected_users[index] = { member_name : value.MEMBER_NAME, state : 'disconnected' };
+			for(var i = 0; i < con_len; i++) {
+				if(index == connect_list[i]) {
+					current_connected_users[index].state = 'connected';
+				}
 			}
-		}
+		});
 
 		return current_connected_users;
 	};
 
-	// member list in same group
-	function set_member_list(member_list) {
-		var len = member_list.length;
-		var result = [];
-
-		for(var i = 0; i < len; i++) {
-			var member = member_list;
-			result[member[i].MEMBER_NO] = member[i].MEMBER_NAME;
-		}
-		return result;
-	};
 </script>
 
 <script type="text/x-javascript">
- 	var cnt = 0;
+ 	var fileCnt = 0;
  	var progressBar = null;
+ 	console.log("initCnt:"+fileCnt);
+ 	
+ 	$(document).ready(function() {
+	});
  	
  	function fn_addFile(){
- 		cnt++;
- 		console.log(cnt);
+ 		fileCnt++;
+ 		console.log(fileCnt);
  		var str = "<p>" +
- 			"<input type='file' id='file_"+(cnt)+"' name='file_"+(cnt)+"' required='required'>"+
- 			//"<input type='button' value='삭제' class='deleteFile'>" +
- 			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+cnt+"</a>"+ 
+ 			"<input type='file' id='file' name='file_"+(fileCnt)+"' required='required'>"+
+ 			"<a class='delete' id='deletebtn' name='deleteFile'>"+'삭제'+"</a>"+ 
  			"</p>";
  		$("#fileUpload-footer").append(str);
- 		console.log('end');
  		
 		$(".delete").on("click", function(e){ 						// 삭제 버튼
 			e.preventDefault();
 			fn_deleteFile($(this));
 		});
+		/*
+		$('[id="file"]').eq(0).on("change",function(){
+			var groupImgText = $('[id="file"]').eq(0).val();
+			groupImgText = groupImgText.slice(groupImgText.indexOf(".")+ 1).toLowerCase();
+			if(groupImgText != "jpg" && groupImgText != "png"){ 				
+				alert('그룹 이미지는 JPG, PNG 확장자만 가능합니다');
+				$('[id="file"]').eq(0).val("");
+				return;
+			}
+		});*/
+		
+		$('[id="file"]').on("change",function(){
+			var index = $('[id="file"]').index(this);
+			console.log("순서:"+index);
+			var fileText = $('[id="file"]').eq(index).val();
+			fileText = fileText.slice(fileText.indexOf(".")+ 1).toLowerCase();
+			if(fileText != "jpg" && fileText != "png" && fileText != "pptx" && fileText != "xlsx" && fileText != "docx"){ 				
+				alert('공유 파일은 JPG, PNG, PPTX, XLSX, DOCX 확장자만 가능합니다');
+				$('[id="file"]').eq(index).val("");
+				return;
+			}
+		});
  	}
- 		
+ 	
  	function fn_deleteFile(obj){
- 	         obj.parent().remove();
+ 			obj.parent().remove();
  	}
  	
  	function fn_getProgressInfo(){								// 프로그래스 바 정보 얻기
@@ -627,18 +506,14 @@
 			dataType : "json",
 			method: "post",
 			success: function(result){
-				//alert(+ result.pByteRead + " / " + result.pContentLength);
-				console.log(+ result.pByteRead + " / " + result.pContentLength);
 				if(result.pByteRead < result.pContentLength){
 					// 프로그래스바 진행상황 보여주기
-					console.log((result.pByteRead / result.pContentLength) * 100 );
 					$("#progressImg").css("width", (result.pByteRead / result.pContentLength) * 100 +"%");
 					$("#progressImg").html("전송중");
 					
 				}else{
 					console.log((result.pByteRead / result.pContentLength) * 100 );
 					clearInterval(progressBar);
-					//alert("끝");
 				}
 			}
 		});
@@ -651,11 +526,143 @@
 	$(document).ready(function() {
 		<!-- 프로그래스 바 요청 -->
 		$('#uploadButton').click(function(){
-			console.log('uploadButton!!!!!');
 			progressBar = setInterval(function() {
 			 	   fn_getProgressInfo();
-			}, 10);
+			}, 50);
 		})
 	})
+	/*
+	$(document).ready(function() {
+		$('#file_1').on("change",function(){
+			var fileText = $('#file_1').val();
+			fileText = fileText.slice(fileText.indexOf(".")+ 1).toLowerCase();
+			if(fileText != "jpg" && fileText != "png"){ 				
+				alert('업로드 파일은 JPG, PNG 확장자만 가능합니다');
+				$(#file_1).val("");
+				return;
+			}
+		});
+	});
+	*/
 	
+</script>
+
+<!--  
+	title : available date client script
+	author : Daeho Han
+ -->
+<script>
+	var day = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+	var week = [];
+	var result = new Object();
+	var added_member_list = [];
+	var sortedResult = [];
+	
+	$(document).ready(function() {
+		initAvailableDate();
+		initScheduleMember();
+		sortAvailableDate();
+		console.log(result);
+		$("#available_date").html("<b style='color:black;'>"+displayAvailableDate() + "</b>");
+		appendAddedMember(member_list, added_member_list);
+	});
+	
+	function parseDateInfo(week) {
+		var len = week.length;
+		var temp;
+		for(var i = 0; i < len; i++) {
+			temp = week[i].split(";");
+			result[day[i]] = temp;
+		}
+	}
+	
+	
+	function initScheduleMember() {
+		<c:forEach items="${addedScheduleMemberList}" var="asmList">
+			added_member_list.push('${asmList.memberNo}');
+		</c:forEach>
+
+	}
+	
+	function initAvailableDate() {
+		var temp;	
+		var key;
+		<c:forEach items="${availableDate}" var="entry" varStatus="status">	
+			key = trim('${entry.key}');
+			temp = '${entry.value}'.split(';');
+			result[key] = { time : temp, seq : day.indexOf(key)};
+		</c:forEach>
+		
+	}
+	
+	function currentAddedSchedule(member_list, added_schedule_list)  {
+		var current_added_member = new Object();
+		var len = added_schedule_list.length;
+		
+		$.each(member_list, function(index, value) {
+			current_added_member[index] = { member_name : value.MEMBER_NAME, state : 'no'};
+			for(var i = 0; i < len; i++) {
+				if(index == added_schedule_list[i]) {
+					current_added_member[index].state = 'yes';
+				}
+			}
+		});
+		
+		return current_added_member;
+	};
+	
+	function appendAddedMember(member_list, added_member_list) {
+		var current_added_member = currentAddedSchedule(member_list, added_member_list); 
+		
+		$.each(current_added_member, function (index, value){
+			var state;
+			if(value.state == "no") {	
+				state = '<span style="color:red;"><b>미등록<b></span>';
+			} else {
+				state = '<span style="color:green;"><b>등록완료<b></span>';
+				
+			}
+			$('#current_added_list').append('<li>' + current_added_member[index].member_name + " : "+ state +'</li>');
+		});
+	}
+	
+	function sortAvailableDate() {
+		sortedResult = [];
+		$.each(result, function(index, value) {
+			sortedResult.push(value);
+		});
+		
+		sortedResult.sort(compareSequence);
+	}
+	
+	function compareSequence(day1, day2) {
+		if(day1.seq > day2.seq) return 1;
+		if(day1.seq <= day2.seq) return -1;
+		
+		return 0;
+	}
+	
+	function displayAvailableDate() {
+		var tag = "";
+		var slen = sortedResult.length;
+		
+		for (var i = 0; i < slen; i++) {
+			var len = (sortedResult[i].time.length - 1) ;
+			tag += day[i] + " : ";
+			if(len == 0) tag += "가능한 시간 없음";
+			for (var j = 0; j < len; j++) {
+				var temp = sortedResult[i].time[j].split('-')[1];
+				if(temp == 0) {
+					sortedResult[i].time[j] = sortedResult[i].time[j].split('-')[0] + '-' + (Number(sortedResult[i].time[j].split('-')[0]) + 1);
+				}
+				tag += sortedResult[i].time[j];
+				if(j < (len-1)) {
+					tag += ", ";
+				}
+			}
+			tag += '<br>';
+		}
+		
+		return tag;
+	}
 </script>

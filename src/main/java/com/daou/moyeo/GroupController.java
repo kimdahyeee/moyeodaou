@@ -69,7 +69,7 @@ public class GroupController {
 	 * @throws Exception 
 	 */
 	@RequestMapping( value = "/createGroup", method=RequestMethod.POST)
-	public String fileUpload(HttpServletRequest request, @RequestParam Map<String, Object> reqParams, Authentication auth, Model model) throws Exception{
+	public String createGroup(HttpServletRequest request, @RequestParam Map<String, Object> reqParams, Authentication auth, Model model) throws Exception{
 		FileUtil fileUtil = new FileUtil();
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		List<Map<String, Object>> fileInfoList = fileUtil.fileUpload(mhsr);
@@ -80,16 +80,18 @@ public class GroupController {
 		TransactionStatus status = transactionManager.getTransaction(def);
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		
+		Map<String, Object> groupMap = new HashMap<String, Object>();
+		groupMap.put("groupName", reqParams.get("groupName"));
+		groupMap.put("groupDesc", reqParams.get("groupDesc"));
+		groupMap.put("groupImg", fileInfoList.get(0).get("FILE_STORED_NAME"));
+
+		Map<String, Object> memGroupMap = new HashMap<String, Object>();
+		memGroupMap.put("groupName", reqParams.get("groupName"));
+		memGroupMap.put("memberNO", u.getMemberNo());
+
 		try {
-			Map<String, Object> groupMap = new HashMap<String, Object>();
-			groupMap.put("groupName", reqParams.get("groupName"));
-			groupMap.put("groupDesc", reqParams.get("groupDesc"));
-			groupMap.put("groupImg", fileInfoList.get(0).get("FILE_STORED_NAME"));
 			groupService.insertGroup(groupMap);
 			
-			Map<String, Object> memGroupMap = new HashMap<String, Object>();
-			memGroupMap.put("groupName", reqParams.get("groupName"));
-			memGroupMap.put("memberNO", u.getMemberNo());
 			groupService.insertMemberGroup(memGroupMap);
 			
 			transactionManager.commit(status);

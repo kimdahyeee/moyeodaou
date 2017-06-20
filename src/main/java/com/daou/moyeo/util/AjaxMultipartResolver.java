@@ -26,7 +26,6 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
     private AjaxProgressListener getListener() {
         
         AjaxProgressListener listener = progressListener.get();
-        //System.out.println("getListener()");
         
         if(listener == null)
         {
@@ -40,7 +39,6 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
     protected FileUpload prepareFileUpload(String encoding) {
         FileUpload fileUpload = getFileUpload();
         FileUpload actualFileUpload = fileUpload;
-        System.out.println("AjaxMultipartResolver.prepareFileUpload()");
         actualFileUpload = newFileUpload(getFileItemFactory());
         actualFileUpload.setSizeMax(fileUpload.getSizeMax());
         actualFileUpload.setHeaderEncoding(encoding);
@@ -49,22 +47,16 @@ public class AjaxMultipartResolver extends CommonsMultipartResolver {
     }
  
     public MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException {
-    	 System.out.println("AjaxMultipartResolver.resolveMultipart()");
-         
+    	 
     	try {           
             AjaxProgressListener listener = getListener();
             
-           System.out.println(request.getParameter("file_"+cnt));
-            listener.setUploadId(request.getParameter("file_"+cnt));
-            cnt++;
             listener.setSession(request.getSession());
              
             return super.resolveMultipart(request);
         } catch(MaxUploadSizeExceededException ex) {
              throw new MultipartException(ex.getMessage());
         } catch (Exception ex) {
-            //exception is typically thrown when user hits stop or cancel
-            //button halfway through upload
             throw new MultipartException(ex.getMessage());
         }
     }
