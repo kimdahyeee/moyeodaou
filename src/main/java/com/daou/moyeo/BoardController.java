@@ -36,16 +36,16 @@ public class BoardController {
 	public String boardList( @PathVariable("groupNo") int groupNo, 
 										@RequestParam(value="page", required=false) String currentPageNo, 
 										Model model ) {
-		PagingDTO pagingVO = new PagingDTO();
+		PagingDTO paginationInfo = new PagingDTO();
 		
 		if(StringUtils.isEmpty(currentPageNo) == true) {
-			pagingVO.setCurrentPageNo(1);
+			paginationInfo.setCurrentPageNo(1);
 		}else {
-			pagingVO.setCurrentPageNo(Integer.parseInt(currentPageNo));
+			paginationInfo.setCurrentPageNo(Integer.parseInt(currentPageNo));
 		}
 		
-		int firstRecordIndex = pagingVO.getFirstRecordIndex();
-		int recordCountPerPage = pagingVO.getRecordCountPerPage();
+		int firstRecordIndex = paginationInfo.getFirstRecordIndex();
+		int recordCountPerPage = paginationInfo.getRecordCountPerPage();
 		
 		Map<String, Object> pageInfoMap = new HashMap<String, Object>();
 		
@@ -57,12 +57,12 @@ public class BoardController {
 		
 		if(allBoardList.size() != 0) {
 			System.out.println("total  : " + allBoardList.get(0).get("totalCount"));
-			pagingVO.setTotalRecordCount((Integer) allBoardList.get(0).get("totalCount"));
+			paginationInfo.setTotalRecordCount((Integer) allBoardList.get(0).get("totalCount"));
 		}else{
-			pagingVO.setTotalRecordCount(0);
+			paginationInfo.setTotalRecordCount(0);
 		}
 		
-		model.addAttribute("paginationInfo", pagingVO);
+		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("allBoardList", allBoardList);
 		model.addAttribute("groupNo", groupNo);
 		

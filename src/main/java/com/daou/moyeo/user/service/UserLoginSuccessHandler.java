@@ -32,6 +32,7 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 		
 		  UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		  logger.info("회원 정보 :: ", u);
+		  
 		  ObjectMapper om = new ObjectMapper();
 		  Map<String, Object> map = new HashMap<String, Object>();
 		  

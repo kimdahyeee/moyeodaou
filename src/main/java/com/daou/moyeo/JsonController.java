@@ -45,7 +45,7 @@ public class JsonController {
 	 * @return
 	 * @author KimDaHye
 	 */
-	@RequestMapping(value = "/insertSchedule", method=RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/insertSchedule", method=RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public ScheduleDTO insertSchedule(@RequestBody ScheduleDTO scheduleDto) {
 		scheduleService.insertScheduleInfo(scheduleDto);
 		update(scheduleDto.getGroupNo());

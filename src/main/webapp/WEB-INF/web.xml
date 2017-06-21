@@ -10,7 +10,6 @@
 			/WEB-INF/spring/root-context.xml
 			/WEB-INF/spring/appServlet/datasource-context.xml
 			/WEB-INF/spring/appServlet/security-context.xml
-			<!--   /WEB-INF/spring/appServlet/session.xml	-->
 		</param-value>
 	</context-param>
 	
@@ -28,9 +27,6 @@
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
-		<!-- <multipart-config>
-	<max-file-size>1000000</max-file-size>
-    </multipart-config> -->
 	</servlet>
 		
 	<servlet-mapping>

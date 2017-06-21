@@ -76,18 +76,18 @@ public class GroupController {
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		List<Map<String, Object>> fileInfoList = fileUtil.fileUpload(mhsr);
 		
+		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
+		Map<String, Object> groupMap = new HashMap<String, Object>();
+		Map<String, Object> memGroupMap = new HashMap<String, Object>();
+		
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = transactionManager.getTransaction(def);
 		
-		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
-		
-		Map<String, Object> groupMap = new HashMap<String, Object>();
 		groupMap.put("groupName", reqParams.get("groupName"));
 		groupMap.put("groupDesc", reqParams.get("groupDesc"));
 		groupMap.put("groupImg", fileInfoList.get(0).get("FILE_STORED_NAME"));
 
-		Map<String, Object> memGroupMap = new HashMap<String, Object>();
 		memGroupMap.put("groupName", reqParams.get("groupName"));
 		memGroupMap.put("memberNO", u.getMemberNo());
 
@@ -96,18 +96,20 @@ public class GroupController {
 			groupService.insertMemberGroup(memGroupMap);
 			transactionManager.commit(status);
 			logger.info("transaction manager commit");
+			
+			int groupNo = groupService.selectGroupNo((String) reqParams.get("groupName"));
+
+			List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
+			gas.addAll(u.getAuthorities());
+			gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + groupNo + "_MASTER"));
+			
+			Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), gas);
+			SecurityContextHolder.getContext().setAuthentication(newAuth);
+			
 		} catch (Exception e) {
 			transactionManager.rollback(status);
-			logger.info("transaction manager rollback");
+			logger.info("transaction manager rollback :: ", e);
 		}
-		
-		int groupNo = groupService.selectGroupNo((String) reqParams.get("groupName"));
-		List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
-		gas.addAll(u.getAuthorities());
-		gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + groupNo + "_MASTER"));
-		
-		Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), gas);
-		SecurityContextHolder.getContext().setAuthentication(newAuth);
 		
 		return "redirect:/main";
 	}
