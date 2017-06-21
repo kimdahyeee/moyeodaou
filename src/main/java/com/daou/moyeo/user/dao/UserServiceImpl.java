@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl extends SqlSessionDaoSupport implements UserService {
 
 	@Override
-	public int insertUser(Map<String, String> paramMap) {
-		return getSqlSession().insert("user.insertUser", paramMap);
+	public int insertUser(Map<String, String> userInfo) {
+		return getSqlSession().insert("user.insertUser", userInfo);
 	}
 	
 }

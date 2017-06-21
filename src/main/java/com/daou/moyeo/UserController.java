@@ -78,6 +78,7 @@ public class UserController {
 		
 		int userResult = 0;
 		int emailResult = 0;
+		
 		String encodePW = encoder.encode(password);
 		
 		HashMap<String, String> resultMap = new HashMap<String, String>();
@@ -90,7 +91,7 @@ public class UserController {
 		try{
 			userResult = userService.insertUser(userMap);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.info("회원가입 실패 ::: ", e );
 			resultMap.put("KEY", "FAIL");
 		}
 		
@@ -101,8 +102,13 @@ public class UserController {
 			groupMap.put("groupNo", groupNo);
 			groupMap.put("memberNo", memberNo);
 			groupMap.put("token", code);
-			emailResult = emailService.putNewMemberInGroup(groupMap);
-		}
+			try {
+				emailResult = emailService.putNewMemberInGroup(groupMap);
+			} catch (Exception e) {
+				logger.info("회원가입+그룹가입 실패 ::: ", e );
+				resultMap.put("KEY", "FAIL");
+			}
+		} 
 		
 		if (emailResult == 1 ) {
 			resultMap.put("KEY", "EMAIL_SUCCESS");

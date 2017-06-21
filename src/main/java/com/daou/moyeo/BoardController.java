@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.daou.moyeo.board.service.BoardService;
-import com.daou.moyeo.dto.PagingVO;
+import com.daou.moyeo.dto.PagingDTO;
 import com.daou.moyeo.user.vo.UserDetailsVO;
 
 @Controller
@@ -36,7 +36,7 @@ public class BoardController {
 	public String boardList( @PathVariable("groupNo") int groupNo, 
 										@RequestParam(value="page", required=false) String currentPageNo, 
 										Model model ) {
-		PagingVO pagingVO = new PagingVO();
+		PagingDTO pagingVO = new PagingDTO();
 		
 		if(StringUtils.isEmpty(currentPageNo) == true) {
 			pagingVO.setCurrentPageNo(1);

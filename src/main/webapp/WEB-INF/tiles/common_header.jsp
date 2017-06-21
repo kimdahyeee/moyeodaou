@@ -26,12 +26,7 @@
 	
 	<link href="<c:url value='/resources/css/style-responsive.css'/>" rel="stylesheet">
 	
-	<!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
-	
-	<script src="<c:url value='/resources/js/chart-master/Chart.js'/>"></script>
-	<!--<script src="<c:url value='/resources/node_modules/socket.io-client/dist/socket.io.js'/>"></script>-->
 	<script src="<c:url value='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js'/>"></script>
-	
 
 </head>
 <body>

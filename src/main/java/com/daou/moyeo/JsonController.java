@@ -64,8 +64,6 @@ public class JsonController {
 	@RequestMapping(value = "/calendarEvent", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public List<Map<String, Object>> calendarEvent(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		List<Map<String, Object>> scheduleList = scheduleService.selectScheduleList(scheduleUserInfo);
-		System.out.println(scheduleUserInfo);
-		System.out.println(scheduleList);
 		return scheduleList;
 	}
 	
@@ -81,7 +79,7 @@ public class JsonController {
 	@RequestMapping(value = "/deleteSchedule", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public int deleteSchedule(@RequestBody Map<String, Object> scheduleUserInfo, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		int scheduleNo = (Integer) scheduleUserInfo.get("scheduleNo");
-		int groupNo = (Integer) scheduleUserInfo.get("scheduleNo");
+		int groupNo = (Integer) scheduleUserInfo.get("groupNo");
 		update(groupNo);
 		int result = scheduleService.deleteSchedule(scheduleNo);
 		return result;

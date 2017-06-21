@@ -46,8 +46,8 @@ public class GroupServiceImpl extends SqlSessionDaoSupport implements GroupServi
 	}
 
 	@Override
-	public int deleteGroup(int groupNo) {
-		return getSqlSession().delete("group.deleteGroup", groupNo);
+	public void deleteGroup(int groupNo) {
+		getSqlSession().delete("group.deleteGroup", groupNo);
 	}
 
 	@Override

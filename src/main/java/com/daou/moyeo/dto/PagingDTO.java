@@ -1,6 +1,6 @@
 package com.daou.moyeo.dto;
 
-public class PagingVO {
+public class PagingDTO {
 	/**
 	 * currentPageNo : 현재 페이지 번호
 	 * recordCountPerPage : 한 페이지당 게시되는 게시물 건 수
@@ -13,8 +13,6 @@ public class PagingVO {
 	 * lastRecordIndex : 페이징 SQL의 조건절에 사용되는 마지막 rownum.
 	 */
 	private int currentPageNo;
-	private int recordCountPerPage = 10;
-	private int pageSize = 5;
 	private int totalRecordCount;
 	private int totalPageCount;
 	private int firstPageNoOnPageList;
@@ -28,16 +26,10 @@ public class PagingVO {
 		this.currentPageNo = currentPageNo;
 	}
 	public int getRecordCountPerPage() {
-		return recordCountPerPage;
-	}
-	public void setRecordCountPerPage(int recordCountPerPage) {
-		this.recordCountPerPage = recordCountPerPage;
+		return 10;
 	}
 	public int getPageSize() {
-		return pageSize;
-	}
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
+		return 5;
 	}
 	public int getTotalRecordCount() {
 		return totalRecordCount;

@@ -31,11 +31,12 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 			throws IOException, ServletException {
 		
 		  UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
-		  System.out.println(u);
+		  logger.info("회원 정보 :: ", u);
 		  ObjectMapper om = new ObjectMapper();
 		  Map<String, Object> map = new HashMap<String, Object>();
 		  
 		  map.put("KEY", "SUCCESS");
+		  
 		  if(getReturnUrl(req, res).equals("/daou")){
 			  map.put("RETURNURI", req.getContextPath()+"/main");
 		  } else {

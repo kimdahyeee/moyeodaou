@@ -101,7 +101,7 @@
 			GROUP_NAME = #{groupName}
 	</select>
 	
-	<delete id="deleteGroup" parameterType="int">
+	<delete id="deleteGroup">
 		DELETE GBT, ST, ADT, GFT, MGT, GT
 		FROM MEMBER_GROUP_TB AS MGT
 		LEFT JOIN SCHEDULE_TB AS ST 				ON MGT.GROUP_NO=ST.GROUP_NO
