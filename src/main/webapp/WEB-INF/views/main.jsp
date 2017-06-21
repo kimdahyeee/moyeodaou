@@ -22,6 +22,7 @@
 					<p>그룹을 자유롭게 생성해 주세요!</p>
 				</div>
 			</div>
+			
 			<!-- /row mt -->
 			<!-- 그룹 생성 modal -->
 			<div class="modal fade" id="makeGroup" tabindex="-1" role="dialog"
@@ -34,9 +35,7 @@
 							<h4 class="modal-title" id="myModalLabel">그룹 생성</h4>
 						</div>
 						<div class="modal-body">
-							<form class="form-horizontal style-form"
-								action="<c:url value='/createGroup'/>"
-								method="post" enctype="multipart/form-data">
+							<form class="form-horizontal style-form" action="<c:url value='/createGroup'/>" method="post" enctype="multipart/form-data">
 								<div class="form-group">
 									<label class="col-sm-2 col-sm-2 control-label">그룹명</label>
 									<div class="col-sm-10">
@@ -46,8 +45,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 col-sm-2 control-label">그룹 소개</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control"
-											placeholder="50자 내로 입력해주세요!" name="groupDesc" required>
+										<input type="text" class="form-control" placeholder="50자 내로 입력해주세요!" name="groupDesc" required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -59,8 +57,7 @@
 								</div>
 								<div class="centered">
 									<button type="submit" class="btn btn-primary" id="createBtn">생성</button>
-									<button type="button" class="btn btn-default"
-										data-dismiss="modal">취소</button>
+									<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 								</div>
 							</form>
 						</div>

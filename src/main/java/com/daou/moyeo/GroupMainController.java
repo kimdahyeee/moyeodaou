@@ -87,7 +87,7 @@ public class GroupMainController {
 		currentInfo.put("weekStartDate", cs.getThisWeekStartDate());
 		
 		List<Map<String, Object>> sharingList = fileService.getFileList(groupNo);  // load Group Fille List
-		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // load Group Board List
+		List<Map<String, Object>> allMainBoardList = boardService.selectMainBoardList(groupNo); // KIMDAHYE load Group Board List
 		
 		Map<String, Object> groupInfo = groupService.selectGroupInfo(groupNo); // daeho 2017.06.07 chat
 		List<Map<String, Object>> otherGroupList = groupService.selectOtherGroupList(currentInfo); // daeho 2017.06.07 chat
@@ -196,7 +196,7 @@ public class GroupMainController {
 	
 	@RequestMapping(value = "/group/{groupNo}/deleteGroup")
 	public String groupDelete(@PathVariable("groupNo") int groupNo){
-		int result = groupService.deleteGroup(groupNo);
+		groupService.deleteGroup(groupNo);
 		return "redirect:/main";
 	}
 	

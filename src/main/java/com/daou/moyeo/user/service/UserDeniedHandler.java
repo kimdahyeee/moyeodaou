@@ -21,7 +21,6 @@ public class UserDeniedHandler implements AccessDeniedHandler {
 		
 		req.setAttribute("errMsg",ade.getMessage());
 		res.sendRedirect(req.getContextPath()+"/denied");
-		//req.getRequestDispatcher("/WEB-INF/views/user/denied.jsp").forward(req, res);
 	}
 	
 }

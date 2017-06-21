@@ -35,10 +35,6 @@ public class UserDetailsVO implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
 	}
-	
-	/*public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-		this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
-	}*/
 
 	@Override
 	public String getPassword() {

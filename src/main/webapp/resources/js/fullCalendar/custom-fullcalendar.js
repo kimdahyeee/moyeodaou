@@ -1,7 +1,6 @@
 $(document).ready(function() {
 		if ($("#calendar").length > 0) {
 			$('#external-events .fc-event').each(function() {
-				// store data so the calendar knows to render an event upon drop
 				$(this).data('event', {
 					title : $.trim($(this).text()), // use the element's text as the event title
 					stick : true
@@ -42,7 +41,7 @@ $(document).ready(function() {
                 	
                     $.ajax({
                         url: "/daou/calendarEvent",
-                        type : 'post',
+                        type : "POST",
                         headers: { 
         	                'Accept': 'application/json',
         	                'Content-Type': 'application/json' 
@@ -90,7 +89,7 @@ $(document).ready(function() {
 	                                }
 	                            },
 	                            error: function (request, status, error) {  
-	                                alert('Error on deleting the event ');
+	                                alert('error : ' + error);
 	                            }
 	                        });
 	                    }
@@ -138,10 +137,11 @@ $(document).ready(function() {
 			
 			var today = new Date();
 			var dd = today.getDate();
-			var mm = today.getMonth()+1; //January is 0!
+			var mm = today.getMonth(); 
 			var yyyy = today.getFullYear();
-			var sundayDate = new Date(yyyy, mm-1, dd-today.getUTCDay());
-			
+			var sundayDate = new Date(yyyy, mm, dd-today.getDay());
+
+			console.log(sundayDate);
 			var scheduleInfos = {
 					groupNo : $("#groupNo").val(), 
 					memberNo : $("#memberNo").val(),
@@ -149,12 +149,9 @@ $(document).ready(function() {
 					scheduleInfos : scheduleInfo
 			};
 			
-			console.log('Item: ', JSON.stringify(scheduleInfos));
-			
 			$.ajax({
 	            type: "POST",
 	            url: "/daou/insertSchedule", 
-	            processData : true,
 	            headers: { 
 	                'Accept': 'application/json',
 	                'Content-Type': 'application/json' 
@@ -167,7 +164,7 @@ $(document).ready(function() {
 	            }
 	        });
 		} else {
-			alert("스케줄을 입력해 주세요.")
+			alert("스케줄을 입력해 주세요.");
 		}
 	}
 	

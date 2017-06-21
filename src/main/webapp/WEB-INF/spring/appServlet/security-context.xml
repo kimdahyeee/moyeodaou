@@ -21,20 +21,18 @@
         <sec:form-login 
         		login-page="/"
 	        	login-processing-url="/login"
-	        	always-use-default-target="true"
 	        	username-parameter="email"
 	        	password-parameter="password"
 	        	authentication-success-handler-ref="userLoginSuccessHandler"
 	        	authentication-failure-handler-ref="userLoginFailureHandler"/>
         <sec:logout  
-        		delete-cookies="true"
         		logout-success-url="/"
         		logout-url="/logout"
-        		invalidate-session="true"
         	/>
         	<sec:access-denied-handler ref="userDeniedHandler"/>
         	<sec:csrf disabled="true"/>
     </sec:http>	
+    
     <sec:authentication-manager>
     	<sec:authentication-provider user-service-ref="userAuthenticationService">
     		<sec:password-encoder ref="passwordEncoder"></sec:password-encoder>

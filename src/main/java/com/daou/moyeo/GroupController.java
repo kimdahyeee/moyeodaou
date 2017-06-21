@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,9 @@ import com.daou.moyeo.util.FileUtil;
 
 @Controller
 public class GroupController {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
+	
 	@Resource(name="groupService")
 	private GroupService groupService;
 	
@@ -48,7 +51,6 @@ public class GroupController {
 	 */
 	@RequestMapping(value = "/main")
 	public String main(Model model, Authentication auth) {
-		//TODO
 		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		List<Map<String, Object>> groupList = groupService.selectGroupList(u.getMemberNo());
 		model.addAttribute("groupList", groupList);
@@ -69,44 +71,45 @@ public class GroupController {
 	 * @throws Exception 
 	 */
 	@RequestMapping( value = "/createGroup", method=RequestMethod.POST)
-	public String createGroup(HttpServletRequest request, @RequestParam Map<String, Object> reqParams, Authentication auth, Model model) throws Exception{
+	public String createGroup(HttpServletRequest request, @RequestParam Map<String, Object> reqParams, Authentication auth, Model model) {
 		FileUtil fileUtil = new FileUtil();
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) request; 
 		List<Map<String, Object>> fileInfoList = fileUtil.fileUpload(mhsr);
 		
+		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
+		Map<String, Object> groupMap = new HashMap<String, Object>();
+		Map<String, Object> memGroupMap = new HashMap<String, Object>();
+		
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-		
 		TransactionStatus status = transactionManager.getTransaction(def);
-		UserDetailsVO u = (UserDetailsVO) auth.getPrincipal();
 		
-		Map<String, Object> groupMap = new HashMap<String, Object>();
 		groupMap.put("groupName", reqParams.get("groupName"));
 		groupMap.put("groupDesc", reqParams.get("groupDesc"));
 		groupMap.put("groupImg", fileInfoList.get(0).get("FILE_STORED_NAME"));
 
-		Map<String, Object> memGroupMap = new HashMap<String, Object>();
 		memGroupMap.put("groupName", reqParams.get("groupName"));
 		memGroupMap.put("memberNO", u.getMemberNo());
 
 		try {
 			groupService.insertGroup(groupMap);
-			
 			groupService.insertMemberGroup(memGroupMap);
-			
 			transactionManager.commit(status);
+			logger.info("transaction manager commit");
+			
+			int groupNo = groupService.selectGroupNo((String) reqParams.get("groupName"));
+
+			List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
+			gas.addAll(u.getAuthorities());
+			gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + groupNo + "_MASTER"));
+			
+			Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), gas);
+			SecurityContextHolder.getContext().setAuthentication(newAuth);
+			
 		} catch (Exception e) {
 			transactionManager.rollback(status);
-			System.out.println("rollback");
+			logger.info("transaction manager rollback :: ", e);
 		}
-		
-		int groupNo = groupService.selectGroupNo((String) reqParams.get("groupName"));
-		List<GrantedAuthority> gas = new ArrayList<GrantedAuthority>();
-		gas.addAll(u.getAuthorities());
-		gas.add(new SimpleGrantedAuthority("ROLE_GROUP" + groupNo + "_MASTER"));
-		
-		Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), gas);
-		SecurityContextHolder.getContext().setAuthentication(newAuth);
 		
 		return "redirect:/main";
 	}
